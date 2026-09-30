@@ -1,0 +1,48 @@
+trigger:
+  branches:
+    include:
+      - main   # ✅ Runs only on main branch
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: Website_Catalogue   # 🔑 Secrets: FTP_Host, FTP_Username, FTP_Password
+
+steps:
+  - checkout: self
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'
+    displayName: 'Install Node.js'
+
+  # ✅ Install deps only if package.json changed
+  - script: |
+      git diff --quiet HEAD^ HEAD -- package.json package-lock.json
+      if [ $? -ne 0 ]; then
+        echo "📦 package.json changed → Installing dependencies..."
+        npm install
+      else
+        echo "✅ Skipping npm install (no changes in package.json)"
+      fi
+    displayName: 'Conditional npm install'
+
+  - script: CI=false npm run build
+    displayName: 'Build React app'
+
+  - script: ls -lah ./build
+    displayName: 'Verify build output'
+
+  # ⚡ FTP Deploy to root /
+  - script: |
+      echo "🚀 Deploying via FTP to root directory..."
+      sudo apt-get update
+      sudo apt-get install -y lftp
+      lftp -u $(FTP_Username),$(FTP_Password) ftp://$(FTP_Host) <<EOF
+      set ssl:verify-certificate no
+      set ftp:ssl-allow no
+      mirror -R build /
+      bye
+      EOF
+    displayName: 'Deploy via FTP'
