@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { ENDPOINTS } from '../../config/endpoints';
 import {
   LineChart,
   Line,
@@ -14,7 +15,7 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import '../App.css';
+import '../styles/App.css';
 
 const ReportGenerator = () => {
   const [selectedKPI, setSelectedKPI] = useState('All');
@@ -109,7 +110,7 @@ const ReportGenerator = () => {
     formData.append('frequency', timeRange);
 
     try {
-      const response = await fetch(' https://ungenuine-neville-oasitic.ngrok-free.dev/api/recommendations', {
+      const response = await fetch(ENDPOINTS.recommendations, {
         method: 'POST',
         body: formData
       });
@@ -159,7 +160,7 @@ const ReportGenerator = () => {
     formData.append('frequency', timeRange);
 
     try {
-      const response = await fetch('https://ungenuine-neville-oasitic.ngrok-free.dev/api/recommendations', {
+      const response = await fetch(ENDPOINTS.recommendations, {
         method: 'POST',
         body: formData
       });

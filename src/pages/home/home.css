@@ -1,0 +1,151 @@
+/* ---------- Cinematic layer ----------
+   The text layers sit above the 3D stage. They pass pointer events through
+   so that planets and labels stay clickable. Only real content captures input. */
+.lf-home__cinematic { pointer-events: none; }
+.lf-home-hero__inner > *, .lf-chapter__card, .lf-scroll-hint { pointer-events: auto; }
+
+/* ---------- Hero ---------- */
+.lf-home-hero {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: calc(100svh - var(--header-h));
+  padding-block: var(--sp-8);
+}
+.lf-home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(3, 5, 13, 0.82) 0%, rgba(3, 5, 13, 0.55) 34%, rgba(3, 5, 13, 0) 58%);
+  pointer-events: none;
+}
+.lf-home-hero__inner { width: 100%; }
+.lf-home-hero__inner > * { max-width: 640px; }
+.lf-home-hero__title {
+  font-size: var(--fs-hero);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  margin-bottom: var(--sp-5);
+  text-shadow: 0 2px 30px rgba(3, 5, 13, 0.6);
+}
+.lf-gradient-text {
+  background: linear-gradient(95deg, var(--lf-yellow) 0%, var(--lf-orange) 55%, #ff9a5a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.lf-home-hero__lead { font-size: calc(var(--fs-body) * 1.12); color: var(--space-text-2); text-shadow: 0 1px 16px rgba(3, 5, 13, 0.8); }
+.lf-home-hero__planets { margin-top: var(--sp-7); }
+.lf-home-hero__planets .lf-meta { margin-bottom: var(--sp-2); }
+.lf-chip--link { text-decoration: none; transition: border-color var(--dur-fast), color var(--dur-fast); }
+.lf-dark .lf-chip--link { color: var(--space-text); background: rgba(6, 10, 24, 0.55); }
+.lf-dark .lf-chip--link:hover { border-color: var(--lf-yellow); color: #fff; }
+
+.lf-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-5);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  transform: translateX(-50%);
+  color: var(--space-text-2);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.lf-scroll-hint span {
+  width: 18px;
+  height: 28px;
+  border: 2px solid currentColor;
+  border-radius: 10px;
+  position: relative;
+}
+.lf-scroll-hint span::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--lf-yellow);
+  animation: lf-scroll-dot 1.8s var(--ease-in-out) infinite;
+}
+@keyframes lf-scroll-dot { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(9px); opacity: 0; } 100% { opacity: 0; } }
+
+/* ---------- Chapters ---------- */
+.lf-chapter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-height: 135svh;
+  padding: var(--sp-8) var(--gutter);
+  max-width: 1440px;
+  margin-inline: auto;
+}
+.lf-chapter--right { justify-content: flex-end; }
+.lf-chapter--outro { min-height: 70svh; }
+.lf-chapter__card {
+  width: min(100%, 460px);
+  padding: var(--sp-6);
+  border: 1px solid var(--space-line);
+  border-radius: var(--radius-lg);
+  background: rgba(8, 12, 28, 0.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-glow);
+}
+.lf-chapter__card h2 { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem); }
+.lf-chapter__card > p { color: var(--space-text-2); }
+.lf-chapter__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-1) var(--sp-4);
+  list-style: none;
+  margin: var(--sp-5) 0;
+  padding: 0;
+}
+.lf-chapter__list a {
+  display: block;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--space-line);
+  color: var(--space-text);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  text-decoration: none;
+}
+.lf-chapter__list a:hover { color: var(--lf-yellow); border-color: var(--lf-yellow); }
+
+/* Portrait / mobile: the object sits in the upper half, the card at the bottom */
+@media (max-aspect-ratio: 17/20) {
+  .lf-chapter { align-items: flex-end; min-height: 150svh; padding-bottom: 12svh; }
+  .lf-chapter--right { justify-content: flex-start; }
+  .lf-home-hero { align-items: flex-end; padding-bottom: 14svh; }
+  .lf-home-hero::before { background: linear-gradient(0deg, rgba(3, 5, 13, 0.9) 0%, rgba(3, 5, 13, 0.6) 45%, rgba(3, 5, 13, 0) 70%); }
+  .lf-home-hero__planets { display: none; }
+}
+
+/* Static profile: no camera journey, so the chapters are compact */
+.lf-home.is-static .lf-chapter { min-height: 0; padding-block: var(--sp-7); }
+.lf-home.is-static .lf-chapter--outro { display: none; }
+.lf-home.is-static .lf-home__cinematic {
+  background:
+    radial-gradient(900px 500px at 75% 20%, rgba(45, 88, 192, 0.35), transparent 65%),
+    var(--space-950);
+}
+.lf-home.is-static .lf-home-hero__planets { display: block; }
+
+/* ---------- Light content ---------- */
+.lf-home__content {
+  position: relative;
+  z-index: 2;
+  background: var(--surface);
+  box-shadow: 0 -40px 80px rgba(3, 5, 13, 0.6);
+}

@@ -1,4 +1,5 @@
 // src/components/JDCVComparison.js
+import { ENDPOINTS } from '../../config/endpoints';
 import React, { useState } from 'react';
 import { FaUpload, FaSpinner, FaFilePdf } from 'react-icons/fa';
 
@@ -47,7 +48,7 @@ const JDCVComparison = () => {
       setError('');
       setResult(null);
 
-      const response = await fetch('http://10.2.0.70:5002/match-jd-cv/', {
+      const response = await fetch(ENDPOINTS.jdCvMatch, {
         method: 'POST',
         body: formData,
       });

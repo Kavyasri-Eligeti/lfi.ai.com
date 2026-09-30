@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ENDPOINTS } from '../../config/endpoints';
 import { FaUser, FaEnvelope, FaUserTie, FaSearch, FaSpinner } from 'react-icons/fa';
 
 const UserList = ({ onSelectUser }) => {
@@ -11,7 +12,7 @@ const UserList = ({ onSelectUser }) => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://10.2.0.65:8020/users?limit=100&offset=0');
+        const response = await fetch(ENDPOINTS.users);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

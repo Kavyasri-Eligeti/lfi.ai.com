@@ -1,4 +1,5 @@
 // src/components/ResumeSummarizer.js
+import { ENDPOINTS } from '../../config/endpoints';
 import React, { useState } from 'react';
 import { FaUpload, FaSpinner, FaFilePdf } from 'react-icons/fa';
 
@@ -34,7 +35,7 @@ const ResumeSummarizer = () => {
       setError('');
       setSummary('');
 
-      const response = await fetch('http://10.2.0.70:5002/summarize-pdf', {
+      const response = await fetch(ENDPOINTS.resumeSummarize, {
         method: 'POST',
         body: formData,
       });

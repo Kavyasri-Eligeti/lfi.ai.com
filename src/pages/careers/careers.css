@@ -1,0 +1,47 @@
+.lf-orbit-cards { position: relative; min-height: 320px; }
+.lf-orbit-card {
+  position: absolute;
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  font-weight: 700;
+  font-size: 1.125rem;
+  animation: lf-float 7s var(--ease-in-out) infinite;
+}
+.lf-orbit-card--0 { left: 4%; top: 8%; }
+.lf-orbit-card--1 { right: 6%; top: 38%; animation-delay: -2.3s; }
+.lf-orbit-card--2 { left: 18%; bottom: 6%; animation-delay: -4.6s; }
+@keyframes lf-float { 50% { transform: translateY(-12px); } }
+@media (max-width: 900px) { .lf-orbit-cards { display: none; } }
+
+.lf-nurture { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--sp-4); list-style: none; margin: 0; padding: 0; }
+.lf-nurture li {
+  position: relative;
+  padding: var(--sp-6) var(--sp-5);
+  border: 1px solid var(--space-line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  overflow: hidden;
+  transition: transform var(--dur-card) var(--ease-out), border-color var(--dur-fast);
+}
+.lf-nurture li::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent), transparent 70%);
+  opacity: 0.25;
+}
+.lf-nurture li:hover { transform: translateY(-3px); border-color: var(--accent); }
+.lf-nurture h3 { margin: 0; font-size: 1.375rem; }
+.lf-nurture__index { display: block; margin-bottom: var(--sp-3); font-weight: 700; color: var(--accent); }
+
+.lf-careers-cta { text-align: center; }
+.lf-careers-cta p { margin-inline: auto; }
+.lf-careers-cta .lf-actions { justify-content: center; }

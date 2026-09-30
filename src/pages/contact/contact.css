@@ -1,0 +1,28 @@
+.lf-channels,
+.lf-social-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lf-channel,
+.lf-social-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  height: 100%;
+  padding: var(--sp-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-decoration: none;
+  transition: border-color var(--dur-fast), box-shadow var(--dur-card), transform var(--dur-card) var(--ease-out);
+}
+.lf-channel:hover,
+.lf-social-tile:hover { border-color: var(--lf-blue); box-shadow: var(--shadow-2); transform: translateY(-2px); }
+.lf-channel__label { font-size: var(--fs-meta); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
+.lf-channel__email { font-size: 1.125rem; font-weight: 650; color: var(--link); word-break: break-all; }
+.lf-social-tile { font-size: 1.125rem; font-weight: 700; color: var(--text); }
+.lf-social-tile::after { content: '↗'; color: var(--lf-orange-700); }

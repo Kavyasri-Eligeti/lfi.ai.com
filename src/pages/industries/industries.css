@@ -1,0 +1,35 @@
+.lf-constellation-section { background: radial-gradient(800px 400px at 30% 50%, rgba(45, 88, 192, 0.3), transparent 70%), var(--space-900); }
+.lf-constellation-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--sp-7); align-items: center; }
+@media (max-width: 900px) { .lf-constellation-layout { grid-template-columns: 1fr; } }
+
+.lf-constellation { position: relative; aspect-ratio: 16 / 10; }
+.lf-constellation__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lf-constellation__svg line { stroke: rgba(143, 176, 255, 0.35); stroke-width: 0.25; transition: stroke var(--dur-card); }
+.lf-constellation__svg line.is-active { stroke: var(--lf-yellow); stroke-width: 0.35; }
+.lf-constellation__halo { fill: rgba(93, 134, 255, 0.14); transition: fill var(--dur-card), transform var(--dur-card); }
+.lf-constellation__star { fill: #cfe0ff; transition: fill var(--dur-card); }
+.lf-constellation__svg g.is-active .lf-constellation__halo { fill: rgba(255, 214, 0, 0.22); }
+.lf-constellation__svg g.is-active .lf-constellation__star { fill: var(--lf-yellow); }
+.lf-constellation__svg g { animation: lf-twinkle 4s ease-in-out infinite; }
+.lf-constellation__svg g:nth-child(odd) { animation-delay: -2s; }
+@keyframes lf-twinkle { 50% { opacity: 0.75; } }
+
+.lf-constellation__labels { list-style: none; margin: 0; padding: 0; }
+.lf-constellation__labels li { position: absolute; transform: translate(-50%, 55%); }
+.lf-constellation__labels a {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(157, 184, 255, 0.28);
+  border-radius: var(--radius-pill);
+  background: rgba(6, 10, 24, 0.7);
+  color: var(--space-text);
+  font-size: var(--fs-meta);
+  font-weight: 650;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.lf-constellation__labels a:hover, .lf-constellation__labels a.is-active { border-color: var(--lf-yellow); color: #fff; }
+@media (max-width: 560px) { .lf-constellation__labels a { font-size: 0.6875rem; padding: 0.25rem 0.5rem; } }
+
+.lf-constellation-preview h2 { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem); }
+.lf-constellation-preview p { color: var(--space-text-2); }

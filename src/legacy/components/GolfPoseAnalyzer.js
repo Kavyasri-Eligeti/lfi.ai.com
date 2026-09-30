@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ENDPOINTS } from '../../config/endpoints';
 
 function GolfPoseAnalyzer() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -27,7 +28,7 @@ function GolfPoseAnalyzer() {
 
     try {
       console.log("Sending request to backend...");
-      const response = await fetch('http://10.2.0.70:5001/analyze/', {
+      const response = await fetch(ENDPOINTS.golfAnalyze, {
         method: 'POST',
         body: formData,
         // Don't set Content-Type header, let the browser set it with the correct boundary

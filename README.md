@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# Linkfields AI: AI Universe & Demo Catalogue
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The website behind **lfiai.com**. It is a cinematic 3D "AI universe" that presents Linkfields Innovations'
+AI and analytics demos alongside the company's solutions, services, industries, company, careers and
+contact information. It also preserves every page and link of the original demo catalogue.
 
-## Available Scripts
+- **3D universe:** 8 AI-category planets orbit an original AI emblem. Solutions and Services worlds and
+  an Industries constellation are visited by a scroll-driven camera. Built in plain Three.js, loaded
+  lazily after the page is interactive.
+- **Readable first:** every piece of content is real HTML with conventional navigation. The 3D layer is
+  an enhancement, with a static fallback (no WebGL2, reduced motion, "Reduce motion" toggle, context loss).
+- **Honest content:** every item carries a status badge: *Linkfields offering*, *Live demo*, *Proposed*,
+  *AI technology*, and so on. Proposed items are never presented as offerings, and tests enforce it.
 
-In the project directory, you can run:
+## Quick start
 
-### `npm start`
+```bash
+npm ci
+npm start          # dev server on http://localhost:3000
+npm test           # content-integrity and rendering tests
+npm run build      # production build in ./build
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+URL flags: `?profile=high|balanced|light|static`, `?debug=1` (performance HUD).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project structure
 
-### `npm test`
+```
+public/            index.html (SEO content + static hero shell), brand/, fonts/, images/, sitemap, robots
+src/
+  app/             App, router (new + legacy routes), navigation
+  components/      brand/ (official logo, AI emblem SVG) · layout/ · ui/
+  config/          endpoints.js: legacy backend URLs (env-overridable)
+  content/         ★ all site content and its verification status
+  features/        universe/ (3D engine + host) · globe/ · motion/
+  hooks/ pages/ styles/ utils/
+  legacy/          the original production catalogue, preserved unchanged
+  __tests__/
+docs/              audit, inventories, architecture, design system, QA report, deployment
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To update content, edit `src/content/*`. Pages render from those files.
 
-### `npm run build`
+## Documentation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Doc | Contents |
+|---|---|
+| [01-audit](docs/01-audit.md) | Repository audit, source recovery, risks, items needing confirmation |
+| [02-content-inventory](docs/02-content-inventory.md) | Corporate content and status taxonomy |
+| [03-ai-proposals](docs/03-ai-proposals.md) | Proposed AI solutions and services (awaiting approval) |
+| [04-architecture](docs/04-architecture.md) | 3D scene, emblem, animation, rendering profiles, folder structure |
+| [05-design-system](docs/05-design-system.md) | Typography, colour and tokens |
+| [06-routes-and-demos](docs/06-routes-and-demos.md) | Preserved routes and the 38-entry demo inventory |
+| [07-quality-report](docs/07-quality-report.md) | Performance, accessibility, build and test results |
+| [08-deployment-and-rollback](docs/08-deployment-and-rollback.md) | Release path and rollback |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deployment
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`azure-pipelines.yml` builds and FTP-mirrors `build/` on **every push to `main`**. Read
+[docs/08](docs/08-deployment-and-rollback.md) before merging.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Credits and licences
+Open Sans © The Open Sans Project Authors (SIL OFL 1.1, `public/fonts/OFL-LICENSE.txt`). Simplex
+noise GLSL © Ashima Arts / Stefan Gustavson (MIT). Three.js (MIT). GSAP (Standard "no charge" licence).
+The Linkfields logo is © Linkfields Innovations and is used unmodified.

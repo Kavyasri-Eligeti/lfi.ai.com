@@ -1,0 +1,82 @@
+.lf-planet-page {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100svh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding: var(--sp-5) var(--gutter) var(--sp-6);
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.lf-planet-panel {
+  width: min(100%, 470px);
+  max-height: calc(100svh - var(--header-h) - 160px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--sp-6);
+  border: 1px solid var(--space-line);
+  border-radius: var(--radius-lg);
+  /* Near-opaque so that text contrast never depends on what is behind it. */
+  background: rgba(8, 12, 28, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-glow);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(157, 184, 255, 0.35) transparent;
+}
+.lf-planet-panel h1 { font-size: clamp(2rem, 1.5rem + 1.8vw, 2.75rem); margin-bottom: var(--sp-2); }
+.lf-planet-panel h1:focus { box-shadow: none; }
+.lf-planet-panel > p, .lf-planet-panel section > p { color: var(--space-text-2); }
+.lf-planet-panel section { margin-top: var(--sp-5); }
+.lf-planet-panel header { margin-bottom: var(--sp-4); }
+.lf-planet-panel__tagline { margin-bottom: var(--sp-3); color: var(--space-text-2); font-size: 1.0625rem; }
+.lf-planet-panel__crumbs { margin-bottom: var(--sp-4); font-size: var(--fs-meta); color: var(--space-text-2); }
+.lf-planet-panel__h2 { margin-bottom: var(--sp-2); font-size: var(--fs-meta); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lf-yellow); }
+.lf-planet-panel__empty { padding: var(--sp-3) var(--sp-4); border: 1px dashed rgba(255, 180, 90, 0.5); border-radius: var(--radius); color: #ffd7a8 !important; font-size: var(--fs-small); }
+
+.lf-planet-demos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-1); }
+.lf-planet-demo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--space-line);
+  border-radius: var(--radius);
+  color: var(--space-text) !important;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color var(--dur-fast), background-color var(--dur-fast);
+}
+.lf-planet-demo::after { content: '↗'; color: var(--space-text-2); }
+.lf-planet-demo[href^='/']::after { content: '→'; }
+.lf-planet-demo:hover { border-color: var(--lf-yellow); background: rgba(255, 214, 0, 0.06); }
+.lf-planet-demo__name { flex: 1; }
+.lf-planet-demo__tag { font-size: 0.6875rem; color: #ffc27a; font-weight: 700; }
+
+.lf-planet-tech { margin: var(--sp-2) 0 0; display: grid; gap: var(--sp-3); }
+.lf-planet-tech dt { font-weight: 700; font-size: var(--fs-small); }
+.lf-planet-tech dd { margin: 0; color: var(--space-text-2); font-size: var(--fs-small); }
+
+.lf-chip--proposed { border-style: dashed !important; }
+
+.lf-planet-panel__pager { display: flex; justify-content: space-between; gap: var(--sp-2); margin-top: var(--sp-6); }
+.lf-planet-panel__back { width: 100%; margin-top: var(--sp-3); }
+
+.lf-planet-page__index { max-width: 980px; }
+.lf-planet-page__index .lf-planet-card { background: rgba(8, 12, 28, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.lf-planet-page__index .lf-planet-card[aria-current='page'] { border-color: var(--lf-yellow); }
+
+/* Mobile/portrait: the planet sits at the top and the panel is a bottom sheet */
+@media (max-aspect-ratio: 17/20) {
+  .lf-planet-page { padding-top: 38svh; }
+  .lf-planet-panel { width: 100%; max-height: none; overflow: visible; }
+  .lf-planet-page__index { display: none; }
+}
+
+/* Static profile: nothing behind the panel, so give it a backdrop */
+.lf-stage--static ~ .lf-planet-page { padding-top: var(--sp-6); }

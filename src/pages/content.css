@@ -1,0 +1,83 @@
+/* Shared styles for the light content pages (Solutions, Services, Industries, Company, Careers, Contact). */
+
+.lf-offering__headline { font-weight: 650; color: var(--text) !important; }
+.lf-card__subhead { margin: var(--sp-2) 0; font-size: var(--fs-meta); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
+.lf-proposal__title { font-size: 1.125rem !important; }
+
+.lf-verified-note { margin-bottom: var(--sp-6); border-color: #b9c9ee; border-left-color: var(--lf-blue); background: var(--lf-blue-100); }
+
+/* Services: long-form rows (documentation-style) */
+.lf-service-list { display: grid; gap: var(--sp-5); }
+.lf-service {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 2fr;
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  scroll-margin-top: calc(var(--header-h) + 64px);
+}
+@media (max-width: 860px) { .lf-service { grid-template-columns: 1fr; gap: var(--sp-4); } }
+.lf-service__head { display: flex; gap: var(--sp-4); }
+.lf-service__head h3 { margin-bottom: var(--sp-2); }
+.lf-service__index { margin: 0; font-size: 2.25rem; font-weight: 700; line-height: 1; color: var(--lf-orange-700); letter-spacing: -0.04em; }
+.lf-service__body > p { color: var(--text-2); }
+.lf-sub-services { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: var(--sp-4); list-style: none; padding: 0; margin: 0 0 var(--sp-5); }
+.lf-sub-services li { padding: var(--sp-4); border-radius: var(--radius); background: var(--surface-2); }
+.lf-sub-services h4 { margin-bottom: var(--sp-1); font-size: 1rem; }
+.lf-sub-services p { margin: 0; font-size: var(--fs-small); color: var(--text-2); }
+
+[id] { scroll-margin-top: calc(var(--header-h) + 64px); }
+
+/* Company */
+.lf-values { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: var(--sp-4); list-style: none; margin: 0; padding: 0; }
+.lf-values li { padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+.lf-values h3 { font-size: 1.25rem; margin-bottom: var(--sp-2); }
+.lf-values p { margin: 0; color: var(--text-2); }
+.lf-values li::before { content: ''; display: block; width: 28px; height: 4px; margin-bottom: var(--sp-4); border-radius: 2px; background: linear-gradient(90deg, var(--lf-yellow), var(--lf-orange)); }
+
+.lf-principles { counter-reset: p; display: grid; gap: var(--sp-3); list-style: none; margin: 0; padding: 0; }
+.lf-principles li { counter-increment: p; display: grid; grid-template-columns: 48px 1fr; gap: var(--sp-3); padding: var(--sp-4) 0; border-bottom: 1px solid var(--border); }
+.lf-principles li::before { content: counter(p, decimal-leading-zero); font-weight: 700; color: var(--lf-blue); font-size: 1.25rem; }
+.lf-principles h3 { font-size: 1.125rem; margin-bottom: var(--sp-1); }
+.lf-principles p { margin: 0; color: var(--text-2); }
+
+.lf-partners { display: flex; flex-wrap: wrap; gap: var(--sp-3); list-style: none; padding: 0; margin: 0; }
+.lf-partners li { padding: 0.6rem 1.1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); font-weight: 650; color: var(--text-2); }
+
+.lf-vm { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+@media (max-width: 760px) { .lf-vm { grid-template-columns: 1fr; } }
+.lf-vm article { padding: var(--sp-6); border-radius: var(--radius-lg); background: var(--surface-2); border: 1px solid var(--border); }
+.lf-vm p { margin: 0; font-size: 1.0625rem; color: var(--text-2); }
+
+/* Offices (Company + Contact) */
+.lf-globe-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-6); align-items: center; }
+@media (max-width: 960px) { .lf-globe-layout { grid-template-columns: 1fr; } }
+.lf-globe { position: relative; aspect-ratio: 1; width: 100%; max-width: 560px; margin-inline: auto; }
+.lf-globe canvas { width: 100%; height: 100%; }
+.lf-globe__fallback { position: absolute; inset: 0; display: grid; place-items: center; }
+
+.lf-offices { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: var(--sp-3); list-style: none; margin: 0; padding: 0; }
+.lf-office {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  width: 100%;
+  height: 100%;
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: left;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.lf-dark .lf-office { background: rgba(255, 255, 255, 0.03); border-color: var(--space-line); color: var(--space-text-2); }
+.lf-office h3 { margin: 0; font-size: 1.0625rem; color: var(--text); }
+.lf-dark .lf-office h3 { color: var(--space-text); }
+.lf-office address { font-style: normal; }
+.lf-office.is-active { border-color: var(--lf-yellow); box-shadow: 0 0 0 1px var(--lf-yellow); }
+.lf-office__focus { align-self: flex-start; margin-top: var(--sp-2); padding: 0; border: 0; background: none; color: var(--space-link); font-weight: 650; font-size: var(--fs-meta); cursor: pointer; text-decoration: underline; }
+.lf-hq { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lf-orange-700); }
+.lf-dark .lf-hq { color: var(--lf-yellow); }
