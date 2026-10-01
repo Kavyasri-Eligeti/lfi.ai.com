@@ -4,6 +4,7 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + 16px);
+  background: var(--surface);
 }
 
 body {
@@ -16,9 +17,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
+  overflow-x: clip;
 }
 
-#main { position: relative; z-index: 1; display: block; }
+#main { position: relative; display: block; }
 #main:focus { outline: none; }
 
 img, svg, canvas, video { display: block; max-width: 100%; }
@@ -26,32 +28,39 @@ img { height: auto; }
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 var(--sp-4);
+  font-family: var(--font-display);
   line-height: var(--lh-heading);
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   color: inherit;
+  text-wrap: balance;
 }
-h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: -0.025em; }
-h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: -0.02em; }
-h3 { font-size: var(--fs-h3); font-weight: 650; }
-h4 { font-size: var(--fs-h4); font-weight: 650; letter-spacing: 0; }
+h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: var(--track-tight); font-weight: 800; }
+h2 { font-size: var(--fs-h2); line-height: 1.08; letter-spacing: -0.03em; font-weight: 800; }
+h3 { font-size: var(--fs-h3); letter-spacing: -0.02em; }
+h4 { font-size: var(--fs-h4); letter-spacing: -0.01em; }
 
 p, ul, ol, dl { margin: 0 0 var(--sp-4); }
 ul, ol { padding-left: 1.25em; }
-p { max-width: var(--measure); }
+p { max-width: var(--measure); text-wrap: pretty; }
 
-a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 a:hover { color: var(--link-hover); }
 
 button { font: inherit; color: inherit; }
 
 :focus { outline: none; }
 :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
-.lf-dark :focus-visible, .lf-header :focus-visible { box-shadow: var(--focus-ring-dark); }
+.lf-ink :focus-visible, .lf-footer :focus-visible, .lf-header__capsule:focus-visible {
+  --focus-color: var(--lf-yellow);
+  box-shadow: 0 0 0 3px var(--surface-ink), 0 0 0 6px var(--lf-yellow);
+}
 /* Programmatic focus targets (hash navigation, route headings) need no ring */
 [tabindex='-1']:focus-visible { box-shadow: none; }
 
 ::selection { background: var(--lf-yellow); color: var(--lf-charcoal); }
+
+[hidden] { display: none !important; }
 
 .lf-visually-hidden {
   position: absolute !important;
@@ -67,14 +76,14 @@ button { font: inherit; color: inherit; }
   top: var(--sp-2);
   z-index: 1000;
   padding: var(--sp-2) var(--sp-4);
-  background: var(--lf-yellow);
-  color: var(--lf-charcoal);
+  background: var(--lf-charcoal);
+  color: #fff;
   font-weight: 700;
   border-radius: var(--radius-sm);
   transform: translateY(-200%);
-  transition: transform var(--dur-fast) var(--ease-out);
+  transition: transform var(--dur-micro) var(--ease-out);
 }
-.lf-skip-link:focus { transform: translateY(0); }
+.lf-skip-link:focus { transform: translateY(0); color: #fff; }
 
 .lf-container {
   width: 100%;
@@ -82,17 +91,16 @@ button { font: inherit; color: inherit; }
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
+.lf-container--narrow { max-width: calc(var(--container-narrow) + 2 * var(--gutter)); }
 
-.lf-section { padding-block: var(--section-y); }
-.lf-route-loading { min-height: 100vh; background: var(--space-900); }
-.lf-section--muted { background: var(--surface-2); }
-.lf-section--dark { background: var(--space-900); color: var(--space-text); }
+.lf-section { padding-block: var(--section-y); position: relative; }
+.lf-section--tint { background: var(--surface-2); }
+.lf-section--ink { background: var(--surface-ink); color: var(--text-on-ink); }
+.lf-route-loading { min-height: 100vh; background: var(--surface); }
 
-.lf-dark { color: var(--space-text); }
-.lf-dark a:not([class]) { color: var(--space-link); }
-.lf-dark a:not([class]):hover { color: #fff; }
-.lf-dark .lf-link-arrow { color: var(--space-link); }
-.lf-dark .lf-link-arrow:hover { color: #fff; }
+.lf-ink { color: var(--text-on-ink); }
+.lf-ink a:not([class]) { color: #fff; }
+.lf-ink a:not([class]):hover { color: var(--lf-yellow); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

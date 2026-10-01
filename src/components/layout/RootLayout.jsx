@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
+import { m } from 'framer-motion';
 import Header from './Header';
 import Footer from './Footer';
+import { EASE } from '../../features/motion/tokens';
 
 // Scrolls to #hash targets after client-side navigation (e.g. /solutions#sap).
 function HashScroller() {
@@ -27,13 +29,41 @@ function HashScroller() {
   return null;
 }
 
+// After a client-side page change, move focus to the main region so screen
+// reader and keyboard users start at the new page's content.
+function useRouteFocus(pathname, hash) {
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (!hash) document.getElementById('main')?.focus({ preventScroll: true });
+  }, [pathname, hash]);
+}
+
 export default function RootLayout() {
+  const { pathname, hash } = useLocation();
+  const firstRender = useRef(true);
+  useEffect(() => {
+    firstRender.current = false;
+  }, []);
+  useRouteFocus(pathname, hash);
+
   return (
     <>
       <a className="lf-skip-link" href="#main">Skip to main content</a>
       <Header />
       <main id="main" tabIndex={-1}>
-        <Outlet />
+        {/* Enter-only page transition: navigation is never delayed by an exit animation. */}
+        <m.div
+          key={pathname}
+          initial={firstRender.current ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.32, ease: EASE.out }}
+        >
+          <Outlet />
+        </m.div>
       </main>
       <Footer />
       <ScrollRestoration />

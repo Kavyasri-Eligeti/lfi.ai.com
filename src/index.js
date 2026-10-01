@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// Open Sans @font-face + preload live in public/index.html (stable /fonts URL).
+// Open Sans and Hanken Grotesk @font-face + preloads live in public/index.html (stable /fonts URL).
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/components.css';
+import './components/sections/sections.css';
 import App from './app/App';
 import reportWebVitals from './reportWebVitals';
 

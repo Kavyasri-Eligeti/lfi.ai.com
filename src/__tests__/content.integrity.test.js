@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { demos, demoById } from '../content/demos';
-import { planets, worlds } from '../content/universe';
-import { technologyById } from '../content/technologies';
+import { capabilities, featuredDemoIds } from '../content/capabilities';
+import { partners, offices, company } from '../content/company';
+import { insights } from '../content/insights';
+import { careers } from '../content/careers';
 import { corporateServices } from '../content/services';
 import { corporateSolutions } from '../content/solutions';
 import { industries } from '../content/industries';
@@ -60,7 +62,7 @@ describe('corporate content matches linkfields.com', () => {
   });
 
   test('solutions are preserved', () => {
-    expect(corporateSolutions.map((s) => s.name)).toEqual(['SAP', 'Odoo', 'Microsoft Dynamics', 'Salesforce', 'iPaaS', 'RPA']);
+    expect(corporateSolutions.map((s) => s.name)).toEqual(['SAP', 'Odoo', 'Microsoft Dynamics', 'Salesforce', 'iPaaS', 'RPA', 'Testorium Z']);
   });
 
   test('industries are preserved exactly', () => {
@@ -72,7 +74,7 @@ describe('corporate content matches linkfields.com', () => {
       'Fintech',
       'FMCG',
       'Mining',
-      'Oil and Gas',
+      'Oil & Gas',
     ]);
     industries.forEach((i) => i.relatedDemos.forEach((id) => expect(demoById[id]).toBeDefined()));
   });
@@ -87,31 +89,53 @@ describe('claims are labelled honestly', () => {
   });
 
   test('every status used has display metadata', () => {
-    [...demos, ...planets, ...proposedServices, ...proposedSolutions].forEach((x) => expect(STATUS_META[x.status]).toBeDefined());
+    [...demos, ...capabilities, ...proposedServices, ...proposedSolutions].forEach((x) => expect(STATUS_META[x.status]).toBeDefined());
   });
 });
 
-describe('universe integrity: every clickable object leads somewhere meaningful', () => {
-  test('planets reference real demos, technologies and services', () => {
-    const proposedIds = new Set(proposedServices.map((s) => s.id));
-    const serviceIds = new Set(corporateServices.map((s) => s.id));
-    planets.forEach((p) => {
-      p.demos.forEach((id) => expect(demoById[id]).toBeDefined());
-      p.moons.forEach((id) => expect(technologyById[id]).toBeDefined());
-      p.services.proposed.forEach((id) => expect(proposedIds.has(id)).toBe(true));
-      p.services.corporate.forEach((id) => expect(serviceIds.has(id)).toBe(true));
-      // A planet without demos must be marked proposed or link to corporate offerings.
-      if (!p.demos.length) expect(p.status === STATUS.PROPOSED || (p.corporateLinks || []).length > 0).toBe(true);
+const PUBLIC = path.join(__dirname, '../../public');
+const publicFile = (url) => fs.existsSync(path.join(PUBLIC, url.replace(/^\//, '')));
+
+describe('every browsable item leads somewhere real', () => {
+  test('capability groups and featured demos reference existing demos', () => {
+    capabilities.forEach((c) => {
+      expect(c.demos.length).toBeGreaterThan(0);
+      c.demos.forEach((id) => expect(demoById[id]).toBeDefined());
+    });
+    featuredDemoIds.forEach((id) => expect(demoById[id]).toBeDefined());
+  });
+
+  test('bundled images exist in public/', () => {
+    partners.forEach((p) => expect(publicFile(p.logo)).toBe(true));
+    industries.filter((i) => i.image).forEach((i) => expect(publicFile(i.image)).toBe(true));
+    company.recognition.filter((r) => r.image).forEach((r) => expect(publicFile(r.image)).toBe(true));
+    Object.values(careers.images).forEach((img) => {
+      expect(publicFile(img.src)).toBe(true);
+      expect(publicFile(img.srcSm)).toBe(true);
+    });
+    demos.filter((d) => d.image).forEach((d) => expect(publicFile(d.image)).toBe(true));
+  });
+
+  test('offices carry published contact details and direction links', () => {
+    expect(offices.map((o) => o.country)).toEqual(['South Africa', 'India', 'USA', 'UAE', 'Australia', 'Botswana']);
+    offices.forEach((o) => {
+      expect(o.address.length).toBeGreaterThan(10);
+      expect(o.phones.length).toBeGreaterThan(0);
+      expect(o.directions).toMatch(/^https:\/\/(www\.google\.com\/maps|goo\.gl\/maps|maps\.app\.goo\.gl)/);
     });
   });
 
-  test('outer-world satellites link to existing page anchors', () => {
-    worlds.solutions.satellites.forEach((s) =>
-      expect(corporateSolutions.some((c) => s.href === `/solutions#${c.id}`)).toBe(true)
-    );
-    worlds.services.satellites.forEach((s) =>
-      expect(corporateServices.some((c) => s.href === `/services#${c.id}`)).toBe(true)
-    );
-    expect(worlds.industries.stars).toHaveLength(worlds.industries.layout.length);
+  test('insights keep their published titles and only published dates', () => {
+    expect(insights).toHaveLength(8);
+    insights.forEach((n) => {
+      expect(n.href).toMatch(/^https:\/\//);
+      if (n.type === 'News') expect(n.date).toBeUndefined();
+      if (n.date) expect(n.date).toMatch(/^2024-\d\d-\d\d$/);
+    });
+  });
+
+  test('the mission and values are the published wording', () => {
+    expect(company.mission).toMatch(/^Through our relentless pursuit of engineering excellence/);
+    expect(company.values.map((v) => v.name)).toEqual(['Innovation', 'Courage', 'Respect', 'Impact', 'Passion', 'Ownership']);
   });
 });

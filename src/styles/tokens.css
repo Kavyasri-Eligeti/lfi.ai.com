@@ -1,99 +1,114 @@
 /*
- * Linkfields AI design tokens.
- * Brand colours are extracted from the official logo (public/brand/linkfields-logo.svg).
- * Typography follows an AWS-documentation-style technical hierarchy, set in
- * Open Sans (SIL OFL), which is also the open-source default of AWS's Cloudscape
- * design system. Amazon Ember is not used (Amazon brand typeface).
+ * Linkfields AI design tokens: "Modular Intelligence".
+ * Light-first. Brand colours are the exact values in the official logo file
+ * (public/brand/linkfields-logo.svg). The "leaf" radius (three small corners,
+ * one large) is taken from the three modules of the Linkfields mark.
+ * Display type: Hanken Grotesk. Body and UI: Open Sans (the open-source
+ * default of AWS's Cloudscape system). Both SIL OFL 1.1, self-hosted.
+ * Amazon Ember is not used (Amazon brand typeface, no licence).
  */
 :root {
   /* Brand (exact logo values) */
   --lf-yellow: #ffd600;
   --lf-orange: #ff7800;
   --lf-blue: #2d58c0;
-  --lf-mist: #e6eced;
+  --lf-mist: #e6eced;          /* logo wordmark */
   --lf-charcoal: #16191f;
 
   /* Accessible brand derivatives */
-  --lf-blue-600: #2449a3;          /* hover / pressed */
-  --lf-blue-100: #e8eefb;
-  --lf-orange-700: #a84a00;        /* orange text on white: 5.3:1 */
-  --lf-orange-100: #fff1e5;
-  --lf-yellow-100: #fff8cc;
+  --lf-blue-700: #1f3f8f;      /* hover / pressed, 9.6:1 on white */
+  --lf-blue-50: #eef2fb;
+  --lf-blue-100: #dfe7f8;
+  --lf-orange-700: #a84a00;    /* orange text on white, 5.3:1 */
+  --lf-orange-50: #fff4ea;
+  --lf-yellow-50: #fffbe0;
+  --lf-yellow-300: #ffe566;
 
-  /* Environment A: cinematic universe */
-  --space-950: #03050d;
-  --space-900: #060a18;
-  --space-800: #0b1226;
-  --space-700: #131c38;
-  --space-line: rgba(143, 176, 255, 0.18);
-  --space-glass: rgba(9, 14, 32, 0.72);
-  --space-text: #eef2f6;
-  --space-text-2: #b7c2d4;
-  --space-link: #9db8ff;
-
-  /* Environment B: content (light) */
+  /* Neutrals (cool, biased toward the brand blue) */
   --surface: #ffffff;
-  --surface-2: #f4f6f8;
-  --surface-3: #e9edf1;
-  --border: #d5dbe1;
-  --border-strong: #aab4c0;
+  --surface-2: #f5f7fa;
+  --surface-3: #eaeef3;
+  --surface-ink: #16191f;      /* charcoal surfaces: nav capsule, footer, dark tiles */
+  --surface-ink-2: #1f242c;
+  --border: #dde2e9;
+  --border-strong: #b4bdc9;
   --text: #16191f;
-  --text-2: #414d5c;
-  --text-3: #5f6b7a;
+  --text-2: #4a5463;           /* 7.6:1 on white */
+  --text-3: #5f6a79;           /* 5.6:1 on white */
+  --text-on-ink: #eef1f5;
+  --text-on-ink-2: #b9c2ce;
   --link: #2d58c0;
   --link-hover: #1f3f8f;
 
   /* Status tones */
-  --tone-blue-bg: #e8eefb;   --tone-blue-fg: #1f3f8f;
-  --tone-green-bg: #e6f4ea;  --tone-green-fg: #19692c;
-  --tone-orange-bg: #fff1e5; --tone-orange-fg: #8f3f00;
-  --tone-violet-bg: #efeafd; --tone-violet-fg: #4b2fa6;
-  --tone-neutral-bg: #eef1f4; --tone-neutral-fg: #414d5c;
+  --tone-blue-bg: #e8eefb;    --tone-blue-fg: #1f3f8f;
+  --tone-green-bg: #e4f3ea;   --tone-green-fg: #17663a;
+  --tone-orange-bg: #fff1e3;  --tone-orange-fg: #8f3f00;
+  --tone-violet-bg: #efeafd;  --tone-violet-fg: #4b2fa6;
+  --tone-neutral-bg: #edf0f4; --tone-neutral-fg: #414d5c;
 
   /* Typography */
+  --font-display: 'Hanken Grotesk', 'Open Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-sans: 'Open Sans Variable', 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
-  --fs-hero: clamp(2.5rem, 1.2rem + 4.2vw, 5.5rem);      /* 40 → 88px */
-  --fs-h1: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem);       /* 36 → 56px */
-  --fs-h2: clamp(2rem, 1.4rem + 2vw, 3.5rem);            /* 32 → 56px */
+  --fs-hero: clamp(2.5rem, 1.15rem + 4.6vw, 5.5rem);     /* 40 → 88px */
+  --fs-h1: clamp(2.25rem, 1.45rem + 2.8vw, 4rem);        /* 36 → 64px */
+  --fs-h2: clamp(2rem, 1.35rem + 2.1vw, 3.5rem);         /* 32 → 56px */
   --fs-h3: clamp(1.375rem, 1.2rem + 0.5vw, 1.75rem);     /* 22 → 28px */
   --fs-h4: 1.125rem;
-  --fs-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);     /* 16 → 18px */
+  --fs-lead: clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem); /* 17 → 20px */
+  --fs-body: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);   /* 16 → 17px */
   --fs-small: 0.9375rem;                                  /* 15px nav */
   --fs-meta: 0.8125rem;                                   /* 13px */
+  --fs-label: 0.75rem;                                    /* 12px eyebrows */
 
-  --lh-tight: 1.12;
-  --lh-heading: 1.2;
-  --lh-body: 1.6;
-  --measure: 70ch;
+  --lh-tight: 1.04;
+  --lh-heading: 1.14;
+  --lh-body: 1.65;
+  --measure: 68ch;
+  --track-tight: -0.035em;
+  --track-label: 0.12em;
 
   /* Spacing (4px base) */
   --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
-  --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem; --sp-8: 4rem; --sp-9: 6rem;
-  --section-y: clamp(3.5rem, 2rem + 5vw, 7rem);
-  --gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
-  --container: 1240px;
+  --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem; --sp-8: 4rem; --sp-9: 6rem; --sp-10: 8rem;
+  --section-y: clamp(3.5rem, 1.8rem + 6vw, 8rem);
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+  --container: 1280px;
+  --container-narrow: 860px;
 
-  --radius-sm: 6px; --radius: 10px; --radius-lg: 16px; --radius-pill: 999px;
-  --shadow-1: 0 1px 2px rgba(22, 25, 31, 0.06), 0 1px 3px rgba(22, 25, 31, 0.08);
-  --shadow-2: 0 4px 12px rgba(22, 25, 31, 0.08), 0 2px 4px rgba(22, 25, 31, 0.05);
-  --shadow-glow: 0 0 0 1px rgba(157, 184, 255, 0.25), 0 20px 60px rgba(0, 0, 0, 0.45);
+  /* Shape */
+  --radius-xs: 4px; --radius-sm: 8px; --radius: 12px; --radius-lg: 20px; --radius-pill: 999px;
+  --leaf: 28px;                                       /* the large corner of a brand module */
+  --radius-leaf: var(--radius-xs) var(--radius-xs) var(--leaf) var(--radius-xs);
+  --radius-leaf-lg: 6px 6px 48px 6px;
+  --radius-leaf-tl: var(--leaf) var(--radius-xs) var(--radius-xs) var(--radius-xs);
+
+  /* Elevation (cool-tinted) */
+  --shadow-1: 0 1px 0 rgba(30, 44, 70, 0.06), 0 1px 3px rgba(30, 44, 70, 0.08);
+  --shadow-2: 0 1px 0 rgba(30, 44, 70, 0.05), 0 12px 28px -14px rgba(30, 44, 70, 0.32);
+  --shadow-3: 0 2px 0 rgba(30, 44, 70, 0.04), 0 28px 56px -24px rgba(30, 44, 70, 0.42);
 
   /* Motion (mirrors src/features/motion/tokens.js) */
-  --dur-fast: 180ms;
-  --dur-card: 450ms;
-  --dur-section: 700ms;
+  --dur-micro: 150ms;
+  --dur-ui: 300ms;
+  --dur-section: 600ms;
+  --dur-hero: 900ms;
   --ease-out: cubic-bezier(0.22, 0.8, 0.24, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
-  --header-h: 60px;
-  --focus-ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--lf-blue);
-  --focus-ring-dark: 0 0 0 2px var(--space-900), 0 0 0 4px var(--lf-yellow);
+  /* Breakpoints (reference only; CSS media queries use these literal values):
+     480, 768, 1024, 1280, 1536 */
+
+  --header-h: 72px;
+  --focus-color: var(--lf-blue);
+  --focus-ring: 0 0 0 3px var(--surface), 0 0 0 6px var(--focus-color);
 }
 
 [data-motion='reduced'] {
-  --dur-fast: 0ms;
-  --dur-card: 0ms;
+  --dur-micro: 0ms;
+  --dur-ui: 0ms;
   --dur-section: 0ms;
+  --dur-hero: 0ms;
 }

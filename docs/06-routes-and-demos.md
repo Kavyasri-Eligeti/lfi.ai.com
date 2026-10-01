@@ -1,51 +1,45 @@
-# 06 · Preserved routes and demo inventory
+# 06 · Routes and demo inventory
 
 ## Routes
 
-| Route | Before | Now |
+| Route | Production today (`main`) | This branch |
 |---|---|---|
-| `/` | Project Catalogue (legacy Industries page) | AI Universe home |
+| `/` | Project Catalogue (legacy) | New home page |
 | `/catalogue` | none | **Original Project Catalogue, unchanged** (legacy component) |
-| `/BankingAnalytics` · `/TelecomAnalytics` · `/BankingTelecomAnalytics` | legacy | unchanged (legacy) |
-| `/golf-analyzer` · `/resume-summarizer` · `/jd-cv-comparison` | legacy | unchanged (legacy) |
-| `/users` · `/generate-report` | legacy (unlinked) | unchanged (legacy, still unlinked) |
-| `/universe/:planetId` | none | Planet pages (8) |
-| `/demos` · `/solutions` · `/services` · `/industries` · `/company` · `/careers` · `/contact` | none | New pages |
+| `/BankingAnalytics` · `/TelecomAnalytics` · `/BankingTelecomAnalytics` | legacy | unchanged |
+| `/golf-analyzer` · `/resume-summarizer` · `/jd-cv-comparison` | legacy | unchanged |
+| `/users` · `/generate-report` | legacy (unlinked) | unchanged (still unlinked) |
+| `/solutions` · `/services` · `/industries` · `/company` · `/careers` · `/contact` | none | new pages |
+| `/demos` | none | redirects to `/solutions#products` |
 
-The legacy backend endpoints are unchanged. They are centralised in `src/config/endpoints.js` with
-identical defaults and optional `REACT_APP_*` overrides.
-
-`public/sitemap.xml` keeps every original URL and adds the new ones.
+Legacy backend endpoints are unchanged (`src/config/endpoints.js`). `public/sitemap.xml` lists every
+original URL plus the new pages.
 
 ## Demo catalogue (38 entries, `src/content/demos.js`)
 
-Every active entry from the production catalogue is preserved with its **exact link**. An automated
-test parses the original source and fails if any link goes missing.
+Every active entry from the production catalogue keeps its **exact link**. A unit test parses the
+original source and fails if any link is missing.
 
-| Group | Entries |
+### Link check, 1 October 2026 (HTTP status from this machine)
+
+| Result | Entries |
 |---|---|
-| Conversational AI & document intelligence | RAG Chatbot, RAG Mobile, Unmanned Kiosk, TextIQ, vajraX, EduPilot |
-| Banking | Banking Churn & Segmentation (+ churn/segment sub-demos), FinSight, Credit Risk, Banking Claims Fraud, 360 Customer Behaviour, CLV (Banking+Telecom), Sentiment Analysis |
-| Telecom | Telecom Churn & Segmentation (+ sub-demos), (Banking+Telecom) Customer Analytics (+ sub-demos), NBO Revenue, NBO Data Recommendation Engine |
-| Insurance | Claims Fraud & Anomaly, Signature Fraud, Network Fraud, Risk Score, Underwriting, Insurance Platform, Insurance CLV, Lapse Prediction |
-| Operations & CX | Demand Forecasting & Inventory Optimisation, Energy Equipment Failure, Engage360, Smart KPI, Digital Twin (flagged: same URL as Kiosk), Digital Growth Intelligence |
-| Talent & internal | Resume Summarisation*, JD/CV Comparison*, Golf Pose Analyzer*, Cybersecurity LMS*, Internal Portal |
-| POCs | Consulate SA, Consulate LA |
+| 200 OK | 34 of the 37 unique external URLs |
+| 502 | Consulate SA, Consulate LA (`consulate-*.lfidemo.com`) |
+| Private network | Cybersecurity LMS (`http://10.2.0.70:5003`), plus the in-app tools that call `10.2.x.x` backends |
+| Same URL as another entry | Digital Twin uses the Unmanned Kiosk URL (preserved and flagged on its card) |
 
-\* *Linkfields network only*: these rely on `10.2.x.x` backends, exactly as before.
+## Capability groups (`src/content/capabilities.js`)
 
-"Demand Forecasting" and "Inventory optimization" shared one URL in the original and are merged under the
-lfiai.com structured-data name. Both labels remain in the classic `/catalogue` view.
+These groups are used by the home index and the catalogue filter. Each one is backed only by existing demos.
 
-## Planet → demo mapping (`src/content/universe.js`)
+| Capability | Demos |
+|---|---|
+| Generative AI | 9: the original catalogue's "GenAI" list |
+| Conversational AI | 4: RAG Chatbot, RAG Mobile, Unmanned Kiosk, EduPilot |
+| Document Intelligence | 4: TextIQ, vajraX, Resume Summarisation, JD/CV Comparison |
+| Predictive Analytics | 16: the original "Machine Learning" and "Advanced Analytics" lists |
+| Fraud and Risk | 6 |
+| Computer Vision | 1: Golf Pose Analyzer |
 
-| Planet | Status | Demos |
-|---|---|---|
-| Generative AI | live | the original catalogue's "GenAI" list (TextIQ, vajraX, FinSight, Engage360, EduPilot, Digital Growth Intelligence, Internal Portal, Consulate SA/LA) |
-| Conversational AI | live | RAG Chatbot, RAG Mobile, Unmanned Kiosk, EduPilot |
-| Document Intelligence | live | TextIQ, vajraX, Resume Summarisation, JD/CV Comparison |
-| Data Intelligence | live | 16 ML/analytics demos (original "Machine Learning" + "Advanced Analytics" lists and related analytics) |
-| Fraud & Risk Intelligence | live | Insurance/Banking/Signature/Network fraud, Credit Risk, Risk Score |
-| Computer Vision | live | Golf Pose Analyzer |
-| AI Agents | **proposed** | none (proposed services only) |
-| AI Automation | corporate | none. Links to the published Automation service, RPA and iPaaS |
+Featured on home: RAG Chatbot, TextIQ, vajraX, FinSight, Credit Risk, Claims Fraud, Demand Forecasting.

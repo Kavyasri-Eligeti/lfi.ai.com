@@ -1,32 +1,32 @@
-// Motion design tokens, shared by CSS (styles/tokens.css), framer-motion and GSAP.
+// Motion design tokens, shared by CSS (styles/tokens.css) and Motion for React.
 // Durations are in seconds.
 
 export const DURATION = {
-  button: 0.2,
-  card: 0.45,
-  section: 0.7,
-  camera: 2.0,       // cinematic camera fly-to
-  cameraShort: 1.3,  // camera retarget within the same view
+  micro: 0.15,
+  ui: 0.3,
+  section: 0.6,
+  hero: 0.9,
 };
 
 export const EASE = {
   out: [0.22, 0.8, 0.24, 1],
   inOut: [0.65, 0, 0.35, 1],
-  gsapOut: 'power3.out',
-  gsapInOut: 'power2.inOut',
 };
 
 // Standard reveal used for section content. Transform-only on purpose: text is
 // always fully painted (no late LCP from fading content, no contrast failures,
-// nothing invisible if an observer fails). It simply glides into place.
+// nothing invisible if an observer fails). It glides 12px into place, once.
 export const reveal = {
-  initial: { y: 28 },
+  initial: { y: 16 },
   whileInView: { y: 0 },
-  viewport: { once: true, margin: '0px 0px -10% 0px' },
+  viewport: { once: true, margin: '0px 0px -8% 0px' },
   transition: { duration: DURATION.section, ease: EASE.out },
 };
 
-export const stagger = (i, step = 0.06) => ({
+export const stagger = (i, step = 0.05) => ({
   ...reveal,
-  transition: { ...reveal.transition, delay: Math.min(i * step, 0.4) },
+  transition: { ...reveal.transition, delay: Math.min(i * step, 0.3) },
 });
+
+// Layout transitions for filtered grids (interruptible).
+export const layoutTransition = { duration: DURATION.ui, ease: EASE.out };

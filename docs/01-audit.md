@@ -1,5 +1,11 @@
 # 01 · Repository and content audit
 
+> **Update, 1 October 2026:** the universe concept was replaced by the approved "Modular Intelligence"
+> direction on branch `feature/ai-redesign`. The universe engine, planet pages and globe were removed
+> (they remain in git history on `feature/ai-universe`), and GSAP was uninstalled. The re-verified content
+> inventory is in 02, the new architecture in 04, and current measurements in 07. The findings below about
+> source recovery, hosting and risks still apply.
+
 _Audit date: 2026-09-30 · Branch: `feature/ai-universe`_
 
 ## 1. What the folder contained

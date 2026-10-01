@@ -1,95 +1,149 @@
-import { m } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import PageHero from '../../components/ui/PageHero';
 import SectionHeader from '../../components/ui/SectionHeader';
-import StatusBadge from '../../components/ui/StatusBadge';
 import SmartLink from '../../components/ui/SmartLink';
 import ProposalCard from '../../components/ui/ProposalCard';
+import Icon, { Arrow } from '../../components/ui/Icon';
+import ContactBand from '../../components/sections/ContactBand';
 import { corporateServices } from '../../content/services';
-import { proposedServices, verifiedAiCapabilities } from '../../content/proposals';
-import { STATUS } from '../../content/status';
+import { proposedServices } from '../../content/proposals';
 import { usePageMeta } from '../../hooks/usePageMeta';
-import { stagger } from '../../features/motion/tokens';
-import '../content.css';
+import './services.css';
+import Reveal from '../../features/motion/Reveal';
+
+function SubService({ sub }) {
+  return (
+    <details className="lf-disclosure lf-subservice">
+      <summary>
+        <span className="lf-subservice__name">{sub.name}</span>
+        <span className="lf-disclosure__icon" aria-hidden="true"><Icon name="plus" size={16} /></span>
+      </summary>
+      <div className="lf-subservice__body">
+        {sub.tagline && <p className="lf-subservice__tagline">{sub.tagline}</p>}
+        {sub.summary && <p>{sub.summary}</p>}
+        <SmartLink href={sub.href} className="lf-link">Read more about {sub.name} <Arrow /></SmartLink>
+      </div>
+    </details>
+  );
+}
+
+function ServiceRow({ service }) {
+  return (
+    <Reveal as="article" id={service.id} className="lf-service" aria-labelledby={`${service.id}-title`}>
+      <header className="lf-service__head">
+        <h2 id={`${service.id}-title`} className="lf-service__name">{service.name}</h2>
+        <p className="lf-service__headline">{service.headline}</p>
+        <SmartLink href={service.href} className="lf-link">{service.name} on linkfields.com <Arrow /></SmartLink>
+      </header>
+      <div className="lf-service__body">
+        <h3 className="lf-service__overview-title">{service.overview.title}</h3>
+        <p className="lf-service__overview">{service.overview.text}</p>
+        {service.offer && <p className="lf-service__offer">{service.offer}</p>}
+        {service.subServices && (
+          <div className="lf-service__subs">
+            {service.subServices.map((sub) => <SubService key={sub.name} sub={sub} />)}
+          </div>
+        )}
+        {service.groups && (
+          <div className="lf-service__groups">
+            {service.groups.map((g) => (
+              <section key={g.name} className="lf-service__group" aria-label={g.name}>
+                <h4>{g.name}</h4>
+                <ul className="lf-list-plain">
+                  {g.items.map((it) => (
+                    <li key={it.name}><strong>{it.name}</strong> {it.text}</li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        )}
+      </div>
+    </Reveal>
+  );
+}
+
+// Highlights the service currently in view in the side index.
+function useActiveSection(ids) {
+  const [active, setActive] = useState(ids[0]);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.4;
+      let current = ids[0];
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= line) current = id;
+      });
+      setActive(current);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [ids]);
+  return active;
+}
+
+const SERVICE_IDS = corporateServices.map((s) => s.id);
 
 export default function ServicesPage() {
-  usePageMeta('Services', 'Linkfields services: Engineering, Consulting, Cloud, Automation, Technology, Teams and IT Infrastructure and Solutions.');
-  const demoBacked = proposedServices.filter((s) => s.status === STATUS.DEMO_SUPPORTED).length;
+  usePageMeta(
+    'Services',
+    'Linkfields Innovations services: Engineering, Consulting, Cloud, Automation, Technology, Teams and IT Infrastructure and Solutions.'
+  );
+  const active = useActiveSection(SERVICE_IDS);
+
   return (
     <>
-      <PageHero eyebrow="Services" title="Services that turn technology into outcomes">
-        <p>Seven service practices published by Linkfields, and a separate set of proposed AI services under review.</p>
+      <PageHero
+        variant="b"
+        eyebrow="Services"
+        title="Seven practices behind every Linkfields solution"
+        actions={<a href="#ai-services" className="lf-btn lf-btn--secondary">Proposed AI services</a>}
+      >
+        <p className="lf-lead">
+          From consulting and engineering to cloud, automation, data and AI, these are the services Linkfields Innovations
+          publishes, with every sub-service linked to its page.
+        </p>
       </PageHero>
 
-      <nav className="lf-toc" aria-label="On this page">
-        <div className="lf-container">
-          <ul>
-            {corporateServices.map((s) => <li key={s.id}><a href={`#${s.id}`}>{s.name}</a></li>)}
-            <li><a href="#proposed-ai-services">Proposed AI services</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <section className="lf-section" aria-labelledby="corporate-services">
-        <div className="lf-container">
-          <SectionHeader id="corporate-services" eyebrow="Existing services" title="Linkfields services">
-            Names, headlines and descriptions as published on linkfields.com.
-          </SectionHeader>
-          <div className="lf-service-list">
-            {corporateServices.map((s, i) => (
-              <m.article key={s.id} id={s.id} className="lf-service" {...stagger(i, 0.03)}>
-                <div className="lf-service__head">
-                  <p className="lf-service__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
-                  <div>
-                    <h3>{s.name}</h3>
-                    <p className="lf-offering__headline">{s.headline}</p>
-                    <StatusBadge status={s.status} />
-                  </div>
-                </div>
-                <div className="lf-service__body">
-                  {s.intro && <p>{s.intro}</p>}
-                  <ul className="lf-sub-services">
-                    {s.subServices.map((sub) => (
-                      <li key={sub.name}>
-                        <h4>{sub.name}</h4>
-                        {sub.text && <p>{sub.text}</p>}
-                      </li>
-                    ))}
-                  </ul>
-                  <SmartLink href={s.href} className="lf-link-arrow">{s.name} on linkfields.com</SmartLink>
-                </div>
-              </m.article>
-            ))}
+      <section className="lf-section lf-services-layout" aria-label="Linkfields services">
+        <div className="lf-container lf-services-layout__inner">
+          <nav className="lf-services-index" aria-label="Services on this page">
+            <p className="lf-eyebrow">On this page</p>
+            <ul className="lf-list-plain">
+              {corporateServices.map((s) => (
+                <li key={s.id}>
+                  <a href={`#${s.id}`} aria-current={active === s.id ? 'true' : undefined}>{s.name}</a>
+                </li>
+              ))}
+              <li><a href="#ai-services">Proposed AI services</a></li>
+            </ul>
+          </nav>
+          <div className="lf-services-list">
+            {corporateServices.map((s) => <ServiceRow key={s.id} service={s} />)}
           </div>
         </div>
       </section>
 
-      <section className="lf-section lf-section--muted" aria-labelledby="proposed-ai-services">
+      <section className="lf-section lf-section--tint" id="ai-services" aria-labelledby="ai-services-title">
         <div className="lf-container">
-          <SectionHeader id="proposed-ai-services" eyebrow="Proposed · awaiting business approval" title="Proposed AI services">
-            <p>
-              {proposedServices.length} proposed AI service areas. {demoBacked} are backed by an existing Linkfields demo that shows
-              the underlying capability. <strong>None of them is a current offering until approved.</strong>
-            </p>
+          <SectionHeader split id="ai-services-title" eyebrow="Proposed · awaiting approval" title="AI services under review">
+            Possible additions to the Linkfields services. None of them is a current offering. The AI service published today is AI
+            &amp; Machine Learning, part of the Technology service.
           </SectionHeader>
-
-          <div className="lf-callout lf-verified-note">
-            <p>
-              <strong>Already published by Linkfields:</strong>{' '}
-              {verifiedAiCapabilities.map((c, i) => (
-                <span key={c.name}>
-                  {i > 0 && ' · '}
-                  <a href={`#${c.serviceId}`}>{c.name}</a>
-                </span>
-              ))}
-              . These are existing services, not proposals.
-            </p>
-          </div>
-
-          <div className="lf-grid">
+          <div className="lf-grid lf-proposals">
             {proposedServices.map((p, i) => <ProposalCard key={p.id} item={p} index={i} />)}
           </div>
         </div>
       </section>
+
+      <ContactBand />
     </>
   );
 }

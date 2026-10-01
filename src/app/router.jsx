@@ -1,13 +1,10 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import RootLayout from '../components/layout/RootLayout';
-import UniverseLayout from '../features/universe/UniverseLayout';
-// New-site pages are small (~18 KB gzipped together) and ship in the main
-// bundle: a deep link then renders without a second request (no LCP waterfall).
-// The heavy parts stay lazy: the 3D engine, the globe and the legacy app.
+// New-site pages are small and ship in the main bundle: a deep link then
+// renders without a second request (no LCP waterfall). The heavy parts stay
+// lazy: the WebGL hero tier and the legacy app.
 import HomePage from '../pages/home/HomePage';
-import PlanetPage from '../pages/universe/PlanetPage';
-import DemosPage from '../pages/demos/DemosPage';
 import SolutionsPage from '../pages/solutions/SolutionsPage';
 import ServicesPage from '../pages/services/ServicesPage';
 import IndustriesPage from '../pages/industries/IndustriesPage';
@@ -38,15 +35,10 @@ export const routes = [
   {
     element: <RootLayout />,
     children: [
-      {
-        element: <UniverseLayout />,
-        children: [
-          { index: true, element: <HomePage /> },
-          { path: 'universe/:planetId', element: <PlanetPage /> },
-        ],
-      },
-      { path: 'demos', element: <DemosPage /> },
+      { index: true, element: <HomePage /> },
       { path: 'solutions', element: <SolutionsPage /> },
+      // The demo catalogue now lives on the solutions page.
+      { path: 'demos', element: <Navigate to="/solutions#products" replace /> },
       { path: 'services', element: <ServicesPage /> },
       { path: 'industries', element: <IndustriesPage /> },
       { path: 'company', element: <CompanyPage /> },

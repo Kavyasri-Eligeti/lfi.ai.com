@@ -1,0 +1,54 @@
+/* Modular intelligence field. The CSS tier is also used in public/index.html
+   (static first paint), so its class names are part of that contract. */
+.lf-field-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.92;
+  max-height: 560px;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+}
+.lf-field-canvas { position: absolute; inset: -8%; opacity: 0; transition: opacity var(--dur-hero) var(--ease-out); }
+.lf-field-canvas canvas { width: 100% !important; height: 100% !important; display: block; }
+.lf-field-css { display: grid; place-items: center; transition: opacity var(--dur-hero) var(--ease-out); }
+.lf-field-stage.is-webgl .lf-field-canvas { opacity: 1; }
+.lf-field-stage.is-webgl .lf-field-css { opacity: 0; }
+
+.lf-mfield {
+  --rx: 58deg;
+  --rz: -42deg;
+  --cell: clamp(30px, 4.6vw, 64px);
+  --gap: calc(var(--cell) * 0.18);
+  display: grid;
+  grid-template-columns: repeat(6, var(--cell));
+  grid-auto-rows: var(--cell);
+  gap: var(--gap);
+  transform: rotateX(var(--rx)) rotateZ(var(--rz));
+  transform-style: preserve-3d;
+  transition: transform 1s var(--ease-out);
+}
+.lf-mfield__t {
+  --h: 4px;
+  --side: #d6dce5;
+  --face: linear-gradient(145deg, #ffffff, #eef1f5);
+  display: block;
+  background: var(--face);
+  border-radius: 4px;
+  transform: translateZ(var(--h));
+  transition: transform 1.2s var(--ease-out);
+  box-shadow:
+    1px 1px 0 var(--side), 2px 2px 0 var(--side), 3px 3px 0 var(--side), 4px 4px 0 var(--side),
+    5px 5px 0 var(--side), 6px 6px 0 var(--side), 14px 18px 24px rgba(30, 44, 70, 0.14);
+}
+.lf-mfield__t--leaf { border-radius: 4px 4px 22px 4px; }
+.lf-mfield__t--leaf2 { border-radius: 22px 4px 4px 4px; }
+.lf-mfield__t--y { --face: linear-gradient(145deg, #ffe14d, #ffd600); --side: #d4b200; grid-row: span 2; border-radius: 24px 3px 24px 3px; }
+.lf-mfield__t--o { --face: linear-gradient(145deg, #ff9a3d, #ff7800); --side: #cc6000; border-radius: 3px 3px 22px 3px; }
+.lf-mfield__t--b { --face: linear-gradient(145deg, #4c74d6, #2d58c0); --side: #1f3f8f; border-radius: 3px 3px 22px 3px; }
+.lf-mfield__t--ghost { --face: rgba(255, 255, 255, 0.4); --side: transparent; box-shadow: inset 0 0 0 1px var(--border); }
+@media (max-width: 767px) {
+  .lf-field-stage { aspect-ratio: auto; height: 260px; }
+  .lf-mfield { --cell: 34px; }
+  .lf-mfield__t { box-shadow: 1px 1px 0 var(--side), 2px 2px 0 var(--side), 3px 3px 0 var(--side), 4px 4px 0 var(--side), 10px 12px 16px rgba(30, 44, 70, 0.12); }
+}

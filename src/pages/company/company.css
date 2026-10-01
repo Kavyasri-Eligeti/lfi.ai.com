@@ -1,0 +1,102 @@
+/* ---------- Story ---------- */
+.lf-story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; }
+.lf-story__lede { position: sticky; top: calc(var(--header-h) + 32px); }
+.lf-story__lede h2 { font-size: clamp(2.25rem, 1.4rem + 3vw, 4.25rem); letter-spacing: -0.045em; line-height: 1.02; }
+.lf-milestones { border-left: 2px solid var(--border); }
+.lf-milestone { position: relative; display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--sp-4); padding: 0 0 var(--sp-7) var(--sp-6); }
+.lf-milestone:last-child { padding-bottom: 0; }
+.lf-milestone::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px 3px 9px 3px;
+  background: var(--lf-blue);
+}
+.lf-milestone:nth-child(2)::before { background: var(--lf-orange); }
+.lf-milestone:nth-child(3)::before { background: var(--lf-yellow); }
+.lf-milestone__year { font: 800 1.75rem/1 var(--font-display); letter-spacing: -0.03em; }
+.lf-milestone h3 { margin: 0 0 var(--sp-2); font-size: 1.375rem; }
+.lf-milestone p { color: var(--text-2); }
+@media (max-width: 860px) {
+  .lf-story { grid-template-columns: 1fr; }
+  .lf-story__lede { position: static; }
+  .lf-milestone { grid-template-columns: 1fr; gap: var(--sp-2); }
+}
+
+/* ---------- Vision / mission ---------- */
+.lf-vm { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
+.lf-vm__card { padding: clamp(1.75rem, 1rem + 2.5vw, 3.5rem); border-radius: var(--radius-leaf-lg); background: var(--surface); box-shadow: var(--shadow-1); }
+.lf-vm__card--mission { background: var(--surface-ink); box-shadow: none; }
+.lf-vm__text { margin: 0; font: 650 clamp(1.25rem, 1rem + 0.9vw, 1.75rem)/1.4 var(--font-display); letter-spacing: -0.015em; max-width: 34ch; }
+.lf-vm__card--mission .lf-vm__text { color: #fff; }
+@media (max-width: 760px) { .lf-vm { grid-template-columns: 1fr; } }
+
+/* ---------- Values ---------- */
+.lf-values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--text); }
+.lf-value { padding: var(--sp-6) var(--sp-5) var(--sp-6) 0; border-bottom: 1px solid var(--border); }
+.lf-value:not(:nth-child(3n + 1)) { padding-left: var(--sp-5); border-left: 1px solid var(--border); }
+.lf-value h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); letter-spacing: -0.03em; margin: var(--sp-4) 0 var(--sp-2); }
+.lf-value p { color: var(--text-2); margin: 0; }
+.lf-value__module { display: block; width: 28px; height: 28px; border-radius: 4px 4px 14px 4px; background: var(--surface-3); transition: background-color var(--dur-ui), transform var(--dur-ui) var(--ease-out); }
+.lf-value:nth-child(1) .lf-value__module { background: var(--lf-yellow); border-radius: 14px 4px 14px 4px; }
+.lf-value:nth-child(2) .lf-value__module { background: var(--lf-orange); }
+.lf-value:nth-child(3) .lf-value__module { background: var(--lf-blue); }
+.lf-value:hover .lf-value__module { transform: rotate(-8deg) scale(1.08); }
+@media (max-width: 900px) {
+  .lf-values { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lf-value:not(:nth-child(3n + 1)) { padding-left: 0; border-left: 0; }
+  .lf-value:nth-child(even) { padding-left: var(--sp-5); border-left: 1px solid var(--border); }
+}
+@media (max-width: 560px) {
+  .lf-values { grid-template-columns: 1fr; }
+  .lf-value:nth-child(even) { padding-left: 0; border-left: 0; }
+}
+
+/* ---------- Approach (charcoal) ---------- */
+.lf-principles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-8); }
+.lf-principles li {
+  padding: var(--sp-5);
+  border-radius: var(--radius-leaf);
+  background: var(--surface-ink-2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  font: 700 1.25rem/1.25 var(--font-display);
+  color: #fff;
+  letter-spacing: -0.015em;
+}
+.lf-recipe__title { color: #fff; margin-bottom: var(--sp-5); }
+.lf-recipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-5); counter-reset: none; }
+.lf-recipe li { border-top: 2px solid rgba(255, 255, 255, 0.18); padding-top: var(--sp-4); }
+.lf-recipe li:first-child { border-top-color: var(--lf-yellow); }
+.lf-recipe__step { display: block; margin-bottom: var(--sp-3); font: 600 0.8125rem/1 var(--font-mono); color: var(--lf-yellow); }
+.lf-recipe p { color: var(--text-on-ink-2); font-size: 0.9375rem; margin: 0; }
+.lf-recipe__more { margin-top: var(--sp-7); }
+@media (max-width: 1024px) { .lf-principles, .lf-recipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .lf-principles, .lf-recipe { grid-template-columns: 1fr; } }
+
+/* ---------- Recognition ---------- */
+.lf-recognition { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: var(--sp-4); margin-top: var(--sp-7); }
+.lf-recognition__item { display: flex; gap: var(--sp-4); align-items: center; padding: var(--sp-4); border-radius: var(--radius-leaf); background: var(--surface-2); }
+.lf-recognition__item img { width: 56px; height: 56px; object-fit: contain; flex: 0 0 auto; }
+.lf-recognition__item p { margin: 0; font-size: 0.875rem; color: var(--text-2); }
+.lf-recognition__mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  min-width: 56px;
+  height: 56px;
+  padding: 0 8px;
+  border-radius: 4px 4px 18px 4px;
+  background: var(--surface-ink);
+  color: #fff;
+  font: 800 0.8125rem/1.1 var(--font-display);
+  text-align: center;
+}
+
+/* ---------- CSR ---------- */
+.lf-csr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-6) clamp(2rem, 1rem + 4vw, 5rem); align-items: end; }
+.lf-csr h2 { margin: 0; font-size: clamp(2.25rem, 1.4rem + 3vw, 4rem); letter-spacing: -0.045em; }
+.lf-csr .lf-lead { margin: 0; }
+@media (max-width: 760px) { .lf-csr { grid-template-columns: 1fr; } }

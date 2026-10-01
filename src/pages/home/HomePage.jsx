@@ -1,254 +1,232 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { m } from 'framer-motion';
-import { useUniverse } from '../../features/universe/UniverseContext';
-import { usePageMeta } from '../../hooks/usePageMeta';
-import { reveal, stagger } from '../../features/motion/tokens';
+import ModularField from '../../features/field/ModularField';
 import SectionHeader from '../../components/ui/SectionHeader';
-import UniverseIndex from '../../components/ui/UniverseIndex';
-import DemoCard from '../../components/ui/DemoCard';
 import SmartLink from '../../components/ui/SmartLink';
-import { planets } from '../../content/universe';
-import { corporateSolutions, ERP_INTRO, aiProductIds } from '../../content/solutions';
-import { corporateServices } from '../../content/services';
+import SocialIcon from '../../components/ui/SocialIcon';
+import { Arrow } from '../../components/ui/Icon';
+import CapabilityIndex from '../../components/sections/CapabilityIndex';
+import FeaturedBento from '../../components/sections/FeaturedBento';
+import IndustryTabs from '../../components/sections/IndustryTabs';
+import PartnerWall from '../../components/sections/PartnerWall';
+import OfficeMap from '../../components/sections/OfficeMap';
+import CareersBand from '../../components/sections/CareersBand';
+import InsightsList from '../../components/sections/InsightsList';
+import ContactBand from '../../components/sections/ContactBand';
+import { company, offices, socials } from '../../content/company';
+import { demos } from '../../content/demos';
+import { capabilities } from '../../content/capabilities';
 import { industries } from '../../content/industries';
-import { company, offices, emails } from '../../content/company';
-import { careers } from '../../content/careers';
-import { getDemos, demos } from '../../content/demos';
+import { corporateServices } from '../../content/services';
+import { usePageMeta } from '../../hooks/usePageMeta';
 import './home.css';
+import Reveal from '../../features/motion/Reveal';
 
-const CHAPTERS = 4; // hero(0) → solutions(1) → services(2) → industries(3) → outro(4)
+// Verified AI-related capabilities inside the published services.
+const AI_IN_SERVICES = [
+  { service: 'technology', sub: 'AI & Machine Learning' },
+  { service: 'technology', sub: 'Big Data Engineering' },
+  { service: 'automation', sub: 'Robotic Process Automation' },
+];
 
-/**
- * Home: native scrolling drives the camera through selected scenes only
- * (hero → Solutions → Services → Industries). No scroll-jacking: the page scrolls
- * normally, the camera follows. Every chapter is real HTML content with links.
- */
 export default function HomePage() {
   usePageMeta(
     null,
-    'Explore Linkfields Innovations’ AI universe: live AI and analytics demos, enterprise solutions, services and industries.'
+    'Linkfields AI: live AI and analytics demos, enterprise AI solutions and engineering services from Linkfields Innovations, for banking, telecom, insurance and more.'
   );
-  const { setScrollProgress, setSuspended, profile } = useUniverse();
-  const cinematicRef = useRef(null);
-  const anchorsRef = useRef([]);
-
-  useEffect(() => {
-    const root = cinematicRef.current;
-    if (!root) return undefined;
-    const marks = Array.from(root.querySelectorAll('[data-chapter]'));
-
-    const measure = () => {
-      const vh = window.innerHeight;
-      anchorsRef.current = marks.map((el, i) => {
-        const r = el.getBoundingClientRect();
-        const top = r.top + window.scrollY;
-        if (i === 0) return 0;
-        if (i === marks.length - 1) return top + r.height - vh;
-        return top + r.height / 2 - vh / 2;
-      });
-    };
-
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const a = anchorsRef.current;
-      const y = window.scrollY;
-      let p = CHAPTERS;
-      for (let k = 0; k < a.length - 1; k++) {
-        if (y < a[k + 1]) {
-          p = k + Math.max(0, (y - a[k]) / Math.max(1, a[k + 1] - a[k]));
-          break;
-        }
-      }
-      setScrollProgress(Math.min(Math.max(p, 0), CHAPTERS));
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    const onResize = () => {
-      measure();
-      onScroll();
-    };
-
-    measure();
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-
-    // Pause rendering once the light content fully covers the universe.
-    const io = new IntersectionObserver(([entry]) => setSuspended(!entry.isIntersecting), { rootMargin: '0px' });
-    io.observe(root);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-      io.disconnect();
-      setSuspended(false);
-    };
-  }, [setScrollProgress, setSuspended]);
-
-  const products = getDemos(aiProductIds);
-  const staticMode = profile === 'static';
+  const heroRef = useRef(null);
+  const proof = [
+    { value: demos.length, label: 'AI and analytics demos' },
+    { value: capabilities.length, label: 'AI capability areas' },
+    { value: industries.length, label: 'industries served' },
+    { value: offices.length, label: 'offices worldwide' },
+    { value: company.founded, label: 'established' },
+  ];
+  const aiServices = AI_IN_SERVICES.map(({ service, sub }) => {
+    const s = corporateServices.find((x) => x.id === service);
+    return { service: s, sub: s.subServices.find((x) => x.name === sub) };
+  });
 
   return (
-    <div className={`lf-home${staticMode ? ' is-static' : ''}`}>
-      <div className="lf-home__cinematic lf-dark" ref={cinematicRef}>
-        {/* HERO */}
-        <section className="lf-home-hero" data-chapter="0" aria-labelledby="hero-title">
-          <div className="lf-container lf-home-hero__inner">
-            <p className="lf-eyebrow">Linkfields AI Universe</p>
-            <h1 id="hero-title" className="lf-home-hero__title">
-              Explore the universe of <span className="lf-gradient-text">enterprise AI</span>
+    <>
+      {/* ---------- Hero ---------- */}
+      <section className="lf-hero" ref={heroRef} aria-labelledby="hero-title">
+        <div className="lf-container lf-hero__inner">
+          <div className="lf-hero__copy">
+            <p className="lf-eyebrow lf-hero__kicker">Linkfields AI</p>
+            <h1 id="hero-title" className="lf-hero__title">
+              Intelligence that <span className="lf-accent">moves business</span> forward.
             </h1>
-            <p className="lf-home-hero__lead">
-              Travel through Linkfields Innovations’ AI and analytics work: {demos.length} catalogue entries across
-              eight AI categories, alongside the solutions, services and industries behind them.
+            <p className="lf-hero__lead">
+              Explore the AI solutions, live demos and engineering services Linkfields Innovations builds for banking, telecom,
+              insurance and other industries.
             </p>
             <div className="lf-actions">
-              <Link to="/demos" className="lf-btn lf-btn--accent">Explore live demos</Link>
-              <a href="#overview" className="lf-btn lf-btn--ghost">Skip the journey</a>
+              <Link to="/solutions" className="lf-btn">Explore AI solutions <Arrow /></Link>
+              <Link to="/contact" className="lf-btn lf-btn--secondary">Talk to our team</Link>
             </div>
-            <nav className="lf-home-hero__planets" aria-label="AI categories">
-              <p className="lf-meta">Jump to a planet</p>
-              <ul className="lf-chip-list">
-                {planets.map((p) => (
-                  <li key={p.id}>
-                    <Link className="lf-chip lf-chip--link" to={`/universe/${p.id}`}>{p.name}</Link>
+          </div>
+          <ModularField interactRef={heroRef} className="lf-hero__field" />
+        </div>
+        <div className="lf-container">
+          <dl className="lf-hero__proof">
+            {proof.map((p) => (
+              <div key={p.label}>
+                <dt className="lf-visually-hidden">{p.label}</dt>
+                <dd>
+                  <span className="lf-hero__proof-value lf-num">{p.value}</span>
+                  <span className="lf-hero__proof-label">{p.label}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* ---------- AI capabilities ---------- */}
+      <section className="lf-section" aria-labelledby="capabilities-title">
+        <div className="lf-container">
+          <SectionHeader split id="capabilities-title" eyebrow="AI capabilities" title="Six capability areas, each backed by working demos">
+            Every area below is shown by demos you can open today. Select one to see its products.
+          </SectionHeader>
+          <CapabilityIndex />
+        </div>
+      </section>
+
+      {/* ---------- Featured solutions ---------- */}
+      <section className="lf-section lf-section--tint" aria-labelledby="featured-title">
+        <div className="lf-container">
+          <SectionHeader
+            split
+            id="featured-title"
+            eyebrow="Featured solutions"
+            title="Flagship AI products"
+            aside={
+              <Link to="/solutions#products" className="lf-link lf-home__aside-link">
+                See all {demos.length} demos <Arrow />
+              </Link>
+            }
+          >
+            Retrieval-augmented assistants, document intelligence and the analytics models behind fraud, risk and forecasting.
+          </SectionHeader>
+          <FeaturedBento />
+        </div>
+      </section>
+
+      {/* ---------- Enterprise services ---------- */}
+      <section className="lf-section" aria-labelledby="services-title">
+        <div className="lf-container">
+          <SectionHeader split id="services-title" eyebrow="Enterprise services" title="AI built on seven engineering practices">
+            Linkfields AI work draws on the company’s published services. Three of them deal directly with AI, data and automation.
+          </SectionHeader>
+          <div className="lf-home-services">
+            <ul className="lf-list-plain lf-home-services__ai">
+              {aiServices.map(({ service, sub }, i) => (
+                <Reveal as="li" key={sub.name} index={i}>
+                  <article className="lf-card lf-card--tint lf-card--interactive lf-home-services__card">
+                    <p className="lf-eyebrow">{service.name} service</p>
+                    <h3>
+                      <SmartLink href={sub.href} className="lf-card__stretch">{sub.name}</SmartLink>
+                    </h3>
+                    <p className="lf-home-services__tagline">{sub.tagline}</p>
+                    <p>{sub.summary}</p>
+                  </article>
+                </Reveal>
+              ))}
+            </ul>
+            <nav className="lf-home-services__all" aria-label="All services">
+              <p className="lf-eyebrow">All services</p>
+              <ul className="lf-list-plain">
+                {corporateServices.map((s) => (
+                  <li key={s.id}>
+                    <Link to={`/services#${s.id}`}>
+                      <span>{s.name}</span>
+                      <span className="lf-home-services__hint">{s.overview.title}</span>
+                      <Arrow />
+                    </Link>
                   </li>
                 ))}
               </ul>
             </nav>
           </div>
-          {!staticMode && (
-            <p className="lf-scroll-hint" aria-hidden="true">
-              <span /> Scroll to travel
-            </p>
-          )}
-        </section>
+        </div>
+      </section>
 
-        {/* CHAPTER 1: SOLUTIONS */}
-        <section className="lf-chapter lf-chapter--left" data-chapter="1" aria-labelledby="ch-solutions">
-          <m.div className="lf-chapter__card" {...reveal}>
-            <p className="lf-eyebrow">Chapter 1 · Solutions</p>
-            <h2 id="ch-solutions">Enterprise platforms, integrated and automated</h2>
-            <p>{ERP_INTRO}</p>
-            <ul className="lf-chapter__list">
-              {corporateSolutions.map((s) => (
-                <li key={s.id}><Link to={`/solutions#${s.id}`}>{s.name}</Link></li>
-              ))}
-            </ul>
-            <Link to="/solutions" className="lf-link-arrow">All solutions, including AI products</Link>
-          </m.div>
-        </section>
+      {/* ---------- Industries ---------- */}
+      <section className="lf-section lf-cv lf-section--tint" aria-labelledby="industries-title">
+        <div className="lf-container">
+          <SectionHeader split id="industries-title" eyebrow="Industries" title="Built for the industries Linkfields knows">
+            Eight industries, with the demos the catalogue files under each.
+          </SectionHeader>
+          <IndustryTabs />
+        </div>
+      </section>
 
-        {/* CHAPTER 2: SERVICES */}
-        <section className="lf-chapter lf-chapter--right" data-chapter="2" aria-labelledby="ch-services">
-          <m.div className="lf-chapter__card" {...reveal}>
-            <p className="lf-eyebrow">Chapter 2 · Services</p>
-            <h2 id="ch-services">Engineering, consulting, cloud and teams</h2>
-            <p>Seven service practices published by Linkfields, from engineering and consulting to cloud, automation and IT infrastructure.</p>
-            <ul className="lf-chapter__list">
-              {corporateServices.map((s) => (
-                <li key={s.id}><Link to={`/services#${s.id}`}>{s.name}</Link></li>
-              ))}
-            </ul>
-            <Link to="/services" className="lf-link-arrow">All services and proposed AI services</Link>
-          </m.div>
-        </section>
-
-        {/* CHAPTER 3: INDUSTRIES */}
-        <section className="lf-chapter lf-chapter--left" data-chapter="3" aria-labelledby="ch-industries">
-          <m.div className="lf-chapter__card" {...reveal}>
-            <p className="lf-eyebrow">Chapter 3 · Industries</p>
-            <h2 id="ch-industries">A constellation of eight industries</h2>
-            <p>Each star is an industry Linkfields serves. Select one to read how Linkfields works in that sector.</p>
-            <ul className="lf-chapter__list">
-              {industries.map((i) => (
-                <li key={i.id}><Link to={`/industries#${i.id}`}>{i.name}</Link></li>
-              ))}
-            </ul>
-            <Link to="/industries" className="lf-link-arrow">Explore industries</Link>
-          </m.div>
-        </section>
-
-        <div className="lf-chapter lf-chapter--outro" data-chapter="4" aria-hidden="true" />
-      </div>
-
-      {/* LIGHT CONTENT */}
-      <div className="lf-home__content" id="overview">
-        <section className="lf-section" aria-labelledby="universe-index">
-          <div className="lf-container">
-            <SectionHeader id="universe-index" eyebrow="The AI universe" title="Eight planets, one intelligence core">
-              Each planet is an AI category. Its moons are the underlying AI technologies, and its surface holds the
-              live Linkfields demos. Items marked <em>Proposed</em> are under business review.
+      {/* ---------- Partners ---------- */}
+      <section className="lf-section lf-cv" aria-labelledby="partners-title">
+        <div className="lf-container">
+          <div className="lf-partners-layout">
+            <SectionHeader id="partners-title" eyebrow="Our partners" title="Working with the platforms enterprises run on">
+              Technology partners as listed by Linkfields Innovations.
             </SectionHeader>
-            <UniverseIndex />
+            <PartnerWall />
           </div>
-        </section>
+          <ul className="lf-list-plain lf-home-recognition" aria-label="Recognition">
+            {company.recognition.filter((r) => r.value !== '2008').map((r) => (
+              <li key={r.label}>
+                {r.image ? <img src={r.image} alt="" width="40" height="40" loading="lazy" /> : <span className="lf-home-recognition__mark">{r.value}</span>}
+                {r.href ? <SmartLink href={r.href}>{r.label}</SmartLink> : <span>{r.label}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-        <section className="lf-section lf-section--muted" aria-labelledby="products">
-          <div className="lf-container">
-            <SectionHeader id="products" eyebrow="Linkfields AI products" title="Live products you can open today">
-              Named AI products from the LFI AI catalogue. Every card opens the working demo.
-            </SectionHeader>
-            <div className="lf-grid">
-              {products.map((demo, i) => (
-                <m.div key={demo.id} {...stagger(i)}>
-                  <DemoCard demo={demo} />
-                </m.div>
-              ))}
-            </div>
-            <div className="lf-actions">
-              <Link to="/demos" className="lf-btn lf-btn--primary">See all {demos.length} catalogue entries</Link>
-            </div>
-          </div>
-        </section>
+      {/* ---------- Global presence ---------- */}
+      <section className="lf-section lf-cv lf-section--tint" aria-labelledby="presence-title" id="offices">
+        <div className="lf-container">
+          <SectionHeader split id="presence-title" eyebrow="Global presence" title="Six offices on four continents">
+            Founded in South Africa in 2008. Today Linkfields has offices in South Africa, India, the USA, the UAE, Australia and Botswana.
+          </SectionHeader>
+          <OfficeMap />
+        </div>
+      </section>
 
-        <section className="lf-section" aria-labelledby="company-snapshot">
-          <div className="lf-container lf-split">
-            <div>
-              <SectionHeader id="company-snapshot" eyebrow="Company" title={company.hero.title}>
-                {company.history}
-              </SectionHeader>
-              <Link to="/company" className="lf-link-arrow">About Linkfields</Link>
-            </div>
-            <ul className="lf-stats">
-              {company.recognition.map((r, i) => (
-                <m.li key={r.label} {...stagger(i)}>
-                  <strong>{r.value}</strong>
-                  <span>{r.label}</span>
-                </m.li>
-              ))}
-            </ul>
-          </div>
-        </section>
+      {/* ---------- Careers ---------- */}
+      <section className="lf-section lf-cv" aria-labelledby="careers-title">
+        <div className="lf-container">
+          <CareersBand id="careers-title" />
+        </div>
+      </section>
 
-        <section className="lf-section lf-section--dark lf-dark" aria-labelledby="join">
-          <div className="lf-container lf-split">
-            <m.div {...reveal}>
-              <p className="lf-eyebrow">{careers.eyebrow}</p>
-              <h2 id="join">{careers.title}</h2>
-              <p>{careers.intro}</p>
-              <div className="lf-actions">
-                <Link to="/careers" className="lf-btn lf-btn--accent">Careers at Linkfields</Link>
-              </div>
-            </m.div>
-            <m.div {...stagger(1)}>
-              <p className="lf-eyebrow">Contact</p>
-              <h2>Talk to us</h2>
-              <p>
-                {offices.length} offices across {offices.map((o) => o.country).join(', ')}.
-              </p>
-              <div className="lf-actions">
-                <Link to="/contact" className="lf-btn lf-btn--ghost">Contact and offices</Link>
-                <SmartLink href={`mailto:${emails.sales}`} className="lf-btn lf-btn--ghost">{emails.sales}</SmartLink>
-              </div>
-            </m.div>
-          </div>
-        </section>
-      </div>
-    </div>
+      {/* ---------- Latest updates and social ---------- */}
+      <section className="lf-section lf-cv lf-section--tint" aria-labelledby="insights-title">
+        <div className="lf-container">
+          <SectionHeader
+            split
+            id="insights-title"
+            eyebrow="Latest updates"
+            title="Insights and news"
+            aside={
+              <ul className="lf-list-plain lf-home-social" aria-label="Follow Linkfields">
+                {socials.map((s) => (
+                  <li key={s.id}>
+                    <SmartLink href={s.href} className="lf-home-social__link">
+                      <SocialIcon id={s.id} size={18} />
+                      <span>{s.name}</span>
+                    </SmartLink>
+                  </li>
+                ))}
+              </ul>
+            }
+          >
+            Articles and press coverage published by Linkfields. Follow the company for the latest updates.
+          </SectionHeader>
+          <InsightsList limit={6} />
+        </div>
+      </section>
+
+      <ContactBand />
+    </>
   );
 }

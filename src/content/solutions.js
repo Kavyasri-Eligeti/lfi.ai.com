@@ -1,5 +1,6 @@
-// Corporate solutions. Source: linkfields.com solution pages (verbatim
-// headlines and intros, offering names as listed). Retrieved 2026-09-30.
+// Corporate solutions. Source: linkfields.com solution pages and the header
+// "Solutions" menu (headlines, intros and offering names as published).
+// Retrieved 2026-10-01.
 import { STATUS } from './status';
 import { CORPORATE_SITE } from './company';
 
@@ -12,8 +13,8 @@ export const corporateSolutions = [
     name: 'SAP',
     group: 'ERP',
     status: STATUS.CORPORATE,
-    headline: 'SAP ERP Consulting and Implementation Solutions',
-    intro: 'Empower your enterprise with SAP Solutions.',
+    headline: 'Empower your enterprise with SAP Solutions',
+    intro: 'SAP ERP consulting and implementation solutions.',
     offerings: ['S/4 HANA', 'Core SAP Expertise', 'SAP Special Expertise', 'Services & More', 'Data Services'],
     href: `${CORPORATE_SITE}/solutions/erp-solutions/sap`,
   },
@@ -22,7 +23,7 @@ export const corporateSolutions = [
     name: 'Odoo',
     group: 'ERP',
     status: STATUS.CORPORATE,
-    headline: 'Customized Odoo Solutions for Every Business Need',
+    headline: 'Get your business processes simplified',
     intro: 'We specialize in customizing Odoo to suit your specific business requirements.',
     offerings: [
       'Business Process Re-engineering',
@@ -66,9 +67,9 @@ export const corporateSolutions = [
     name: 'iPaaS',
     group: 'Integration',
     status: STATUS.CORPORATE,
-    headline: 'Your Partner for Advanced iPaaS',
+    headline: 'Pioneers in iPaaS implementation',
     intro:
-      'Tailor-made solutions that align with your unique business needs, backed by expertise across a diverse range of products.',
+      'Linkfields offers tailor-made solutions that align with your unique business needs, backed by expertise across a diverse range of products.',
     offerings: [
       'Tailored Integration Solutions',
       'Seamless Data Management',
@@ -76,6 +77,9 @@ export const corporateSolutions = [
       'API Governance',
       'Unified Monitoring',
       'Cloud and On-Premises Integration',
+      'Strategic Consultation',
+      'Continuous Support and Training',
+      'Scalability and Compliance',
     ],
     href: `${CORPORATE_SITE}/services/cloud/ipaas`,
   },
@@ -84,10 +88,29 @@ export const corporateSolutions = [
     name: 'RPA',
     group: 'Automation',
     status: STATUS.CORPORATE,
-    headline: 'Robotic Process Automation',
-    intro: 'Advance in automation goals by introducing software bots.',
-    offerings: ['Software robots', 'Integrations', 'Cognitive processes'],
+    headline: 'Software bots for an automated workplace',
+    intro:
+      'RPA, aimed at automating business processes, uses tools, or a “robot,” to capture and interpret applications for processing a transaction, manipulating data, triggering responses and communicating with other digital systems.',
+    offerings: [
+      'RPA consulting',
+      'Automation design',
+      'RPA development',
+      'Infrastructure support',
+      'Managed RPA services',
+      'Automation support',
+      'RPA center of excellence',
+    ],
     href: `${CORPORATE_SITE}/services/automation/robotic-process-automation`,
+  },
+  {
+    id: 'testorium-z',
+    name: 'Testorium Z',
+    group: 'Quality',
+    status: STATUS.CORPORATE,
+    headline: 'Accelerate Quality. Automate Smart. Deliver Faster.',
+    intro: 'Listed in the Solutions menu on linkfields.com. Full details are on the product’s own website.',
+    offerings: [],
+    href: 'https://testoriumz.com',
   },
 ];
 
