@@ -1,84 +1,10 @@
-/* ---------- Hero ----------
-   These class names are also used by the static first-paint shell in
-   public/index.html, so the hero paints before any JavaScript runs. */
-.lf-hero {
-  position: relative;
-  padding-block: clamp(2rem, 1rem + 3vw, 4.5rem) clamp(2rem, 1rem + 3vw, 3.5rem);
-  background:
-    radial-gradient(48% 60% at 78% 38%, rgba(45, 88, 192, 0.07), transparent 70%),
-    radial-gradient(30% 40% at 70% 70%, rgba(255, 214, 0, 0.08), transparent 70%),
-    var(--surface);
-  overflow: hidden;
-}
-.lf-hero__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: var(--sp-5);
-  align-items: center;
-  min-height: min(640px, calc(100svh - var(--header-h) - 140px));
-}
-.lf-hero__copy { position: relative; z-index: 1; min-width: 0; }
-.lf-hero__kicker { margin-bottom: var(--sp-5); }
-.lf-hero__title {
-  font-size: var(--fs-hero);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-  font-weight: 800;
-  max-width: 11ch;
-  margin: 0 0 var(--sp-5);
-  animation: lf-rise var(--dur-hero) var(--ease-out) both;
-}
-.lf-hero__lead {
-  font-size: var(--fs-lead);
-  color: var(--text-2);
-  max-width: 46ch;
-  margin: 0 0 var(--sp-6);
-  animation: lf-rise var(--dur-hero) var(--ease-out) 80ms both;
-}
-.lf-hero .lf-actions { animation: lf-rise var(--dur-hero) var(--ease-out) 160ms both; }
-.lf-hero__field { animation: lf-settle 1.2s var(--ease-out) 120ms both; }
-/* Transform-only: the text is painted on the first frame. */
-@keyframes lf-rise { from { transform: translateY(14px); } to { transform: none; } }
-@keyframes lf-settle { from { transform: translateY(18px) scale(0.97); } to { transform: none; } }
-[data-motion='reduced'] .lf-hero__title,
-[data-motion='reduced'] .lf-hero__lead,
-[data-motion='reduced'] .lf-hero .lf-actions,
-[data-motion='reduced'] .lf-hero__field { animation: none; }
-
-.lf-hero__proof {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0;
-  margin: clamp(1.5rem, 1rem + 2vw, 3rem) 0 0;
-  border-top: 1px solid var(--border);
-}
-.lf-hero__proof > div { padding: var(--sp-5) var(--sp-4) 0 0; min-width: 0; }
-.lf-hero__proof > div + div { padding-left: var(--sp-4); border-left: 1px solid var(--border); }
-.lf-hero__proof dd { margin: 0; display: grid; gap: 4px; }
-.lf-hero__proof-value { font: 800 clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem)/1 var(--font-display); letter-spacing: -0.03em; color: var(--text); }
-.lf-hero__proof-label { font-size: 0.875rem; color: var(--text-3); }
-
-@media (max-width: 900px) {
-  .lf-hero__inner { grid-template-columns: 1fr; min-height: 0; }
-  .lf-hero__field { order: -1; margin-block: -12px -8px; }
-  .lf-hero__title { max-width: 13ch; }
-  .lf-hero__proof { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: var(--sp-4); }
-  .lf-hero__proof > div:nth-child(4) { border-left: 0; padding-left: 0; }
-}
-@media (max-width: 520px) {
-  .lf-hero__title { font-size: clamp(2.375rem, 1.6rem + 4vw, 3rem); }
-  .lf-hero__proof { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .lf-hero__proof > div:nth-child(n) { border-left: 0; padding-left: 0; }
-  .lf-hero__proof > div:nth-child(even) { padding-left: var(--sp-4); border-left: 1px solid var(--border); }
-  .lf-hero__proof > div:last-child { grid-column: 1 / -1; }
-}
-
+/* Homepage sections below the theatre. */
 .lf-home__aside-link { margin-top: var(--sp-4); }
 
 /* ---------- Services ---------- */
 .lf-home-services { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(1.5rem, 1rem + 3vw, 4rem); align-items: start; }
 .lf-home-services__ai { display: grid; gap: var(--sp-4); }
-.lf-home-services__card h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); letter-spacing: -0.025em; }
+.lf-home-services__card h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); letter-spacing: -0.01em; }
 .lf-home-services__card .lf-eyebrow { margin: 0; }
 .lf-home-services__tagline { font-weight: 600; color: var(--text) !important; }
 .lf-home-services__ai > li:nth-child(1) .lf-home-services__card { background: var(--lf-yellow-50); }
@@ -98,7 +24,7 @@
   text-decoration: none;
   transition: padding var(--dur-ui) var(--ease-out), color var(--dur-micro);
 }
-.lf-home-services__all a > span:first-child { grid-area: name; font: 700 1.125rem/1.25 var(--font-display); }
+.lf-home-services__all a > span:first-child { grid-area: name; font: 400 1.125rem/1.25 var(--font-display); }
 .lf-home-services__hint { grid-area: hint; font-size: 0.875rem; color: var(--text-3); }
 .lf-home-services__all .lf-arrow { grid-area: icon; color: var(--text-3); }
 .lf-home-services__all a:hover { padding-left: 12px; color: var(--lf-blue); }
@@ -125,7 +51,7 @@
   border-radius: 4px 4px 14px 4px;
   background: var(--surface-ink);
   color: #fff;
-  font: 800 0.8125rem/1 var(--font-display);
+  font: 400 0.8125rem/1 var(--font-display);
 }
 
 /* ---------- Social row ---------- */

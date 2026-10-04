@@ -1,5 +1,7 @@
 import { m } from 'framer-motion';
 import PageHero from '../../components/ui/PageHero';
+import CardTheatre from '../../features/theatre/CardTheatre';
+import { PAGE_THEATRES } from '../../content/theatreCards';
 import SmartLink from '../../components/ui/SmartLink';
 import { Arrow } from '../../components/ui/Icon';
 import { careers } from '../../content/careers';
@@ -38,7 +40,6 @@ export default function CareersPage() {
   return (
     <>
       <PageHero
-        variant="a"
         eyebrow={careers.eyebrow}
         title={careers.title}
         actions={
@@ -51,13 +52,16 @@ export default function CareersPage() {
         <p className="lf-lead"><strong>{careers.subtitle}.</strong> {careers.intro}</p>
       </PageHero>
 
+      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
+      <CardTheatre id="explore" cards={PAGE_THEATRES.careers.cards} filters={PAGE_THEATRES.careers.filters} label="Life and roles at Linkfields" />
+
       <section className="lf-section lf-careers-intro" aria-label="Our workplace">
         <div className="lf-container">
           <Photo image={careers.images.office} sizes="(max-width: 1280px) 100vw, 1280px" className="lf-careers-photo--wide" eager />
         </div>
       </section>
 
-      <section className="lf-section" aria-labelledby="thinking-title">
+      <section className="lf-section" id="thinking" aria-labelledby="thinking-title">
         <div className="lf-container lf-careers-split">
           <Reveal as="div">
             <p className="lf-eyebrow">Our culture</p>
@@ -72,7 +76,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <section className="lf-section lf-section--tint" aria-labelledby="nurture-title">
+      <section className="lf-section lf-section--tint" id="nurture" aria-labelledby="nurture-title">
         <div className="lf-container">
           <Reveal as="h2" id="nurture-title" className="lf-careers-nurture__title">{careers.nurtureTitle}</Reveal>
           <ul className="lf-list-plain lf-nurture">
@@ -86,7 +90,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <section className="lf-section lf-section--ink lf-ink lf-careers-cta" aria-labelledby="careers-cta-title">
+      <section className="lf-section lf-section--ink lf-ink lf-careers-cta" id="join" aria-labelledby="careers-cta-title">
         <div className="lf-container lf-careers-cta__inner">
           <Reveal as="div">
             <p className="lf-eyebrow">Join us</p>

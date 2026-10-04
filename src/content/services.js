@@ -164,4 +164,44 @@ export const corporateServices = [
   },
 ];
 
-export const serviceById = Object.fromEntries(corporateServices.map((s) => [s.id, s]));
+// AI services, added alongside the published services above. These are new
+// Linkfields AI practice offerings (not yet on linkfields.com); their links
+// lead to the contact page.
+const ai = (name, tagline, summary) => ({ name, href: '/contact', linkLabel: `Discuss ${name}`, tagline, summary });
+
+export const aiServicePractice = {
+  id: 'ai-services',
+  name: 'AI Services',
+  isNew: true,
+  headline: 'From AI strategy to AI in production',
+  overview: {
+    title: 'End-to-end AI engineering, built on our seven practices',
+    text: 'We help enterprises choose the right AI opportunities, build them on secure foundations and run them reliably in production, combining our engineering, cloud, data and automation experience with today’s leading AI models and platforms.',
+  },
+  subServices: [
+    ai('AI Strategy and Consulting', 'Finding the AI opportunities worth building',
+      'AI readiness assessments, use-case discovery and prioritisation, business cases and roadmaps that connect AI investment to measurable outcomes.'),
+    ai('Generative AI and LLM Engineering', 'Production-grade generative AI applications',
+      'Design and build of copilots and generative AI applications: model selection, prompt and context engineering, evaluation, and integration with your systems.'),
+    ai('AI Agent Development', 'Agents that get work done, safely',
+      'Tool-using AI agents and multi-agent workflows with guardrails, human approval steps and audit trails, connected to your APIs through standards such as MCP.'),
+    ai('RAG and Knowledge Engineering', 'Grounding AI in your own knowledge',
+      'Ingestion pipelines, vector and hybrid search, permission-aware retrieval and answer evaluation for assistants that cite their sources.'),
+    ai('Custom Model Development and Fine-tuning', 'Models shaped to your data',
+      'Training and fine-tuning machine-learning, vision and language models on your data, from feature engineering to model validation.'),
+    ai('Data Engineering for AI', 'The data foundation AI depends on',
+      'Data platforms, pipelines, quality checks and feature stores that make enterprise data ready for analytics and AI.'),
+    ai('MLOps and LLMOps', 'Reliable AI in production',
+      'CI/CD for models, deployment, monitoring, drift detection, cost control and observability for machine-learning and LLM systems.'),
+    ai('AI Governance, Security and Responsible AI', 'Trust built in from the start',
+      'AI policies, risk assessment, red-teaming, prompt-injection defence and compliance with frameworks such as ISO/IEC 42001 and the EU AI Act.'),
+    ai('AI Integration and APIs', 'AI wherever your business runs',
+      'Exposing AI capabilities as secure, reusable APIs and microservices, and embedding them in ERP, CRM and RPA platforms such as SAP, Salesforce and UiPath.'),
+  ],
+  href: '/contact',
+  linkLabel: 'Talk to our AI team',
+};
+
+export const allServices = [...corporateServices, aiServicePractice];
+
+export const serviceById = Object.fromEntries(allServices.map((s) => [s.id, s]));

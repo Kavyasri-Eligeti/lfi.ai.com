@@ -2,15 +2,17 @@
 // Durations are in seconds.
 
 export const DURATION = {
-  micro: 0.15,
-  ui: 0.3,
-  section: 0.6,
-  hero: 0.9,
+  micro: 0.16,
+  ui: 0.32,
+  section: 1.1,
+  hero: 1.6,
+  page: 0.8,
 };
 
 export const EASE = {
-  out: [0.22, 0.8, 0.24, 1],
+  out: [0.16, 1, 0.3, 1],
   inOut: [0.65, 0, 0.35, 1],
+  cinematic: [0.22, 1, 0.36, 1],
 };
 
 // Standard reveal used for section content. Transform-only on purpose: text is

@@ -3,7 +3,7 @@ import LinkfieldsLogo from '../brand/LinkfieldsLogo';
 import SmartLink from '../ui/SmartLink';
 import SocialIcon from '../ui/SocialIcon';
 import { company, emails, socials } from '../../content/company';
-import { corporateSolutions } from '../../content/solutions';
+import { aiSolutions } from '../../content/aiSolutions';
 import { useMotion } from '../../features/motion/MotionProvider';
 
 export default function Footer() {
@@ -28,10 +28,10 @@ export default function Footer() {
         <nav aria-label="AI solutions" className="lf-footer__col">
           <h2 className="lf-footer__title">AI Solutions</h2>
           <ul className="lf-list-plain">
-            <li><Link to="/solutions#products">AI products and demos</Link></li>
-            {corporateSolutions.slice(0, 5).map((s) => (
+            {aiSolutions.slice(0, 5).map((s) => (
               <li key={s.id}><Link to={`/solutions#${s.id}`}>{s.name}</Link></li>
             ))}
+            <li><Link to="/solutions#products">AI products and demos</Link></li>
             <li><a href="/catalogue">Classic catalogue view</a></li>
           </ul>
         </nav>
@@ -40,6 +40,7 @@ export default function Footer() {
           <h2 className="lf-footer__title">Company</h2>
           <ul className="lf-list-plain">
             <li><Link to="/services">Services</Link></li>
+            <li><Link to="/services#ai-services">AI Services</Link></li>
             <li><Link to="/industries">Industries</Link></li>
             <li><Link to="/company">About Linkfields</Link></li>
             <li><Link to="/company#offices">Global presence</Link></li>
@@ -61,8 +62,10 @@ export default function Footer() {
 
       <div className="lf-container lf-footer__bottom">
         <p>
-          © {new Date().getFullYear()} {company.legalName}. Items marked <em>Proposed</em> are under business review and are
-          not current offerings. Third-party names and logos are trademarks of their respective owners.
+          © {new Date().getFullYear()} {company.legalName}. Third-party names and logos are trademarks of their respective
+          owners; their use implies no partnership or endorsement. Earth imagery:{' '}
+          <a href="https://www.solarsystemscope.com/textures/">Solar System Scope</a>, based on NASA data,{' '}
+          <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
         </p>
         <ul className="lf-footer__legal">
           <li><SmartLink href={company.links.privacy}>Privacy Policy</SmartLink></li>

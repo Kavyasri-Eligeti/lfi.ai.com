@@ -97,23 +97,27 @@ export const socials = [
 ];
 
 // Partners as shown in the "Our partners" carousel on linkfields.com, in the
-// same order, with the logo files and links published there. `tile: 'dark'`
-// marks logos that linkfields.com publishes only in a light-on-dark version.
+// same order, with the logo files and links published there. The tiles are
+// graphite, so every logo is shown in its light-on-dark form: the light
+// versions linkfields.com publishes (Automation Anywhere, Soterion) and the
+// official reverse colourways (white lettering) of AWS, Microsoft, Odoo and
+// Blue Prism. `file` overrides the default /images/partners/<id>.svg.
 export const partners = [
-  { id: 'automation-anywhere', name: 'Automation Anywhere', href: 'https://www.automationanywhere.com/', tile: 'dark' },
+  { id: 'automation-anywhere', name: 'Automation Anywhere', href: 'https://www.automationanywhere.com/' },
   { id: 'uipath', name: 'UiPath', href: 'https://www.uipath.com/' },
   { id: 'salesforce', name: 'Salesforce', href: 'https://www.salesforce.com/' },
-  { id: 'soterion', name: 'Soterion', href: 'https://soterion.com/', tile: 'dark' },
-  { id: 'odoo', name: 'Odoo', href: 'https://www.odoo.com/' },
-  { id: 'aws', name: 'AWS', href: 'https://aws.amazon.com/' },
+  { id: 'soterion', name: 'Soterion', href: 'https://soterion.com/' },
+  { id: 'odoo', name: 'Odoo', href: 'https://www.odoo.com/', file: 'odoo-reverse.svg' },
+  { id: 'aws', name: 'AWS', href: 'https://aws.amazon.com/', file: 'aws-reverse.svg' },
   { id: 'azure', name: 'Azure', href: 'https://azure.microsoft.com/' },
-  { id: 'microsoft', name: 'Microsoft', href: 'https://www.microsoft.com/' },
-  { id: 'blue-prism', name: 'Blue Prism', href: 'https://www.blueprism.com/' },
-].map((p) => ({ ...p, logo: `/images/partners/${p.id}.svg` }));
+  { id: 'microsoft', name: 'Microsoft', href: 'https://www.microsoft.com/', file: 'microsoft-reverse.svg' },
+  { id: 'blue-prism', name: 'Blue Prism', href: 'https://www.blueprism.com/', file: 'blue-prism-reverse.svg' },
+].map((p) => ({ ...p, logo: `/images/partners/${p.file || `${p.id}.svg`}` }));
 
 // Offices from https://www.linkfields.com/contact-us, with the direction links
-// published there. `approx` is a city-level position used only to place a
-// marker on the stylised map. It is not an office coordinate.
+// published there. `approx` is the office's position on the globe: building-level
+// where the published directions link or the street address resolves (noted on
+// each line); `areaOnly` marks an office placed by its area.
 export const offices = [
   {
     id: 'south-africa',
@@ -123,7 +127,7 @@ export const offices = [
     phones: ['+27 11 022 6666', '+27 11 023 6666'],
     directions:
       'https://www.google.com/maps/dir//Linkfields+Innovations+(Pty)+Ltd,+Block+H,+Midridge+Office+Estate+International+Business+Gateway,+Cnr+6th+Street+%26,+New+Rd,+Carlswald,+Midrand,+1684,+South+Africa/@-25.9773519,28.1198535,18z/data=!4m8!4m7!1m0!1m5!1m1!1s0x1e956fbeafbef887:0x70ddc33f5ea30690!2m2!1d28.1210252!2d-25.9762899?entry=ttu',
-    approx: { lat: -26.0, lon: 28.13 },
+    approx: { lat: -25.97629, lon: 28.12103 }, // from the published directions link
   },
   {
     id: 'india',
@@ -133,7 +137,7 @@ export const offices = [
     phones: ['+91 40 4547 4849'],
     directions:
       'https://www.google.com/maps/place/Gowra+Fountain+Head/@17.4439218,78.3807443,17z/data=!3m1!4b1!4m5!3m4!1s0x3bcb93e01511d911:0x104e7368bcfb0af1!8m2!3d17.4439218!4d78.382933',
-    approx: { lat: 17.44, lon: 78.38 },
+    approx: { lat: 17.44392, lon: 78.38293 }, // Gowra Fountain Head, from the published directions link
   },
   {
     id: 'usa',
@@ -142,7 +146,7 @@ export const offices = [
     address: '1604, 447 Broadway, 2nd Floor, New York, 10013',
     phones: ['+1 347 871 0999'],
     directions: 'https://goo.gl/maps/4CenTJee6XXRZou1A?coh=178572&entry=tt',
-    approx: { lat: 40.72, lon: -74.0 },
+    approx: { lat: 40.72045, lon: -74.00122 }, // 447 Broadway (OpenStreetMap)
   },
   {
     id: 'uae',
@@ -151,7 +155,7 @@ export const offices = [
     address: '409, Churchill Towers, Business Bay, Dubai, United Arab Emirates, 1686',
     phones: ['+971 50 688 5758'],
     directions: 'https://goo.gl/maps/bm3bunttL7epY7bC7?coh=178572&entry=tt',
-    approx: { lat: 25.19, lon: 55.27 },
+    approx: { lat: 25.18056, lon: 55.26284 }, // Churchill Towers, Business Bay (OpenStreetMap)
   },
   {
     id: 'australia',
@@ -160,7 +164,7 @@ export const offices = [
     address: 'Level 40, 140 William Street, Melbourne, 3000, VIC Australia',
     phones: ['+61 45 124 6666'],
     directions: 'https://goo.gl/maps/VFXWxdQEhMruwG6f8?coh=178572&entry=tt',
-    approx: { lat: -37.81, lon: 144.96 },
+    approx: { lat: -37.81587, lon: 144.95886 }, // 140 William Street (OpenStreetMap)
   },
   {
     id: 'botswana',
@@ -169,7 +173,7 @@ export const offices = [
     address: 'AGA House, Plot 28576, Gaborone Industrial, Gaborone',
     phones: ['+267 311 9073'],
     directions: 'https://maps.app.goo.gl/XCroxEzCeCV8ogYTA?g_st=iw',
-    approx: { lat: -24.65, lon: 25.91 },
+    approx: { lat: -24.6545, lon: 25.9200 }, areaOnly: true, // Gaborone industrial area; the plot is not in public map data
   },
 ];
 

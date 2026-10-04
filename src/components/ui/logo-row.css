@@ -1,0 +1,18 @@
+.lf-logos { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.lf-logos__tile {
+  --t: 40px;
+  display: grid;
+  place-items: center;
+  height: var(--t);
+  min-width: var(--t);
+  padding: 0 9px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 20px -12px rgba(0, 0, 0, 0.8);
+  transition: transform var(--dur-ui) var(--ease-out), box-shadow var(--dur-ui);
+}
+.lf-logos__tile.is-dark { background: #0b1118; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+.lf-logos__tile img { display: block; max-height: calc(var(--t) * 0.55); max-width: calc(var(--t) * 2.4); width: auto; height: auto; object-fit: contain; }
+.lf-logos__tile:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px var(--th-teal), 0 0 24px -8px var(--th-teal); }
+.lf-logos--sm .lf-logos__tile { --t: 32px; padding: 0 7px; border-radius: 8px; }
+.lf-logos--lg .lf-logos__tile { --t: 64px; padding: 0 16px; border-radius: 14px; }

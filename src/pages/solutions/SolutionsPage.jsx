@@ -2,19 +2,22 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, m } from 'framer-motion';
 import PageHero from '../../components/ui/PageHero';
+import CardTheatre from '../../features/theatre/CardTheatre';
+import { PAGE_THEATRES } from '../../content/theatreCards';
 import SectionHeader from '../../components/ui/SectionHeader';
 import SmartLink from '../../components/ui/SmartLink';
 import StatusBadge from '../../components/ui/StatusBadge';
 import DemoCard from '../../components/ui/DemoCard';
-import ProposalCard from '../../components/ui/ProposalCard';
 import Icon, { Arrow } from '../../components/ui/Icon';
-import ContactBand from '../../components/sections/ContactBand';
 import { corporateSolutions, ERP_INTRO } from '../../content/solutions';
 import { demos } from '../../content/demos';
 import { capabilities, capabilityById } from '../../content/capabilities';
 import { industries } from '../../content/industries';
-import { proposedSolutions, verifiedAiCapabilities } from '../../content/proposals';
-import { corporateServices } from '../../content/services';
+import { aiSolutions } from '../../content/aiSolutions';
+import { getDemos } from '../../content/demos';
+import ElementMark from '../../components/brand/ElementMark';
+import LogoRow from '../../components/ui/LogoRow';
+import { SOLUTION_LOGOS } from '../../content/logos';
 import { STATUS, STATUS_META } from '../../content/status';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import { layoutTransition } from '../../features/motion/tokens';
@@ -31,6 +34,7 @@ function SolutionCard({ solution, index }) {
         <span className="lf-solution__group">{solution.group}</span>
         <StatusBadge status={solution.status} />
       </div>
+      <LogoRow keys={SOLUTION_LOGOS[solution.id]} size="lg" label={`${solution.name} logo`} className="lf-solution__logos" />
       <h3 className="lf-solution__name">{solution.name}</h3>
       <p className="lf-solution__headline">{solution.headline}</p>
       <p className="lf-solution__intro">{solution.intro}</p>
@@ -46,10 +50,43 @@ function SolutionCard({ solution, index }) {
   );
 }
 
+function AiSolutionCard({ solution, index }) {
+  const live = getDemos(solution.demos);
+  return (
+    <Reveal as="article" id={solution.id} className="lf-aisol" index={index} step={0.04} style={{ '--a': solution.mark.accent }}>
+      <div className="lf-aisol__head">
+        <ElementMark code={solution.mark.code} index={index + 1} accent={solution.mark.accent} size={60} className="lf-aisol__mark" />
+      </div>
+      <h3 className="lf-aisol__name">{solution.name}</h3>
+      <p className="lf-aisol__tagline">{solution.tagline}</p>
+      <p className="lf-aisol__summary">{solution.summary}</p>
+      <h4 className="lf-aisol__label">Use cases</h4>
+      <ul className="lf-aisol__uses">
+        {solution.useCases.map((u) => <li key={u}>{u}</li>)}
+      </ul>
+      <LogoRow keys={SOLUTION_LOGOS[solution.id]} size="sm" label={`${solution.name} platforms`} className="lf-aisol__logos" />
+      <ul className="lf-list-plain lf-aisol__stack" aria-label="Built with">
+        {solution.stack.map((t) => <li key={t} className="lf-tag">{t}</li>)}
+      </ul>
+      {live.length > 0 && (
+        <p className="lf-aisol__live">
+          <span>See it live:</span>{' '}
+          {live.map((d, i) => (
+            <span key={d.id}>
+              {i > 0 && ', '}
+              <SmartLink href={d.href}>{d.name}</SmartLink>
+            </span>
+          ))}
+        </p>
+      )}
+    </Reveal>
+  );
+}
+
 export default function SolutionsPage() {
   usePageMeta(
-    'AI Solutions and Products',
-    'Linkfields enterprise solutions (SAP, Odoo, Microsoft Dynamics, Salesforce, iPaaS, RPA, Testorium Z) and the full LFI AI catalogue of live AI and analytics demos.'
+    'AI Solutions',
+    'Linkfields AI solutions: generative AI, AI agents, enterprise RAG, conversational AI, document intelligence, computer vision, predictive analytics and more, plus enterprise platforms and live AI demos.'
   );
   const [params, setParams] = useSearchParams();
   const q = params.get('q') || '';
@@ -86,24 +123,39 @@ export default function SolutionsPage() {
   return (
     <>
       <PageHero
-        variant="a"
         eyebrow="AI Solutions"
-        title="Enterprise solutions and AI products"
+        title="AI solutions for the modern enterprise"
         actions={
           <>
-            <a href="#products" className="lf-btn">Browse {demos.length} demos <Arrow /></a>
-            <a href="#enterprise" className="lf-btn lf-btn--secondary">Enterprise solutions</a>
+            <a href="#ai-solutions" className="lf-btn">Explore {aiSolutions.length} AI solutions <Arrow /></a>
+            <a href="#products" className="lf-btn lf-btn--secondary">Browse {demos.length} live demos</a>
           </>
         }
       >
         <p className="lf-lead">
-          The platforms Linkfields implements for enterprises, and the AI and analytics products in the LFI AI catalogue. Every
-          demo link below is the live production link.
+          The AI solutions enterprises are adopting today, from generative AI and autonomous agents to document intelligence and
+          predictive analytics, delivered by Linkfields on the platforms you already run. Each one links to live demos.
         </p>
       </PageHero>
 
+      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
+      <CardTheatre id="explore" cards={PAGE_THEATRES.solutions.cards} filters={PAGE_THEATRES.solutions.filters} label="Linkfields AI solutions and enterprise platforms" />
+
+      {/* ---------- AI solutions ---------- */}
+      <section className="lf-section" id="ai-solutions" aria-labelledby="ai-solutions-title">
+        <div className="lf-container">
+          <SectionHeader split id="ai-solutions-title" eyebrow="AI solutions" title="What we build with AI">
+            Twelve solution areas that cover today’s enterprise AI market, each mapped to the use cases, technology and live Linkfields
+            demos behind it.
+          </SectionHeader>
+          <div className="lf-aisols">
+            {aiSolutions.map((s, i) => <AiSolutionCard key={s.id} solution={s} index={i} />)}
+          </div>
+        </div>
+      </section>
+
       {/* ---------- A. Verified corporate solutions ---------- */}
-      <section className="lf-section" id="enterprise" aria-labelledby="enterprise-title">
+      <section className="lf-section lf-section--tint" id="enterprise" aria-labelledby="enterprise-title">
         <div className="lf-container">
           <SectionHeader split id="enterprise-title" eyebrow="Enterprise solutions" title="Platforms Linkfields delivers">
             {ERP_INTRO}
@@ -115,7 +167,7 @@ export default function SolutionsPage() {
       </section>
 
       {/* ---------- B. AI products and demos ---------- */}
-      <section className="lf-section lf-section--tint" id="products" aria-labelledby="products-title">
+      <section className="lf-section" id="products" aria-labelledby="products-title">
         <div className="lf-container">
           <SectionHeader split id="products-title" eyebrow="AI products and demos" title="The LFI AI catalogue">
             {demos.length} entries: {counts[STATUS.PRODUCT]} live demos, {counts[STATUS.INTERNAL]} tools that work only on the
@@ -206,37 +258,6 @@ export default function SolutionsPage() {
           </p>
         </div>
       </section>
-
-      {/* ---------- C. Proposed offerings ---------- */}
-      <section className="lf-section" id="proposed" aria-labelledby="proposed-title">
-        <div className="lf-container">
-          <SectionHeader split id="proposed-title" eyebrow="Proposed · awaiting approval" title="AI solution areas under review">
-            These are opportunities Linkfields is reviewing. They are not current offerings. Where an existing demo already shows
-            the underlying capability, it is named.
-          </SectionHeader>
-          <div className="lf-callout lf-proposed-note">
-            <Icon name="alert" size={20} />
-            <p>
-              Verified AI capabilities today are{' '}
-              {verifiedAiCapabilities.map((c, i) => {
-                const service = corporateServices.find((s) => s.id === c.serviceId);
-                return (
-                  <span key={c.name}>
-                    {i > 0 && (i === verifiedAiCapabilities.length - 1 ? ' and ' : ', ')}
-                    <SmartLink href={service.href}>{c.name}</SmartLink>
-                  </span>
-                );
-              })}
-              , published as Linkfields services, plus the demos in the catalogue above.
-            </p>
-          </div>
-          <div className="lf-grid lf-proposals">
-            {proposedSolutions.map((p, i) => <ProposalCard key={p.id} item={p} index={i} />)}
-          </div>
-        </div>
-      </section>
-
-      <ContactBand />
     </>
   );
 }

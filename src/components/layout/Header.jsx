@@ -2,12 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, m } from 'framer-motion';
 import LinkfieldsLogo from '../brand/LinkfieldsLogo';
+import AILogo from '../brand/AILogo';
 import { contactNav, primaryNav } from '../../app/navigation';
 import { EASE } from '../../features/motion/tokens';
 import './layout.css';
+import './header.css';
 
 const navClass = ({ isActive }) => (isActive ? 'is-active' : undefined);
 
+/**
+ * Floating header: the Linkfields logo top-left, and a glass pill top-right
+ * holding the primary navigation, a line, and Contact. Below 1100px the pill
+ * reads MENU ——— CONTACT and MENU opens a full-screen menu.
+ */
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -24,7 +31,7 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Mobile menu: Escape closes it, focus moves into it, the page behind does not scroll.
+  // Menu: Escape closes it, focus moves into it, the page behind does not scroll.
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => {
@@ -51,36 +58,38 @@ export default function Header() {
       <div className="lf-header__inner">
         <Link to="/" className="lf-header__capsule" aria-label="Linkfields AI home">
           <LinkfieldsLogo height={26} />
-          <span className="lf-header__product" aria-hidden="true">AI</span>
+          <span className="lf-header__divider" aria-hidden="true" />
+          <AILogo size={34} />
         </Link>
 
-        <nav className="lf-nav" aria-label="Primary">
-          <ul>
-            {primaryNav.map((item) => (
-              <li key={item.to}>
-                <NavLink to={item.to} className={navClass}>
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <Link to={contactNav.to} className="lf-btn lf-btn--sm lf-header__cta">
-          {contactNav.label}
-        </Link>
-
-        <button
-          ref={menuButton}
-          type="button"
-          className="lf-menu-button"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="lf-menu-button__bars" aria-hidden="true" />
-          <span className="lf-visually-hidden">{open ? 'Close menu' : 'Menu'}</span>
-        </button>
+        <div className="lf-pill">
+          <nav className="lf-nav" aria-label="Primary">
+            <ul>
+              {primaryNav.map((item) => (
+                <li key={item.to}>
+                  <NavLink to={item.to} className={navClass}>
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <button
+            ref={menuButton}
+            type="button"
+            className="lf-pill__menu"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? 'Close' : 'Menu'}
+          </button>
+          <span className="lf-pill__line" aria-hidden="true" />
+          <Link to={contactNav.to} className="lf-pill__contact">
+            {contactNav.label}
+          </Link>
+          <span className="lf-pill__glow" aria-hidden="true" />
+        </div>
       </div>
 
       <AnimatePresence>
@@ -89,23 +98,24 @@ export default function Header() {
             ref={sheet}
             id="mobile-menu"
             className="lf-sheet"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.28, ease: EASE.out }}
+            data-lenis-prevent
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE.out }}
           >
+            <p className="lf-sheet__label">What are you looking for?</p>
             <nav aria-label="Mobile">
               <ul>
                 {[{ label: 'Home', to: '/' }, ...primaryNav, contactNav].map((item, i) => (
                   <m.li
                     key={item.to}
-                    initial={{ y: 10 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.32, delay: 0.03 * i, ease: EASE.out }}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.05 * i, ease: EASE.out }}
                   >
                     <NavLink to={item.to} end={item.to === '/'} className={navClass}>
-                      {item.label}
-                      <span className="lf-arrow" aria-hidden="true">→</span>
+                      <span className="lf-sheet__arrow" aria-hidden="true">-&gt;</span> {item.label}
                     </NavLink>
                   </m.li>
                 ))}

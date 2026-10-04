@@ -1,11 +1,12 @@
 import PageHero from '../../components/ui/PageHero';
+import CardTheatre from '../../features/theatre/CardTheatre';
+import { PAGE_THEATRES } from '../../content/theatreCards';
 import SectionHeader from '../../components/ui/SectionHeader';
 import SmartLink from '../../components/ui/SmartLink';
 import { Arrow } from '../../components/ui/Icon';
 import PartnerWall from '../../components/sections/PartnerWall';
 import OfficeMap from '../../components/sections/OfficeMap';
 import InsightsList from '../../components/sections/InsightsList';
-import ContactBand from '../../components/sections/ContactBand';
 import { company, offices } from '../../content/company';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './company.css';
@@ -28,7 +29,6 @@ export default function CompanyPage() {
   return (
     <>
       <PageHero
-        variant="d"
         eyebrow="About Linkfields"
         title={company.hero.title}
         actions={
@@ -40,6 +40,9 @@ export default function CompanyPage() {
       >
         <p className="lf-lead">{company.hero.text}</p>
       </PageHero>
+
+      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
+      <CardTheatre id="explore" cards={PAGE_THEATRES.company.cards} filters={PAGE_THEATRES.company.filters} label="Linkfields values and offices" />
 
       {/* ---------- Story and milestones ---------- */}
       <section className="lf-section" aria-labelledby="story-title">
@@ -181,8 +184,6 @@ export default function CompanyPage() {
           <InsightsList />
         </div>
       </section>
-
-      <ContactBand />
     </>
   );
 }

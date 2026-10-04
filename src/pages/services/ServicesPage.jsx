@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import PageHero from '../../components/ui/PageHero';
-import SectionHeader from '../../components/ui/SectionHeader';
+import CardTheatre from '../../features/theatre/CardTheatre';
+import { PAGE_THEATRES } from '../../content/theatreCards';
 import SmartLink from '../../components/ui/SmartLink';
-import ProposalCard from '../../components/ui/ProposalCard';
 import Icon, { Arrow } from '../../components/ui/Icon';
-import ContactBand from '../../components/sections/ContactBand';
-import { corporateServices } from '../../content/services';
-import { proposedServices } from '../../content/proposals';
+import { allServices } from '../../content/services';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './services.css';
 import Reveal from '../../features/motion/Reveal';
+import LogoRow from '../../components/ui/LogoRow';
+import { SERVICE_LOGOS, SUB_SERVICE_LOGOS } from '../../content/logos';
 
 function SubService({ sub }) {
   return (
@@ -21,7 +21,8 @@ function SubService({ sub }) {
       <div className="lf-subservice__body">
         {sub.tagline && <p className="lf-subservice__tagline">{sub.tagline}</p>}
         {sub.summary && <p>{sub.summary}</p>}
-        <SmartLink href={sub.href} className="lf-link">Read more about {sub.name} <Arrow /></SmartLink>
+        <LogoRow keys={SUB_SERVICE_LOGOS[sub.name]} size="sm" label={`${sub.name} platforms`} className="lf-subservice__logos" />
+        <SmartLink href={sub.href} className="lf-link">{sub.linkLabel || `Read more about ${sub.name}`} <Arrow /></SmartLink>
       </div>
     </details>
   );
@@ -29,11 +30,13 @@ function SubService({ sub }) {
 
 function ServiceRow({ service }) {
   return (
-    <Reveal as="article" id={service.id} className="lf-service" aria-labelledby={`${service.id}-title`}>
+    <Reveal as="article" id={service.id} className={`lf-service${service.isNew ? ' lf-service--new' : ''}`} aria-labelledby={`${service.id}-title`}>
       <header className="lf-service__head">
+        {service.isNew && <p className="lf-service__new">New practice</p>}
         <h2 id={`${service.id}-title`} className="lf-service__name">{service.name}</h2>
         <p className="lf-service__headline">{service.headline}</p>
-        <SmartLink href={service.href} className="lf-link">{service.name} on linkfields.com <Arrow /></SmartLink>
+        <LogoRow keys={SERVICE_LOGOS[service.id]} label={`${service.name} platforms`} className="lf-service__logos" />
+        <SmartLink href={service.href} className="lf-link">{service.linkLabel || `${service.name} on linkfields.com`} <Arrow /></SmartLink>
       </header>
       <div className="lf-service__body">
         <h3 className="lf-service__overview-title">{service.overview.title}</h3>
@@ -89,61 +92,48 @@ function useActiveSection(ids) {
   return active;
 }
 
-const SERVICE_IDS = corporateServices.map((s) => s.id);
+const SERVICE_IDS = allServices.map((s) => s.id);
 
 export default function ServicesPage() {
   usePageMeta(
     'Services',
-    'Linkfields Innovations services: Engineering, Consulting, Cloud, Automation, Technology, Teams and IT Infrastructure and Solutions.'
+    'Linkfields Innovations services: Engineering, Consulting, Cloud, Automation, Technology, Teams, IT Infrastructure and Solutions, and AI Services.'
   );
   const active = useActiveSection(SERVICE_IDS);
 
   return (
     <>
       <PageHero
-        variant="b"
         eyebrow="Services"
-        title="Seven practices behind every Linkfields solution"
-        actions={<a href="#ai-services" className="lf-btn lf-btn--secondary">Proposed AI services</a>}
+        title="Seven proven practices, and a new AI practice"
+        actions={<a href="#ai-services" className="lf-btn">Explore AI services <Arrow /></a>}
       >
         <p className="lf-lead">
-          From consulting and engineering to cloud, automation, data and AI, these are the services Linkfields Innovations
-          publishes, with every sub-service linked to its page.
+          From consulting and engineering to cloud, automation and data, the services Linkfields Innovations is known for, now joined
+          by end-to-end AI services: strategy, generative AI, agents, RAG, MLOps and responsible AI.
         </p>
       </PageHero>
+
+      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
+      <CardTheatre id="explore" cards={PAGE_THEATRES.services.cards} filters={PAGE_THEATRES.services.filters} label="Linkfields practices and AI services" />
 
       <section className="lf-section lf-services-layout" aria-label="Linkfields services">
         <div className="lf-container lf-services-layout__inner">
           <nav className="lf-services-index" aria-label="Services on this page">
             <p className="lf-eyebrow">On this page</p>
             <ul className="lf-list-plain">
-              {corporateServices.map((s) => (
+              {allServices.map((s) => (
                 <li key={s.id}>
                   <a href={`#${s.id}`} aria-current={active === s.id ? 'true' : undefined}>{s.name}</a>
                 </li>
               ))}
-              <li><a href="#ai-services">Proposed AI services</a></li>
             </ul>
           </nav>
           <div className="lf-services-list">
-            {corporateServices.map((s) => <ServiceRow key={s.id} service={s} />)}
+            {allServices.map((s) => <ServiceRow key={s.id} service={s} />)}
           </div>
         </div>
       </section>
-
-      <section className="lf-section lf-section--tint" id="ai-services" aria-labelledby="ai-services-title">
-        <div className="lf-container">
-          <SectionHeader split id="ai-services-title" eyebrow="Proposed · awaiting approval" title="AI services under review">
-            Possible additions to the Linkfields services. None of them is a current offering. The AI service published today is AI
-            &amp; Machine Learning, part of the Technology service.
-          </SectionHeader>
-          <div className="lf-grid lf-proposals">
-            {proposedServices.map((p, i) => <ProposalCard key={p.id} item={p} index={i} />)}
-          </div>
-        </div>
-      </section>
-
-      <ContactBand />
     </>
   );
 }

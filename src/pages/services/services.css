@@ -29,7 +29,7 @@
 }
 .lf-service:first-child { border-top: 2px solid var(--text); }
 .lf-service__head { display: grid; gap: var(--sp-3); align-content: start; position: sticky; top: calc(var(--header-h) + 24px); }
-.lf-service__name { margin: 0; font-size: clamp(2.25rem, 1.5rem + 2.5vw, 3.75rem); letter-spacing: -0.04em; line-height: 1; }
+.lf-service__name { margin: 0; font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); letter-spacing: -0.01em; line-height: 1; }
 .lf-service__headline { margin: 0; font: 600 var(--fs-lead)/1.45 var(--font-sans); color: var(--text-2); max-width: 30ch; }
 .lf-service__head .lf-link { margin-top: var(--sp-2); justify-self: start; }
 .lf-service__overview-title { margin: 0 0 var(--sp-3); font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.75rem); }
@@ -37,10 +37,10 @@
 .lf-service__offer { color: var(--text-2); }
 .lf-service__subs { margin-top: var(--sp-5); }
 .lf-subservice > summary { padding: var(--sp-4) 0; }
-.lf-subservice__name { font: 700 1.125rem/1.3 var(--font-display); }
+.lf-subservice__name { font: 400 1.125rem/1.3 var(--font-display); }
 .lf-subservice__body { padding: 0 0 var(--sp-5); display: grid; gap: var(--sp-3); }
 .lf-subservice__body p { margin: 0; color: var(--text-2); }
-.lf-subservice__tagline { font-weight: 650; color: var(--text) !important; }
+.lf-subservice__tagline { font-weight: 600; color: var(--text) !important; }
 .lf-service__groups { margin-top: var(--sp-5); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
 .lf-service__group { padding: var(--sp-5); border-radius: var(--radius-leaf); background: var(--surface-2); }
 .lf-service__group h4 { margin-bottom: var(--sp-3); }
@@ -52,3 +52,20 @@
   .lf-service { grid-template-columns: 1fr; }
   .lf-service__head { position: static; }
 }
+
+/* New AI practice */
+.lf-service--new { position: relative; }
+.lf-service__new {
+  display: inline-flex;
+  margin: 0 0 var(--sp-3);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font: 700 var(--fs-meta)/1.3 var(--font-sans);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--aws-space);
+  background: var(--aws-orange);
+}
+
+.lf-service__logos { margin: var(--sp-4) 0; }
+.lf-subservice__logos { margin: var(--sp-3) 0 var(--sp-4); }

@@ -1,0 +1,62 @@
+/*
+ * Hover light for every card that opens something: a soft violet halo at the
+ * top-left blending into cyan and blue around the right and bottom, with a
+ * lit edge. Built from the card's own shadows, so rounded, overflow-clipped
+ * cards glow too. The `html` prefix lets it win over each card's own hover.
+ */
+html :is(
+  .lf-card--interactive,
+  .lf-demo-card,
+  .lf-aisol,
+  .lf-solution,
+  .lf-capindex__card,
+  .lf-insight,
+  .lf-channel,
+  .lf-contact__social-link,
+  .lf-partner,
+  .th-card
+) {
+  transition:
+    box-shadow 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out),
+    background-color 0.45s var(--ease-out);
+}
+
+html :is(
+  .lf-card--interactive,
+  .lf-demo-card,
+  .lf-aisol,
+  .lf-solution,
+  .lf-capindex__card,
+  .lf-insight,
+  .lf-channel,
+  .lf-contact__social-link,
+  .lf-partner,
+  .th-card
+):is(:hover, :focus-within) {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 1px rgba(147, 197, 253, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    -16px -16px 44px -12px rgba(139, 92, 246, 0.85),
+    16px -6px 44px -12px rgba(59, 130, 246, 0.75),
+    14px 18px 48px -10px rgba(34, 211, 238, 0.75),
+    -10px 18px 44px -14px rgba(14, 165, 233, 0.6),
+    0 0 90px -24px rgba(56, 189, 248, 0.9);
+}
+
+/* Partner tiles: graphite, with a mild blue backlight (a thin, even halo
+   hugging the tile) in the Linkfields logo blue (#2d58c0), lifted for the dark. */
+html .lf-partner:is(:hover, :focus-within) {
+  position: relative;
+  z-index: 2;
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(83, 132, 255, 0.55),
+    0 0 14px 1px rgba(64, 120, 255, 0.38),
+    0 0 30px 4px rgba(45, 88, 192, 0.2);
+}
+
+[data-motion='reduced'] :is(.lf-card--interactive, .lf-demo-card, .lf-aisol, .lf-solution, .lf-capindex__card, .lf-insight, .lf-channel, .lf-contact__social-link, .lf-partner, .th-card):is(:hover, :focus-within) {
+  transform: none;
+}

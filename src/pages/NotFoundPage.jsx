@@ -7,7 +7,6 @@ export default function NotFoundPage() {
   usePageMeta('Page not found');
   return (
     <PageHero
-      variant="c"
       eyebrow="Error 404"
       title="This page could not be found"
       actions={

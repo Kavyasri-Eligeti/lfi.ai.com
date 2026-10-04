@@ -1,0 +1,11 @@
+Industry photographs from Unsplash (https://unsplash.com), free to use under the Unsplash License
+(https://unsplash.com/license). Resized and converted to WebP.
+
+manufacturing.webp  https://unsplash.com/photos/a-factory-filled-with-lots-of-orange-machines-8gr6bObQLOI
+telecom.webp  https://unsplash.com/photos/black-metal-tower-under-blue-sky-YzZJUXjb9aw
+banking.webp  https://unsplash.com/photos/a-couple-of-tall-buildings-that-are-next-to-each-other-xeJ6ev1w1Sk
+insurance.webp  https://unsplash.com/photos/person-walking-on-street-and-holding-umbrella-while-raining-with-vehicle-nearby-GXEZuWo5m4I
+fintech.webp  https://unsplash.com/photos/person-holding-black-android-smartphone-k24rOBJ2D_0
+fmcg.webp  https://unsplash.com/photos/a-grocery-store-aisle-filled-with-lots-of-food-IH65r4HEQWQ
+mining.webp  https://unsplash.com/photos/caterpillar-haul-truck-in-rocky-quarry-Evss0Whf5OI
+oil-gas.webp  https://unsplash.com/photos/an-oil-rig-in-the-middle-of-the-ocean-0wsMNnEFaTo

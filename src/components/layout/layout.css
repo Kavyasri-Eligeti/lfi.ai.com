@@ -1,144 +1,5 @@
-/* ---------- Header ---------- */
-.lf-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: saturate(1.4) blur(14px);
-  backdrop-filter: saturate(1.4) blur(14px);
-  box-shadow: 0 1px 0 transparent;
-  transition: box-shadow var(--dur-ui) var(--ease-out), background-color var(--dur-ui);
-}
-.lf-header.is-scrolled { box-shadow: 0 1px 0 var(--border); }
-.lf-header.is-open { background: var(--surface); }
-.lf-header__inner {
-  max-width: var(--container);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-  height: var(--header-h);
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 0.5rem + 2vw, 2.5rem);
-}
-
-/* The official logo has a light wordmark, so it always sits on a charcoal
-   capsule. The logo file itself is never recoloured. */
-.lf-header__capsule {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 44px;
-  padding: 0 14px 0 12px;
-  border-radius: var(--radius-pill);
-  background: var(--surface-ink);
-  text-decoration: none;
-  transition: transform var(--dur-micro) var(--ease-out);
-}
-.lf-header__capsule:hover { transform: translateY(-1px); }
-.lf-header__product {
-  font: 800 0.8125rem/1 var(--font-display);
-  letter-spacing: 0.04em;
-  color: var(--lf-charcoal);
-  background: var(--lf-yellow);
-  padding: 5px 7px 4px;
-  border-radius: 4px 4px 9px 4px;
-}
-
-.lf-nav { margin-right: auto; }
-.lf-nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
-.lf-nav a {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  height: 44px;
-  padding: 0 12px;
-  font: 600 var(--fs-small)/1 var(--font-sans);
-  color: var(--text-2);
-  text-decoration: none;
-  border-radius: var(--radius-sm);
-  transition: color var(--dur-micro);
-}
-.lf-nav a::after {
-  content: '';
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 6px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--lf-blue);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur-ui) var(--ease-out);
-}
-.lf-nav a:hover { color: var(--text); }
-.lf-nav a:hover::after { transform: scaleX(1); background: var(--border-strong); }
-.lf-nav a.is-active { color: var(--text); }
-.lf-nav a.is-active::after { transform: scaleX(1); background: var(--lf-blue); }
-
-.lf-header__cta { flex: 0 0 auto; }
-
-.lf-menu-button {
-  display: none;
-  margin-left: auto;
-  width: 48px;
-  height: 48px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-}
-.lf-menu-button__bars,
-.lf-menu-button__bars::before,
-.lf-menu-button__bars::after {
-  position: absolute;
-  left: 13px;
-  width: 22px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--text);
-  transition: transform var(--dur-ui) var(--ease-out), opacity var(--dur-micro);
-}
-.lf-menu-button__bars { top: 23px; }
-.lf-menu-button__bars::before { content: ''; left: 0; top: -7px; }
-.lf-menu-button__bars::after { content: ''; left: 0; top: 7px; }
-.lf-header.is-open .lf-menu-button__bars { background: transparent; }
-.lf-header.is-open .lf-menu-button__bars::before { transform: translateY(7px) rotate(45deg); }
-.lf-header.is-open .lf-menu-button__bars::after { transform: translateY(-7px) rotate(-45deg); }
-
-.lf-sheet {
-  position: fixed;
-  inset: var(--header-h) 0 0;
-  background: var(--surface);
-  padding: var(--sp-5) var(--gutter) calc(var(--sp-7) + env(safe-area-inset-bottom, 0px));
-  overflow-y: auto;
-}
-.lf-sheet ul { list-style: none; margin: 0; padding: 0; }
-.lf-sheet li { border-bottom: 1px solid var(--border); }
-.lf-sheet a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 4px;
-  font: 750 1.625rem/1.1 var(--font-display);
-  letter-spacing: -0.02em;
-  color: var(--text);
-  text-decoration: none;
-}
-.lf-sheet a.is-active { color: var(--lf-blue); }
-.lf-sheet .lf-arrow { color: var(--text-3); font-size: 1.25rem; }
-html.lf-menu-open { overflow: hidden; }
-
-@media (max-width: 1023px) {
-  .lf-nav, .lf-header__cta { display: none; }
-  .lf-menu-button { display: block; }
-}
-@media (min-width: 1024px) { .lf-sheet { display: none; } }
-
 /* ---------- Footer ---------- */
-.lf-footer { background: var(--surface-ink); color: var(--text-on-ink-2); position: relative; overflow: hidden; }
+.lf-footer { background: var(--aws-space); color: var(--text-on-ink-2); position: relative; overflow: hidden; }
 .lf-footer__top {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
@@ -203,3 +64,52 @@ html.lf-menu-open { overflow: hidden; }
 @media (max-width: 480px) {
   .lf-footer__top { grid-template-columns: 1fr; }
 }
+
+/* ---------- Page transition curtain ---------- */
+.lf-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background:
+    radial-gradient(70vw 60vh at 0% 100%, rgba(58, 42, 107, 0.65), transparent 70%),
+    radial-gradient(70vw 60vh at 100% 0%, rgba(29, 74, 82, 0.6), transparent 70%),
+    #05080d;
+  will-change: transform;
+}
+/* A light seam along the curtain's leading and trailing edges */
+.lf-curtain::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--th-teal), var(--th-lavender), transparent);
+  box-shadow: 0 0 24px 2px rgba(111, 227, 211, 0.45);
+}
+/* Scanlines and a fine light seam on the curtain */
+.lf-curtain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px);
+}
+.lf-curtain__inner { position: relative; display: grid; justify-items: center; gap: 22px; padding-inline: var(--gutter); text-align: center; }
+.lf-curtain__label {
+  margin: 0;
+  font: 400 clamp(2.5rem, 1rem + 6vw, 6.5rem)/0.95 var(--font-mono);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.lf-curtain__line {
+  display: block;
+  width: min(56vw, 560px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--th-teal), var(--th-lavender), transparent);
+  transform-origin: center;
+}
+.lf-page { transform-origin: 50% 0; }

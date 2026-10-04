@@ -1,109 +1,123 @@
 /*
- * Linkfields AI design tokens: "Modular Intelligence".
- * Light-first. Brand colours are the exact values in the official logo file
- * (public/brand/linkfields-logo.svg). The "leaf" radius (three small corners,
- * one large) is taken from the three modules of the Linkfields mark.
- * Display type: Hanken Grotesk. Body and UI: Open Sans (the open-source
- * default of AWS's Cloudscape system). Both SIL OFL 1.1, self-hosted.
- * Amazon Ember is not used (Amazon brand typeface, no licence).
+ * Linkfields AI design tokens: "Theatre" (dark, cinematic, monospace).
+ * Near-black teal space, light type, lavender and teal light, film grain.
+ * Display and UI type: Share Tech Mono (SIL OFL, self-hosted via @fontsource).
+ * Long-form reading: Open Sans (SIL OFL, self-hosted).
+ * The Linkfields logo is never recoloured; it sits on dark surfaces.
  */
 :root {
-  /* Brand (exact logo values) */
-  --lf-yellow: #ffd600;
-  --lf-orange: #ff7800;
-  --lf-blue: #2d58c0;
-  --lf-mist: #e6eced;          /* logo wordmark */
-  --lf-charcoal: #16191f;
+  /* Light sources */
+  --th-teal: #6fe3d3;
+  --th-teal-deep: #1d4a52;
+  --th-lavender: #b4a2ff;
+  --th-violet: #3a2a6b;
+  --th-rose: #ff6f91;
+  --th-amber: #ffb547;
 
-  /* Accessible brand derivatives */
-  --lf-blue-700: #1f3f8f;      /* hover / pressed, 9.6:1 on white */
-  --lf-blue-50: #eef2fb;
-  --lf-blue-100: #dfe7f8;
-  --lf-orange-700: #a84a00;    /* orange text on white, 5.3:1 */
-  --lf-orange-50: #fff4ea;
-  --lf-yellow-50: #fffbe0;
-  --lf-yellow-300: #ffe566;
+  /* Kept names (components reference them) */
+  --aws-squid-ink: #0b1118;
+  --aws-squid-ink-2: #070b10;
+  --aws-space: #04070b;
+  --aws-orange: var(--th-amber);
+  --aws-orange-hover: #ffc976;
+  --aws-blue: var(--th-lavender);
+  --aws-blue-dark: #d6ccff;
+  --aws-blue-light: var(--th-teal);
 
-  /* Neutrals (cool, biased toward the brand blue) */
-  --surface: #ffffff;
-  --surface-2: #f5f7fa;
-  --surface-3: #eaeef3;
-  --surface-ink: #16191f;      /* charcoal surfaces: nav capsule, footer, dark tiles */
-  --surface-ink-2: #1f242c;
-  --border: #dde2e9;
-  --border-strong: #b4bdc9;
-  --text: #16191f;
-  --text-2: #4a5463;           /* 7.6:1 on white */
-  --text-3: #5f6a79;           /* 5.6:1 on white */
-  --text-on-ink: #eef1f5;
-  --text-on-ink-2: #b9c2ce;
-  --link: #2d58c0;
-  --link-hover: #1f3f8f;
+  --lf-yellow: var(--th-amber);
+  --lf-orange: var(--th-amber);
+  --lf-blue: var(--th-lavender);
+  --lf-mist: #e9eef2;
+  --lf-charcoal: #05080c;
+  --lf-blue-700: #d6ccff;
+  --lf-blue-50: rgba(180, 162, 255, 0.08);
+  --lf-blue-100: rgba(180, 162, 255, 0.16);
+  --lf-orange-700: var(--th-amber);
+  --lf-orange-50: rgba(255, 181, 71, 0.08);
+  --lf-yellow-50: rgba(255, 181, 71, 0.08);
+  --lf-yellow-300: #ffc976;
 
-  /* Status tones */
-  --tone-blue-bg: #e8eefb;    --tone-blue-fg: #1f3f8f;
-  --tone-green-bg: #e4f3ea;   --tone-green-fg: #17663a;
-  --tone-orange-bg: #fff1e3;  --tone-orange-fg: #8f3f00;
-  --tone-violet-bg: #efeafd;  --tone-violet-fg: #4b2fa6;
-  --tone-neutral-bg: #edf0f4; --tone-neutral-fg: #414d5c;
+  /* Surfaces */
+  --surface: #070a0f;
+  --surface-2: #0b1017;
+  --surface-3: #111822;
+  --surface-ink: #05070b;
+  --surface-ink-2: #0b1017;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --text: #e9eef2;
+  --text-2: #b3bcc5;
+  --text-3: #8a95a0;
+  --text-on-ink: #ffffff;
+  --text-on-ink-2: #b3bcc5;
+  --link: var(--th-lavender);
+  --link-hover: #d6ccff;
+
+  /* Status tones (on dark) */
+  --tone-blue-bg: rgba(180, 162, 255, 0.12);   --tone-blue-fg: #cfc4ff;
+  --tone-green-bg: rgba(111, 227, 211, 0.12);  --tone-green-fg: #8ff0e2;
+  --tone-orange-bg: rgba(255, 181, 71, 0.12);  --tone-orange-fg: #ffcf85;
+  --tone-violet-bg: rgba(180, 162, 255, 0.12); --tone-violet-fg: #cfc4ff;
+  --tone-neutral-bg: rgba(255, 255, 255, 0.06); --tone-neutral-fg: #c9d1d8;
 
   /* Typography */
-  --font-display: 'Hanken Grotesk', 'Open Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-sans: 'Open Sans Variable', 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-mono: 'Share Tech Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-display: var(--font-mono);
+  --font-sans: 'Open Sans Variable', 'Open Sans', 'Helvetica Neue', Roboto, Arial, sans-serif;
 
-  --fs-hero: clamp(2.5rem, 1.15rem + 4.6vw, 5.5rem);     /* 40 → 88px */
-  --fs-h1: clamp(2.25rem, 1.45rem + 2.8vw, 4rem);        /* 36 → 64px */
-  --fs-h2: clamp(2rem, 1.35rem + 2.1vw, 3.5rem);         /* 32 → 56px */
-  --fs-h3: clamp(1.375rem, 1.2rem + 0.5vw, 1.75rem);     /* 22 → 28px */
+  --fs-hero: clamp(2.75rem, 1.2rem + 6vw, 7rem);
+  --fs-h1: clamp(2.25rem, 1.3rem + 3.6vw, 4.5rem);
+  --fs-h2: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+  --fs-h3: 1.375rem;
   --fs-h4: 1.125rem;
-  --fs-lead: clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem); /* 17 → 20px */
-  --fs-body: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);   /* 16 → 17px */
-  --fs-small: 0.9375rem;                                  /* 15px nav */
-  --fs-meta: 0.8125rem;                                   /* 13px */
-  --fs-label: 0.75rem;                                    /* 12px eyebrows */
+  --fs-lead: clamp(1rem, 0.94rem + 0.25vw, 1.125rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-meta: 0.75rem;
+  --fs-label: 0.8125rem;
 
-  --lh-tight: 1.04;
-  --lh-heading: 1.14;
-  --lh-body: 1.65;
-  --measure: 68ch;
-  --track-tight: -0.035em;
-  --track-label: 0.12em;
+  --lh-tight: 1;
+  --lh-heading: 1.08;
+  --lh-body: 1.6;
+  --measure: 70ch;
+  --track-tight: 0.01em;
+  --track-label: 0.08em;
 
   /* Spacing (4px base) */
   --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
   --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem; --sp-8: 4rem; --sp-9: 6rem; --sp-10: 8rem;
-  --section-y: clamp(3.5rem, 1.8rem + 6vw, 8rem);
-  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
-  --container: 1280px;
+  --section-y: clamp(3.5rem, 2rem + 6vw, 8rem);
+  --gutter: clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
+  --container: 1320px;
   --container-narrow: 860px;
 
   /* Shape */
-  --radius-xs: 4px; --radius-sm: 8px; --radius: 12px; --radius-lg: 20px; --radius-pill: 999px;
-  --leaf: 28px;                                       /* the large corner of a brand module */
-  --radius-leaf: var(--radius-xs) var(--radius-xs) var(--leaf) var(--radius-xs);
-  --radius-leaf-lg: 6px 6px 48px 6px;
-  --radius-leaf-tl: var(--leaf) var(--radius-xs) var(--radius-xs) var(--radius-xs);
+  --radius-xs: 4px; --radius-sm: 10px; --radius: 18px; --radius-lg: 26px; --radius-pill: 999px;
+  --leaf: 26px;
+  --radius-leaf: var(--radius);
+  --radius-leaf-lg: var(--radius-lg);
+  --radius-leaf-tl: var(--radius);
 
-  /* Elevation (cool-tinted) */
-  --shadow-1: 0 1px 0 rgba(30, 44, 70, 0.06), 0 1px 3px rgba(30, 44, 70, 0.08);
-  --shadow-2: 0 1px 0 rgba(30, 44, 70, 0.05), 0 12px 28px -14px rgba(30, 44, 70, 0.32);
-  --shadow-3: 0 2px 0 rgba(30, 44, 70, 0.04), 0 28px 56px -24px rgba(30, 44, 70, 0.42);
+  /* Glass and light */
+  --glass: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  --glass-edge: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 30px -18px rgba(0, 0, 0, 0.9);
+  --shadow-2: 0 20px 50px -24px rgba(0, 0, 0, 0.95);
+  --shadow-3: 0 30px 80px -30px rgba(0, 0, 0, 1), 0 0 60px -30px rgba(111, 227, 211, 0.35);
 
-  /* Motion (mirrors src/features/motion/tokens.js) */
-  --dur-micro: 150ms;
-  --dur-ui: 300ms;
-  --dur-section: 600ms;
-  --dur-hero: 900ms;
-  --ease-out: cubic-bezier(0.22, 0.8, 0.24, 1);
+  /* Motion */
+  --dur-micro: 160ms;
+  --dur-ui: 320ms;
+  --dur-section: 1100ms;
+  --dur-hero: 1600ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Breakpoints (reference only; CSS media queries use these literal values):
-     480, 768, 1024, 1280, 1536 */
-
-  --header-h: 72px;
-  --focus-color: var(--lf-blue);
-  --focus-ring: 0 0 0 3px var(--surface), 0 0 0 6px var(--focus-color);
+  --header-h: 88px;
+  --focus-color: var(--th-teal);
+  --focus-ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--focus-color);
+  color-scheme: dark;
 }
 
 [data-motion='reduced'] {

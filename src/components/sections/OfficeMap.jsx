@@ -4,6 +4,8 @@ import Icon from '../ui/Icon';
 import SmartLink from '../ui/SmartLink';
 import { offices, telHref } from '../../content/company';
 import { LAND_RUNS, MAP_GRID } from '../../features/map/worldGrid';
+import OfficeGlobe, { canUseGlobe } from '../../features/globe/OfficeGlobe';
+import { useMotion } from '../../features/motion/MotionProvider';
 
 const { step, lat0, cols, rows } = MAP_GRID;
 const project = ({ lat, lon }) => ({ x: (lon + 180) / step, y: (lat0 - lat) / step });
@@ -17,6 +19,9 @@ export default function OfficeMap({ headingLevel = 3 }) {
   const Heading = `h${headingLevel}`;
   const uid = useId();
   const [active, setActive] = useState(offices[0].id);
+  const { reduced } = useMotion();
+  // The 3D globe where WebGL runs; the flat dot map otherwise.
+  const [globe, setGlobe] = useState(() => !reduced && canUseGlobe());
   const landPath = useMemo(
     () => LAND_RUNS.map((runs, r) => runs.map(([c, len]) => `M${c} ${r + 0.5}h${len}`).join('')).join(''),
     []
@@ -24,6 +29,11 @@ export default function OfficeMap({ headingLevel = 3 }) {
 
   return (
     <div className="lf-officemap">
+      {globe ? (
+        <div className="lf-officemap__map">
+          <OfficeGlobe offices={offices} active={active} onSelect={setActive} onFail={() => setGlobe(false)} />
+        </div>
+      ) : (
       <div className="lf-officemap__map">
         <svg viewBox={`0 0 ${cols} ${rows}`} role="img" aria-labelledby={`${uid}-map-title`} preserveAspectRatio="xMidYMid meet">
           <title id={`${uid}-map-title`}>World map with Linkfields offices in {offices.map((o) => o.city).join(', ')}</title>
@@ -48,8 +58,9 @@ export default function OfficeMap({ headingLevel = 3 }) {
             );
           })}
         </svg>
-        <p className="lf-meta lf-officemap__note">Markers show city locations. Full addresses are in the list.</p>
+        <p className="lf-meta lf-officemap__note">Markers show office locations. Full addresses are in the list.</p>
       </div>
+      )}
 
       <ul className="lf-list-plain lf-officemap__list">
         {offices.map((o) => {

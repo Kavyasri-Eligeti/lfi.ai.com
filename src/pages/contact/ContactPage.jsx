@@ -1,6 +1,8 @@
 import { useId, useRef, useState } from 'react';
 import { AnimatePresence, m } from 'framer-motion';
 import PageHero from '../../components/ui/PageHero';
+import CardTheatre from '../../features/theatre/CardTheatre';
+import { PAGE_THEATRES } from '../../content/theatreCards';
 import SectionHeader from '../../components/ui/SectionHeader';
 import SmartLink from '../../components/ui/SmartLink';
 import SocialIcon from '../../components/ui/SocialIcon';
@@ -158,11 +160,14 @@ export default function ContactPage() {
   ];
   return (
     <>
-      <PageHero variant="b" eyebrow="Contact" title="Let’s talk about what you want to build">
+      <PageHero eyebrow="Contact" title="Let’s talk about what you want to build">
         <p className="lf-lead">Send an enquiry, email the right team directly, or visit one of six Linkfields offices.</p>
       </PageHero>
 
-      <section className="lf-section lf-contact" aria-label="Contact options">
+      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
+      <CardTheatre id="explore" cards={PAGE_THEATRES.contact.cards} filters={PAGE_THEATRES.contact.filters} label="Ways to reach Linkfields" />
+
+      <section className="lf-section lf-contact" id="enquiry" aria-label="Contact options">
         <div className="lf-container lf-contact__inner">
           <EnquiryForm />
           <aside className="lf-contact__aside" aria-label="Email and social">

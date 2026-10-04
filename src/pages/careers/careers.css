@@ -5,8 +5,8 @@
 @media (max-width: 760px) { .lf-careers-photo--wide img { aspect-ratio: 4 / 3; } }
 
 .lf-careers-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; }
-.lf-careers-split h2 { font-size: clamp(2rem, 1.3rem + 2.6vw, 3.75rem); letter-spacing: -0.04em; }
-.lf-careers-empower { font: 700 1.25rem/1.4 var(--font-display); color: var(--text); margin-top: var(--sp-5); padding-left: var(--sp-4); border-left: 3px solid var(--lf-yellow); }
+.lf-careers-split h2 { font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); letter-spacing: -0.01em; }
+.lf-careers-empower { font: 400 1.25rem/1.4 var(--font-display); color: var(--text); margin-top: var(--sp-5); padding-left: var(--sp-4); border-left: 3px solid var(--lf-yellow); }
 .lf-careers-stack { display: grid; gap: var(--sp-4); }
 .lf-careers-stack .lf-careers-photo img { aspect-ratio: 16 / 10; }
 .lf-careers-photo--offset { width: 78%; justify-self: end; }
@@ -20,9 +20,9 @@
   gap: var(--sp-4);
   padding: var(--sp-5);
   border-radius: var(--radius-leaf);
-  background: var(--surface);
+  background: var(--glass), rgba(8, 12, 18, 0.72);
   box-shadow: var(--shadow-1);
-  font: 700 clamp(1.125rem, 1rem + 0.5vw, 1.375rem)/1.25 var(--font-display);
+  font: 400 clamp(1.125rem, 1rem + 0.5vw, 1.375rem)/1.25 var(--font-display);
   letter-spacing: -0.015em;
 }
 .lf-nurture__module { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 3px 3px 11px 3px; background: var(--lf-blue); }
@@ -32,5 +32,5 @@
 @media (max-width: 520px) { .lf-nurture { grid-template-columns: 1fr; } }
 
 .lf-careers-cta__inner { display: grid; gap: var(--sp-6); }
-.lf-careers-cta h2 { color: #fff; font-size: clamp(2.25rem, 1.4rem + 3vw, 4.25rem); max-width: 20ch; }
+.lf-careers-cta h2 { color: #fff; font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); max-width: 20ch; }
 .lf-careers-cta__note { margin: 0; color: var(--text-on-ink-2); }

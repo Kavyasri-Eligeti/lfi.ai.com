@@ -1,0 +1,11 @@
+.lf-glitch { position: relative; display: inline; }
+.lf-glitch.is-active > [aria-hidden] {
+  text-shadow: -0.04em 0 rgba(255, 70, 120, 0.75), 0.04em 0 rgba(80, 220, 255, 0.75);
+  animation: lf-glitch-jitter 0.12s steps(2) infinite;
+}
+@keyframes lf-glitch-jitter {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-0.02em); }
+  100% { transform: translateX(0.015em); }
+}
+.lf-glitch > [aria-hidden] { display: inline-block; white-space: pre-wrap; }

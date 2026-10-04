@@ -11,6 +11,11 @@ import { industries } from '../content/industries';
 import { proposedServices, proposedSolutions } from '../content/proposals';
 import { STATUS, STATUS_META } from '../content/status';
 import { LEGACY_PATHS } from '../app/navigation';
+import { aiSolutions, aiSolutionById } from '../content/aiSolutions';
+import { aiServicePractice } from '../content/services';
+import { aiTools, aiSecurityTools, constellation } from '../content/aiTools';
+import { theatreCards, FEATURED, CARD_FILTERS, cardsFor, MAX_CARDS, HOME_CARDS } from '../content/theatreCards';
+import { LOGOS, SERVICE_LOGOS, SUB_SERVICE_LOGOS, SOLUTION_LOGOS } from '../content/logos';
 
 const legacySource = fs.readFileSync(path.join(__dirname, '../legacy/pages/Industries.js'), 'utf8');
 // Only active entries: commented-out lines in the original are ignored.
@@ -137,5 +142,69 @@ describe('every browsable item leads somewhere real', () => {
   test('the mission and values are the published wording', () => {
     expect(company.mission).toMatch(/^Through our relentless pursuit of engineering excellence/);
     expect(company.values.map((v) => v.name)).toEqual(['Innovation', 'Courage', 'Respect', 'Impact', 'Passion', 'Ownership']);
+  });
+});
+
+describe('AI solutions, AI services and the universe', () => {
+  test('every AI solution is complete and its live demos exist', () => {
+    expect(new Set(aiSolutions.map((x) => x.id)).size).toBe(aiSolutions.length);
+    aiSolutions.forEach((x) => {
+      expect(x.useCases.length).toBeGreaterThan(0);
+      expect(x.mark.code).toMatch(/^[A-Z][a-z]$/);
+      expect(x.mark.accent).toMatch(/^#/);
+      x.demos.forEach((id) => expect(demoById[id]).toBeDefined());
+    });
+  });
+
+  test('AI services sit alongside, not inside, the published services', () => {
+    expect(corporateServices.map((x) => x.id)).not.toContain(aiServicePractice.id);
+    expect(aiServicePractice.subServices.length).toBeGreaterThan(5);
+  });
+
+  test('the constellation lists AI tools and AI security tools, each with its official logo', () => {
+    expect(aiTools).toHaveLength(12);
+    expect(aiSecurityTools).toHaveLength(12);
+    expect(new Set(constellation.map((x) => x.id)).size).toBe(constellation.length);
+    constellation.forEach((x) => {
+      expect(x.name && x.vendor && x.tag).toBeTruthy();
+      expect(publicFile(x.logo)).toBe(true);
+    });
+  });
+
+  test('the theatre cards cover every offering and lead somewhere real', () => {
+    expect(new Set(theatreCards.map((c) => c.id)).size).toBe(theatreCards.length);
+    theatreCards.forEach((c) => {
+      expect(c.to).toMatch(/^\/(solutions|services|industries)(#[a-z0-9-]+)?$/);
+      expect(c.palette).toHaveLength(3);
+      if (c.logo) expect(publicFile(c.logo)).toBe(true);
+      if (c.image) expect(publicFile(c.image)).toBe(true);
+    });
+    expect(FEATURED.length).toBe(MAX_CARDS);
+    // Telecom, Manufacturing, Banking and Insurance are not part of the homepage flow.
+    expect(HOME_CARDS.map((c) => c.id)).not.toEqual(expect.arrayContaining(['industries-telecom']));
+    expect(HOME_CARDS.map((c) => c.id)).not.toContain('industries-manufacturing');
+    ['Telecom', 'Manufacturing', 'Banking', 'Insurance'].forEach((name) =>
+      expect(cardsFor({ filter: 'industries' }).map((c) => c.title)).not.toContain(name)
+    );
+    expect(FEATURED.filter((c) => c.category === 'industries')).toHaveLength(0);
+    // Machine Learning, Deep Learning, Cyber Security and AI Security replace Claude, ChatGPT and Gemini.
+    const home = FEATURED.map((c) => c.title);
+    ['Machine Learning', 'Deep Learning', 'Cyber Security', 'AI Security'].forEach((t) => expect(home).toContain(t));
+    ['Claude', 'ChatGPT', 'Gemini'].forEach((t) => expect(HOME_CARDS.map((c) => c.title)).not.toContain(t));
+    FEATURED.forEach((c) => (c.logos || []).forEach((l) => expect(publicFile(l.src)).toBe(true)));
+    CARD_FILTERS.forEach((f) => expect(cardsFor({ filter: f.id }).length).toBeGreaterThan(0));
+    expect(cardsFor({ query: 'guardrails' }).map((c) => c.title)).toEqual(expect.arrayContaining(['Bedrock Guardrails', 'NeMo Guardrails']));
+  });
+
+  test('every service, sub-service and solution shows official logos that exist', () => {
+    Object.values(LOGOS).forEach((l) => expect(publicFile(l.src)).toBe(true));
+    const keys = [...Object.values(SERVICE_LOGOS), ...Object.values(SUB_SERVICE_LOGOS), ...Object.values(SOLUTION_LOGOS)].flat();
+    keys.forEach((k) => expect(LOGOS[k]).toBeDefined());
+    corporateServices.forEach((s) => {
+      expect(SERVICE_LOGOS[s.id]?.length).toBeGreaterThan(0);
+      (s.subServices || []).forEach((sub) => expect(SUB_SERVICE_LOGOS[sub.name]?.length).toBeGreaterThan(0));
+    });
+    aiServicePractice.subServices.forEach((sub) => expect(SUB_SERVICE_LOGOS[sub.name]?.length).toBeGreaterThan(0));
+    [...corporateSolutions, ...aiSolutions].forEach((x) => expect(SOLUTION_LOGOS[x.id]?.length).toBeGreaterThan(0));
   });
 });

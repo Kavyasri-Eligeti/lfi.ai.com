@@ -1,9 +1,11 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { MotionProvider } from '../features/motion/MotionProvider';
 import { routes } from '../app/router';
 import { demos } from '../content/demos';
-import { capabilities } from '../content/capabilities';
+import { aiSolutions } from '../content/aiSolutions';
+import { FEATURED, PAGE_THEATRES } from '../content/theatreCards';
+import { corporateServices } from '../content/services';
 
 const renderAt = (path) => {
   const router = createMemoryRouter(routes, { initialEntries: [path] });
@@ -16,33 +18,77 @@ const renderAt = (path) => {
 };
 
 describe('the site renders without WebGL (CSS field tier)', () => {
-  test('home renders the hero, the capability index and every section', async () => {
+  test('home renders the statement, the card deck and its filters', async () => {
     renderAt('/');
     expect(await screen.findByRole('heading', { level: 1, name: /intelligence that moves business forward/i })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /explore ai solutions/i })[0]).toHaveAttribute('href', '/solutions');
-    const tabs = within(screen.getByRole('tablist', { name: /ai capabilities/i })).getAllByRole('tab');
-    expect(tabs).toHaveLength(capabilities.length);
-    [/flagship ai products/i, /seven engineering practices/i, /industries linkfields knows/i, /platforms enterprises run on/i, /six offices/i, /insights and news/i].forEach(
-      (name) => expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument()
+    const deck = screen.getByRole('list', { name: /linkfields ai solutions, services, industries and tools/i });
+    expect(within(deck).getAllByRole('link')).toHaveLength(FEATURED.length);
+    expect(screen.getByRole('heading', { level: 2, name: /what are you looking for/i })).toBeInTheDocument();
+    [/flagship ai products/i, /platforms enterprises run on/i].forEach((name) =>
+      expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument()
     );
     expect(document.querySelector('canvas')).toBeNull();
   });
 
-  test('choosing a capability previews its demos', async () => {
+  test('a filter shows its cards, and choosing it again restores the mix', async () => {
     renderAt('/');
-    const tab = await screen.findByRole('tab', { name: /fraud and risk/i });
-    fireEvent.click(tab);
-    expect(tab).toHaveAttribute('aria-selected', 'true');
-    const panel = screen.getByRole('tabpanel', { name: /fraud and risk/i });
-    expect(await within(panel).findByRole('link', { name: /signature fraud detection/i }, { timeout: 3000 })).toHaveAttribute(
-      'href',
-      'https://signaturefrauddetect.lfidemo.com/'
-    );
+    const security = await screen.findByRole('button', { name: /ai security/i });
+    fireEvent.click(security);
+    expect(security).toHaveAttribute('aria-pressed', 'true');
+    const deck = screen.getByRole('list', { name: /linkfields ai solutions, services, industries and tools/i });
+    expect(within(deck).getByRole('link', { name: /bedrock guardrails/i })).toHaveAttribute('href', '/solutions#ai-governance');
+    fireEvent.click(security);
+    expect(within(deck).getAllByRole('link')).toHaveLength(FEATURED.length);
+  });
+
+  test('ask me anything searches every card', async () => {
+    jest.useFakeTimers();
+    renderAt('/');
+    const ask = await screen.findByRole('searchbox', { name: /ask me anything/i });
+    fireEvent.change(ask, { target: { value: 'fraud' } });
+    act(() => { jest.advanceTimersByTime(300); });
+    const deck = screen.getByRole('list', { name: /linkfields ai solutions, services, industries and tools/i });
+    expect(within(deck).getByRole('link', { name: /fraud, risk and anomaly detection/i })).toHaveAttribute('href', '/solutions#fraud-risk');
+    jest.useRealTimers();
   });
 
   test.each([
-    ['/solutions', /enterprise solutions and ai products/i],
-    ['/services', /seven practices behind every linkfields solution/i],
+    ['/solutions', 'solutions', /ai solutions and enterprise platforms/i],
+    ['/services', 'services', /practices and ai services/i],
+    ['/industries', 'industries', /industries linkfields serves/i],
+    ['/company', 'company', /values and offices/i],
+    ['/careers', 'careers', /life and roles/i],
+    ['/contact', 'contact', /ways to reach linkfields/i],
+  ])('%s continues the card theatre with its own cards', async (path, key, name) => {
+    renderAt(path);
+    await screen.findByRole('heading', { level: 1 });
+    const deck = screen.getByRole('list', { name });
+    expect(within(deck).getAllByRole('link')).toHaveLength(PAGE_THEATRES[key].cards.length);
+  });
+
+  test('the footer comes once, at the end of the flow', async () => {
+    renderAt('/services');
+    await screen.findByRole('heading', { level: 1 });
+    expect(screen.queryByRole('contentinfo')).toBeNull();
+    expect(screen.getByRole('link', { name: /go to industries/i })).toBeInTheDocument();
+  });
+
+  test('the contact page ends the flow with the footer', async () => {
+    renderAt('/contact');
+    await screen.findByRole('heading', { level: 1 });
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+  });
+
+  test('every page but the last leads on to the next chapter', async () => {
+    renderAt('/services');
+    await screen.findByRole('heading', { level: 1 });
+    expect(screen.getByRole('link', { name: /go to industries/i })).toHaveAttribute('href', '/industries');
+  });
+
+  test.each([
+    ['/solutions', /ai solutions for the modern enterprise/i],
+    ['/services', /seven proven practices, and a new ai practice/i],
     ['/industries', /eight industries/i],
     ['/company', /driving innovation and transformation/i],
     ['/careers', /be part of a world-leading innovative team/i],
@@ -55,7 +101,8 @@ describe('the site renders without WebGL (CSS field tier)', () => {
 
   test('the old /demos URL redirects to the catalogue', async () => {
     const router = renderAt('/demos');
-    await screen.findByRole('heading', { level: 1, name: /enterprise solutions and ai products/i });
+    // The redirect waits for the page transition's exit.
+    await screen.findByRole('heading', { level: 1, name: /ai solutions for the modern enterprise/i }, { timeout: 5000 });
     expect(router.state.location.pathname).toBe('/solutions');
     expect(router.state.location.hash).toBe('#products');
   });
@@ -63,21 +110,30 @@ describe('the site renders without WebGL (CSS field tier)', () => {
   test('the catalogue lists every demo and filters by capability from the URL', async () => {
     renderAt('/solutions');
     await screen.findByRole('heading', { level: 1 });
-    expect(screen.getByRole('status')).toHaveTextContent(`Showing ${demos.length} of ${demos.length}`);
+    expect(within(document.getElementById('products')).getByRole('status')).toHaveTextContent(`Showing ${demos.length} of ${demos.length}`);
   });
 
   test('a capability filter in the URL narrows the catalogue', async () => {
     renderAt('/solutions?capability=computer-vision');
     await screen.findByRole('heading', { level: 1 });
-    expect(screen.getByRole('status')).toHaveTextContent(`Showing 1 of ${demos.length}`);
+    expect(within(document.getElementById('products')).getByRole('status')).toHaveTextContent(`Showing 1 of ${demos.length}`);
     const catalogue = document.getElementById('products');
     expect(within(catalogue).getByRole('link', { name: /golf pose analyzer/i })).toHaveAttribute('href', '/golf-analyzer');
   });
 
-  test('proposed offerings are labelled as proposed', async () => {
+  test('the solutions page presents every AI solution', async () => {
     renderAt('/solutions');
-    await screen.findByRole('heading', { level: 2, name: /ai solution areas under review/i });
-    expect(screen.getAllByText(/Proposed · (awaiting approval|demo-backed)/).length).toBeGreaterThan(10);
+    await screen.findByRole('heading', { level: 1 });
+    aiSolutions.forEach((sol) => expect(screen.getByRole('heading', { level: 3, name: sol.name })).toBeInTheDocument());
+  });
+
+  test('AI services are listed alongside every published service', async () => {
+    renderAt('/services');
+    await screen.findByRole('heading', { level: 1 });
+    [...corporateServices.map((x) => x.name), 'AI Services'].forEach((name) =>
+      expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument()
+    );
+    expect(screen.getByText('New practice')).toBeInTheDocument();
   });
 
   test('the enquiry form validates before opening email', async () => {
@@ -93,7 +149,7 @@ describe('the site renders without WebGL (CSS field tier)', () => {
     const toggle = await screen.findByRole('button', { name: /hyderabad/i });
     fireEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByText(/Gowra Fountain Head/)).toBeVisible();
+    expect(within(document.getElementById('offices')).getByText(/Gowra Fountain Head/)).toBeVisible();
   });
 
   test('skip link and primary navigation are present', async () => {
