@@ -22,8 +22,8 @@ export default function SmoothScroll() {
     import(/* webpackChunkName: "lenis" */ 'lenis').then(({ default: Lenis }) => {
       if (cancelled) return;
       lenis = new Lenis({
-        lerp: 0.11, // soft glide that still follows the wheel closely
-        wheelMultiplier: 1,
+        lerp: 0.14, // follows the wheel closely; lower values feel like dragging
+        wheelMultiplier: 1.2,
         touchMultiplier: 1.2,
         anchors: { offset: -80 },
         autoRaf: true,

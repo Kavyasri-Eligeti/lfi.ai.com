@@ -6,7 +6,17 @@ import { useMotion } from '../motion/MotionProvider';
 import { selectCards } from '../../content/theatreCards';
 import '../../pages/home/theatre.css';
 
-const CARD_VH = 55; // scroll length per card
+// Scroll length of the theatre. The run over the cards is short and capped:
+// about one wheel notch turns one card, so the whole deck passes in well
+// under two screens. As soon as the last card is up, the page's content
+// rises over the stage (theatre.css pulls it up by OVERLAP_VH), so there is
+// never a blank screen between the cards and the content. The section is the
+// run, plus the screen the content takes to rise, plus the sticky exit.
+const CARD_VH_MAX = 20; // scroll per card when there are few cards
+const CARD_VH_MIN = 7; // never faster than this per card
+const RUN_VH_MAX = 140; // the run over all cards
+export const OVERLAP_VH = 100; // how far the next section rises over the stage
+const runVh = (n) => Math.max(2, n) * Math.max(CARD_VH_MIN, Math.min(CARD_VH_MAX, RUN_VH_MAX / Math.max(1, n)));
 const isExternal = (to) => /^(https?:|mailto:|tel:)/.test(to);
 
 function CardLink({ to, className, children, ...rest }) {
@@ -124,7 +134,7 @@ export default function CardTheatre({
       const el = work.current;
       if (!el) return;
       const top = el.getBoundingClientRect().top + window.scrollY;
-      const span = el.offsetHeight - window.innerHeight;
+      const span = (runVh(cards.length) / 100) * window.innerHeight;
       const y = top + (cards.length > 1 ? (i / (cards.length - 1)) * span : 0) + 2;
       const lenis = getLenis();
       if (lenis) lenis.scrollTo(y, { duration: 1.4 });
@@ -156,7 +166,8 @@ export default function CardTheatre({
         ref={work}
         id={id}
         className={`th-work${theatre ? '' : ' th-work--deck'}`}
-        style={theatre ? { height: `${Math.max(2, cards.length) * CARD_VH + 100}vh` } : undefined}
+        style={theatre ? { height: `${runVh(cards.length) + OVERLAP_VH + 100}vh` } : undefined}
+        data-run={theatre ? runVh(cards.length) : undefined}
         aria-labelledby={titleId}
       >
         <div className={theatre ? 'th-sticky' : 'th-work__deck-wrap'}>

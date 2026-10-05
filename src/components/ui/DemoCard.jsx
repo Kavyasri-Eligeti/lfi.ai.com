@@ -1,6 +1,7 @@
 import StatusBadge from './StatusBadge';
 import SmartLink from './SmartLink';
 import Icon from './Icon';
+import DemoMark from './DemoMark';
 import { capabilitiesForDemo } from '../../content/capabilities';
 
 const linkIcon = (href) => (href.startsWith('/') ? 'arrow' : 'external');
@@ -18,7 +19,7 @@ export default function DemoCard({ demo, headingLevel = 3, variant = 'default', 
     <article className={`lf-card lf-card--interactive lf-demo-card${feature ? ' lf-card--ink lf-demo-card--feature' : ' lf-card--outline'}`}>
       <div className="lf-card__top">
         <StatusBadge status={demo.status} />
-        {demo.image && <img className="lf-demo-card__logo" src={demo.image} alt="" width="64" height="40" loading="lazy" decoding="async" />}
+        <DemoMark demo={demo} />
       </div>
       <Heading className="lf-demo-card__title">
         <SmartLink href={demo.href} className="lf-card__stretch">

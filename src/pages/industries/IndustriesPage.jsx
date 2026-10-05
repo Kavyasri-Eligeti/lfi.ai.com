@@ -10,8 +10,11 @@ import { getDemos } from '../../content/demos';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './industries.css';
 import Reveal from '../../features/motion/Reveal';
+import IndustryScene, { hasScene } from '../../components/sections/IndustryScene';
 
+// Each industry has an animated scene; the published photo is the fallback.
 function IndustryArt({ industry }) {
+  if (hasScene(industry.id)) return <IndustryScene id={industry.id} />;
   if (industry.image) {
     return <img src={industry.image} alt="" width="480" height="800" loading="lazy" decoding="async" />;
   }

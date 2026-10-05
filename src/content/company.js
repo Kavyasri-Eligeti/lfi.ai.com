@@ -55,17 +55,28 @@ export const company = {
   },
   // Only recognitions displayed on linkfields.com. The published "16 years"
   // figure dates from 2024, so the founding year is used instead.
+  // `label` is the published wording; `kicker`, `title` and `detail` split
+  // the same wording for the recognition cards (RecognitionWall).
   recognition: [
-    { value: '2008', label: 'Established in South Africa' },
+    { value: '2008', kicker: 'Founded', title: 'Established in South Africa', label: 'Established in South Africa' },
     {
       value: '38th',
+      kicker: 'Financial Times and Statista, 2023',
+      title: 'Africa’s top 100 fastest-growing companies',
+      detail: 'Ranked 38th in the 2023 list.',
       label: 'Ranked 38th in Financial Times and Statista’s 2023 list of Africa’s top 100 fastest-growing companies',
       href: 'https://www.ft.com/africas-fastest-growing-companies-2023',
     },
-    { value: 'GPTW', label: 'Great Place to Work® Certified', image: '/images/badges/gptw.png' },
-    { value: 'ISO/IEC 27001', label: 'ISO/IEC 27001:2022 certified', image: '/images/badges/iso-27001.png' },
-    { value: 'ISO 9001', label: 'ISO 9001:2015 certified', image: '/images/badges/iso-9001.png' },
-    { value: 'YES', label: 'Proud to be a partner of the Youth Employment Service initiative.' },
+    { value: 'GPTW', kicker: 'Workplace', title: 'Great Place to Work® Certified', label: 'Great Place to Work® Certified', image: '/images/badges/gptw.png' },
+    { value: 'ISO/IEC 27001', kicker: 'Information security', title: 'ISO/IEC 27001:2022 certified', label: 'ISO/IEC 27001:2022 certified', image: '/images/badges/iso-27001.png' },
+    { value: 'ISO 9001', kicker: 'Quality management', title: 'ISO 9001:2015 certified', label: 'ISO 9001:2015 certified', image: '/images/badges/iso-9001.png' },
+    {
+      value: 'YES',
+      kicker: 'Partnership',
+      title: 'Youth Employment Service initiative',
+      detail: 'Proud to be a partner of the YES initiative.',
+      label: 'Proud to be a partner of the Youth Employment Service initiative.',
+    },
   ],
   memberships: ['NASSCOM', 'DUNS'],
   links: {

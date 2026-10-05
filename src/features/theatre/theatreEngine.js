@@ -547,10 +547,13 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
   canvas.addEventListener('click', onDown);
 
   // ---------- Timeline from the DOM ----------
+  // A section may name its own run (`data-run`, in vh) when it is taller than
+  // the run, so the timeline finishes before the section does.
   const progressOf = (el, sticky) => {
     if (!el) return 0;
     const r = el.getBoundingClientRect();
-    const span = sticky ? r.height - height : r.height;
+    const run = parseFloat(el.dataset?.run);
+    const span = run > 0 ? (run / 100) * height : sticky ? r.height - height : r.height;
     return clamp01(-r.top / Math.max(1, span));
   };
 
@@ -583,7 +586,7 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
     const inWork = mark ? smooth(0.86, 1, b) : smooth(0.2, 0.9, entered);
     // As the work section leaves, the scene travels up with it, like the rest
     // of the page, and fades out on the way (no hard edge, no overlap).
-    const presence = workRect ? smooth(0.05, 0.7, workRect.bottom / height) : 1;
+    const presence = workRect ? smooth(0.3, 0.9, workRect.bottom / height) : 1;
     const lift = workRect ? Math.max(0, height - workRect.bottom) : 0;
     canvas.style.opacity = presence.toFixed(3);
     canvas.style.transform = lift > 0 ? `translate3d(0, ${(-lift).toFixed(1)}px, 0)` : '';

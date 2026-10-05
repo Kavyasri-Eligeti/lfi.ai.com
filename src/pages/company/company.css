@@ -77,23 +77,6 @@
 @media (max-width: 560px) { .lf-principles, .lf-recipe { grid-template-columns: 1fr; } }
 
 /* ---------- Recognition ---------- */
-.lf-recognition { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: var(--sp-4); margin-top: var(--sp-7); }
-.lf-recognition__item { display: flex; gap: var(--sp-4); align-items: center; padding: var(--sp-4); border-radius: var(--radius-leaf); background: var(--surface-2); }
-.lf-recognition__item img { width: 56px; height: 56px; object-fit: contain; flex: 0 0 auto; }
-.lf-recognition__item p { margin: 0; font-size: 0.875rem; color: var(--text-2); }
-.lf-recognition__mark {
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  min-width: 56px;
-  height: 56px;
-  padding: 0 8px;
-  border-radius: 4px 4px 18px 4px;
-  background: var(--surface-ink);
-  color: #fff;
-  font: 400 0.8125rem/1.1 var(--font-display);
-  text-align: center;
-}
 
 /* ---------- CSR ---------- */
 .lf-csr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-6) clamp(2rem, 1rem + 4vw, 5rem); align-items: end; }

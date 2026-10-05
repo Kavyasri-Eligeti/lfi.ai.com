@@ -5,6 +5,7 @@ import SectionHeader from '../../components/ui/SectionHeader';
 import SmartLink from '../../components/ui/SmartLink';
 import { Arrow } from '../../components/ui/Icon';
 import PartnerWall from '../../components/sections/PartnerWall';
+import RecognitionWall from '../../components/sections/RecognitionWall';
 import OfficeMap from '../../components/sections/OfficeMap';
 import InsightsList from '../../components/sections/InsightsList';
 import { company, offices } from '../../content/company';
@@ -131,22 +132,7 @@ export default function CompanyPage() {
             </SectionHeader>
             <PartnerWall />
           </div>
-          <ul className="lf-list-plain lf-recognition">
-            {company.recognition.map((r) => (
-              <li key={r.label} className="lf-recognition__item">
-                {r.image ? (
-                  <img src={r.image} alt="" width="56" height="56" loading="lazy" />
-                ) : (
-                  <span className="lf-recognition__mark">{r.value}</span>
-                )}
-                <p>{r.href ? <SmartLink href={r.href}>{r.label}</SmartLink> : r.label}</p>
-              </li>
-            ))}
-            <li className="lf-recognition__item">
-              <span className="lf-recognition__mark">Member</span>
-              <p>{company.memberships.join(' and ')} membership</p>
-            </li>
-          </ul>
+          <RecognitionWall memberships />
         </div>
       </section>
 

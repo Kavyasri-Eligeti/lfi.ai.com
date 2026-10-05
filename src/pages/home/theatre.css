@@ -17,6 +17,21 @@
 /* After the theatre, content sits above the stage, which fades out as the
    cards section ends (no hard edge). */
 .th-work ~ .lf-section, .th-work ~ .lf-contact-band { position: relative; z-index: 2; }
+/* The content after the theatre does not wait for the stage to scroll away:
+   once the last card is up it rises over the stage (by OVERLAP_VH, see
+   CardTheatre.jsx). Its first screen is opaque so the canvas beneath never
+   shows through the text. */
+.th-work:not(.th-work--deck) + .lf-section {
+  margin-top: -100vh;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: linear-gradient(180deg, var(--surface) 0, var(--surface) 100vh, transparent 140vh);
+  box-shadow: 0 -40px 80px -40px rgba(0, 0, 0, 0.9);
+}
+.th-work:not(.th-work--deck) + .lf-section--tint {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.035)),
+    linear-gradient(180deg, var(--surface) 0, var(--surface) 100vh, transparent 140vh);
+}
 
 .th-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 

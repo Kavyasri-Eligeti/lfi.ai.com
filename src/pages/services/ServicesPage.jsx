@@ -31,6 +31,8 @@ function SubService({ sub }) {
 function ServiceRow({ service }) {
   return (
     <Reveal as="article" id={service.id} className={`lf-service${service.isNew ? ' lf-service--new' : ''}`} aria-labelledby={`${service.id}-title`}>
+      {/* The two-column row: the sticky header travels only within it. */}
+      <div className="lf-service__row">
       <header className="lf-service__head">
         {service.isNew && <p className="lf-service__new">New practice</p>}
         <h2 id={`${service.id}-title`} className="lf-service__name">{service.name}</h2>
@@ -47,21 +49,27 @@ function ServiceRow({ service }) {
             {service.subServices.map((sub) => <SubService key={sub.name} sub={sub} />)}
           </div>
         )}
-        {service.groups && (
-          <div className="lf-service__groups">
-            {service.groups.map((g) => (
-              <section key={g.name} className="lf-service__group" aria-label={g.name}>
-                <h4>{g.name}</h4>
-                <ul className="lf-list-plain">
-                  {g.items.map((it) => (
-                    <li key={it.name}><strong>{it.name}</strong> {it.text}</li>
-                  ))}
-                </ul>
-              </section>
-            ))}
-          </div>
-        )}
       </div>
+      </div>
+      {/* Offerings grouped in bands across the full width: the group on the
+          left, its offerings side by side. */}
+      {service.groups && (
+        <div className="lf-service__groups">
+          {service.groups.map((g) => (
+            <section key={g.name} className="lf-service__group" aria-label={g.name}>
+              <h4 className="lf-service__group-name">{g.name}</h4>
+              <ul className="lf-list-plain lf-service__group-items">
+                {g.items.map((it) => (
+                  <li key={it.name}>
+                    <strong>{it.name}</strong>
+                    <span>{it.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      )}
     </Reveal>
   );
 }

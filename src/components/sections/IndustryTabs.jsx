@@ -5,10 +5,12 @@ import Icon, { Arrow } from '../ui/Icon';
 import { industries } from '../../content/industries';
 import { getDemos } from '../../content/demos';
 import { EASE } from '../../features/motion/tokens';
+import IndustryScene, { hasScene } from './IndustryScene';
 
 // Industry panel art: the published photo, or (where linkfields.com has no
 // usable photo) a quiet arrangement of brand modules.
 function IndustryArt({ industry }) {
+  if (hasScene(industry.id)) return <IndustryScene id={industry.id} />;
   if (industry.image) {
     return <img src={industry.image} alt="" width="480" height="800" loading="lazy" decoding="async" />;
   }

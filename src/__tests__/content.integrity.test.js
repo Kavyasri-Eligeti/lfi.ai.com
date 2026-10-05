@@ -16,6 +16,8 @@ import { aiServicePractice } from '../content/services';
 import { aiTools, aiSecurityTools, constellation } from '../content/aiTools';
 import { theatreCards, FEATURED, CARD_FILTERS, cardsFor, MAX_CARDS, HOME_CARDS } from '../content/theatreCards';
 import { LOGOS, SERVICE_LOGOS, SUB_SERVICE_LOGOS, SOLUTION_LOGOS } from '../content/logos';
+import { DEMO_GLYPHS, GLYPHS, GROUP_ACCENTS, demoMarkFor } from '../content/demoMarks';
+import { DEMO_GROUPS } from '../content/demos';
 
 const legacySource = fs.readFileSync(path.join(__dirname, '../legacy/pages/Industries.js'), 'utf8');
 // Only active entries: commented-out lines in the original are ignored.
@@ -119,6 +121,23 @@ describe('every browsable item leads somewhere real', () => {
       expect(publicFile(img.srcSm)).toBe(true);
     });
     demos.filter((d) => d.image).forEach((d) => expect(publicFile(d.image)).toBe(true));
+  });
+
+  test('every demo card shows a logo: a product logo or a themed mark', () => {
+    demos.forEach((d) => {
+      expect(Object.keys(DEMO_GLYPHS)).toContain(d.id);
+      if (d.image) {
+        expect(DEMO_GLYPHS[d.id]).toBeNull();
+      } else {
+        const mark = demoMarkFor(d);
+        expect(mark).not.toBeNull();
+        expect(GLYPHS[mark.glyph]).toBeDefined();
+        expect(mark.path).toMatch(/^M/);
+        expect(GROUP_ACCENTS[d.group]).toBe(mark.accent);
+      }
+    });
+    Object.keys(DEMO_GLYPHS).forEach((id) => expect(demoById[id]).toBeDefined());
+    DEMO_GROUPS.forEach((g) => expect(GROUP_ACCENTS[g.id]).toMatch(/^#[0-9a-f]{6}$/i));
   });
 
   test('offices carry published contact details and direction links', () => {

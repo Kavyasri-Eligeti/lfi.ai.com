@@ -21,17 +21,22 @@
 .lf-services-list { display: grid; }
 .lf-service {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: var(--sp-5) clamp(1.5rem, 1rem + 3vw, 4rem);
+  gap: var(--sp-6);
   padding-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
   border-top: 1px solid var(--border);
   scroll-margin-top: calc(var(--header-h) + 8px);
+}
+.lf-service__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: var(--sp-5) clamp(1.5rem, 1rem + 3vw, 4rem);
 }
 .lf-service:first-child { border-top: 2px solid var(--text); }
 .lf-service__head { display: grid; gap: var(--sp-3); align-content: start; position: sticky; top: calc(var(--header-h) + 24px); }
 .lf-service__name { margin: 0; font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); letter-spacing: -0.01em; line-height: 1; }
 .lf-service__headline { margin: 0; font: 600 var(--fs-lead)/1.45 var(--font-sans); color: var(--text-2); max-width: 30ch; }
-.lf-service__head .lf-link { margin-top: var(--sp-2); justify-self: start; }
+.lf-service__head .lf-link { margin-top: var(--sp-2); justify-self: start; display: inline; }
+.lf-service__head .lf-link .lf-arrow { display: inline; vertical-align: -3px; margin-left: 4px; }
 .lf-service__overview-title { margin: 0 0 var(--sp-3); font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.75rem); }
 .lf-service__overview { color: var(--text-2); }
 .lf-service__offer { color: var(--text-2); }
@@ -41,15 +46,41 @@
 .lf-subservice__body { padding: 0 0 var(--sp-5); display: grid; gap: var(--sp-3); }
 .lf-subservice__body p { margin: 0; color: var(--text-2); }
 .lf-subservice__tagline { font-weight: 600; color: var(--text) !important; }
-.lf-service__groups { margin-top: var(--sp-5); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
-.lf-service__group { padding: var(--sp-5); border-radius: var(--radius-leaf); background: var(--surface-2); }
-.lf-service__group h4 { margin-bottom: var(--sp-3); }
-.lf-service__group li { font-size: 0.875rem; color: var(--text-2); }
-.lf-service__group li + li { margin-top: var(--sp-3); }
-.lf-service__group strong { display: block; color: var(--text); font-size: 0.9375rem; }
-@media (max-width: 1100px) { .lf-service__groups { grid-template-columns: 1fr; } }
+/* Grouped offerings (IT Infrastructure): full-width bands under the row.
+   Each band reads left to right: the group, then its offerings side by side. */
+.lf-service__groups { display: grid; gap: var(--sp-3); }
+.lf-service__group {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.9fr) minmax(0, 4fr);
+  gap: var(--sp-4) clamp(1.25rem, 1rem + 2vw, 3rem);
+  align-items: start;
+  padding: var(--sp-5);
+  border-radius: var(--radius-leaf);
+  background: var(--glass), rgba(8, 12, 18, 0.7);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.lf-service__group-name {
+  margin: 0;
+  padding-left: var(--sp-3);
+  border-left: 2px solid var(--th-teal);
+  font-size: 1.125rem;
+  line-height: 1.2;
+}
+.lf-service__group-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
+.lf-service__group-items li { display: grid; gap: 6px; align-content: start; font-size: 0.875rem; line-height: 1.5; color: var(--text-2); }
+.lf-service__group-items li + li { padding-left: var(--sp-4); border-left: 1px solid var(--border); }
+.lf-service__group-items strong { color: var(--text); font-size: 0.9375rem; line-height: 1.3; }
+@media (max-width: 1100px) {
+  .lf-service__group-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lf-service__group-items li:nth-child(odd) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 640px) {
+  .lf-service__group { grid-template-columns: 1fr; }
+  .lf-service__group-items { grid-template-columns: 1fr; }
+  .lf-service__group-items li + li { padding-left: 0; border-left: 0; padding-top: var(--sp-3); border-top: 1px solid var(--border); }
+}
 @media (max-width: 860px) {
-  .lf-service { grid-template-columns: 1fr; }
+  .lf-service__row { grid-template-columns: 1fr; }
   .lf-service__head { position: static; }
 }
 

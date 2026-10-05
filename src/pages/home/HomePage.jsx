@@ -4,10 +4,10 @@ import { m, useScroll, useTransform } from 'framer-motion';
 import AILogo from '../../components/brand/AILogo';
 import GlitchText from '../../components/fx/GlitchText';
 import SectionHeader from '../../components/ui/SectionHeader';
-import SmartLink from '../../components/ui/SmartLink';
 import { Arrow } from '../../components/ui/Icon';
 import FeaturedBento from '../../components/sections/FeaturedBento';
 import PartnerWall from '../../components/sections/PartnerWall';
+import RecognitionWall from '../../components/sections/RecognitionWall';
 import CardTheatre from '../../features/theatre/CardTheatre';
 import { canUseTheatre } from '../../features/theatre/TheatreStage';
 import { useMotion } from '../../features/motion/MotionProvider';
@@ -112,14 +112,7 @@ export default function HomePage() {
             </SectionHeader>
             <PartnerWall />
           </div>
-          <ul className="lf-list-plain lf-home-recognition" aria-label="Recognition">
-            {company.recognition.filter((r) => r.value !== '2008').map((r) => (
-              <li key={r.label}>
-                {r.image ? <img src={r.image} alt="" width="40" height="40" loading="lazy" /> : <span className="lf-home-recognition__mark">{r.value}</span>}
-                {r.href ? <SmartLink href={r.href}>{r.label}</SmartLink> : <span>{r.label}</span>}
-              </li>
-            ))}
-          </ul>
+          <RecognitionWall items={company.recognition.filter((r) => r.value !== '2008')} />
         </div>
       </section>
     </div>
