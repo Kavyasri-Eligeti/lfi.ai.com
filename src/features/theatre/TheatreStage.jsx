@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMotion } from '../motion/MotionProvider';
 
-// The WebGL stage runs where the browser has WebGL and data saving is off.
-// `phones` admits phone widths (the homepage DNA hero plays there in a lighter
-// form); the full card theatre needs tablet width or more.
-export function canUseStage({ phones = false } = {}) {
+// The WebGL theatre runs from tablet width up, unless data saving is on.
+// Phones, reduced motion and browsers without WebGL get the DOM deck.
+export function canUseTheatre() {
   if (typeof window === 'undefined' || !window.matchMedia) return false;
-  if (!phones && !window.matchMedia('(min-width: 768px)').matches) return false;
+  if (!window.matchMedia('(min-width: 768px)').matches) return false;
   if (navigator.connection?.saveData) return false;
   try {
     const c = document.createElement('canvas');
@@ -16,17 +15,11 @@ export function canUseStage({ phones = false } = {}) {
   }
 }
 
-// The WebGL theatre runs from tablet width up. Phones, reduced motion and
-// browsers without WebGL get the DOM deck.
-export const canUseTheatre = () => canUseStage();
-
 /**
- * The fixed, full-screen canvas behind the page. Loads the theatre engine
- * when the browser is idle and reports it through `onEngine`.
- * withHero   the homepage DNA hero (the spine and cards are on from the start)
- * heroOnly   phones: only the hero plays; the work section is the DOM deck
+ * The fixed, full-screen canvas behind the homepage. Loads the theatre
+ * engine when the browser is idle and reports it through `onEngine`.
  */
-export default function TheatreStage({ sections, withHero = false, heroOnly = false, withMark = false, onEngine, onActive, onSelect, onFail }) {
+export default function TheatreStage({ sections, withMark = true, onEngine, onActive, onSelect, onFail }) {
   const { reduced } = useMotion();
   const host = useRef(null);
   const [ready, setReady] = useState(false);
@@ -34,7 +27,7 @@ export default function TheatreStage({ sections, withHero = false, heroOnly = fa
   handlers.current = { onActive, onSelect, onEngine, onFail };
 
   useEffect(() => {
-    if (reduced || !canUseStage({ phones: heroOnly })) {
+    if (reduced || !canUseTheatre()) {
       handlers.current.onFail?.();
       return undefined;
     }
@@ -45,8 +38,6 @@ export default function TheatreStage({ sections, withHero = false, heroOnly = fa
         .then(({ createTheatre }) =>
           createTheatre(host.current, {
             sections: sections.current,
-            withHero,
-            heroOnly,
             withMark,
             onActive: (i) => handlers.current.onActive?.(i),
             onSelect: (card) => handlers.current.onSelect?.(card),
@@ -75,7 +66,7 @@ export default function TheatreStage({ sections, withHero = false, heroOnly = fa
       handlers.current.onEngine?.(null);
       setReady(false);
     };
-  }, [reduced, sections, withHero, heroOnly, withMark]);
+  }, [reduced, sections, withMark]);
 
   return <div ref={host} className={`th-stage${ready ? ' is-ready' : ''}`} aria-hidden="true" />;
 }
