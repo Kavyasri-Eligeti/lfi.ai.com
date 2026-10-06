@@ -1,13 +1,19 @@
-// The homepage theatre (plain Three.js, lazy-loaded). Original scene code:
-//  1. Intro: the Linkfields AI mark as a thick iridescent glass ring with an
-//     extruded "AI", two ribbons of light drawing a crossing loop beneath it,
-//     and drifting bokeh.
-//  2. Statement: the ring turns edge-on through the headline, then rises away.
-//  3. Work: an iridescent double-helix "data spine" rises; glass cards spiral
-//     around it. Scrolling turns the spiral so each card in turn swings to the
-//     front, with a glitch, a flowing painterly surface and an RGB-split title.
-// Scroll position comes from three DOM sections, so the page's real content,
-// links and focus order stay in the DOM.
+// The homepage theatre (plain Three.js, lazy-loaded). Original scene code.
+// The scene has three modes, chosen by the page:
+//  hero  (homepage) The DNA data spine stands centre-right from the first
+//        frame, with the glass cards spiralling around it and cycling on their
+//        own, slowly and without end (the spiral is endless: cards and spine
+//        repeat along it). When the work section scrolls in, the scroll takes
+//        over the spiral, card by card, and hands back when it leaves.
+//  mark  (legacy intro) The Linkfields AI mark as a thick iridescent glass
+//        ring with an extruded "AI", two ribbons of light drawing a crossing
+//        loop beneath it, and drifting bokeh; the ring turns edge-on through
+//        the headline, then rises away before the spine and cards appear.
+//  plain (other pages) The spine and cards rise as the work section scrolls in.
+// In every mode scrolling turns the spiral so each card in turn swings to the
+// front, with a glitch, a flowing painterly surface and an RGB-split title.
+// Scroll position comes from DOM sections, so the page's real content, links
+// and focus order stay in the DOM.
 import {
   AdditiveBlending,
   BufferAttribute,
@@ -114,12 +120,17 @@ function iridescent({ opacity = 1, tint = '#ffffff', strength = 1 } = {}) {
 }
 
 // ---------- Bokeh particles ----------
+// shape 'column' fills a cylinder of radius spread.r around the y axis. With
+// spread.tile the column repeats every `tile` units of height (three copies),
+// so it can be moved by whole tiles without a visible change.
 function bokeh({ count, spread, colors, sizeRange = [6, 26], shape = 'box' }) {
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
   const size = new Float32Array(count);
   const seed = new Float32Array(count);
   const palette = colors.map((c) => new Color(c));
+  const tile = shape === 'column' && spread.tile;
+  const base = tile ? Math.ceil(count / 3) : count;
   for (let i = 0; i < count; i += 1) {
     if (shape === 'column') {
       const a = Math.random() * Math.PI * 2;
@@ -132,6 +143,17 @@ function bokeh({ count, spread, colors, sizeRange = [6, 26], shape = 'box' }) {
     col.set([c.r, c.g, c.b], i * 3);
     size[i] = sizeRange[0] + Math.random() ** 2.5 * (sizeRange[1] - sizeRange[0]);
     seed[i] = Math.random();
+  }
+  if (tile) {
+    // Copies above and below the base tile, identical in colour, size and drift.
+    for (let i = base; i < count; i += 1) {
+      const j = i % base;
+      const k = Math.floor(i / base) === 1 ? 1 : -1;
+      pos.set([pos[j * 3], pos[j * 3 + 1] + k * tile, pos[j * 3 + 2]], i * 3);
+      col.set([col[j * 3], col[j * 3 + 1], col[j * 3 + 2]], i * 3);
+      size[i] = size[j];
+      seed[i] = seed[j];
+    }
   }
   const geo = new BufferGeometry();
   geo.setAttribute('position', new BufferAttribute(pos, 3));
@@ -239,25 +261,33 @@ function createMark() {
 const STEP = 2.5; // vertical distance between cards
 const TURN = 0.9; // radians between cards around the spine
 const ORBIT = 3.6; // card distance from the spine
+const COIL = 0.55; // radians the strands twist per unit of height
+// The helix repeats every PERIOD units of height, and so does everything on
+// it (rungs, nodes, dust). The spine is a few periods long and is moved by
+// whole periods to stay around the camera, so it never ends.
+const PERIOD = (Math.PI * 2) / COIL;
+const RUNGS_PER_PERIOD = 21;
+const RUNG = PERIOD / RUNGS_PER_PERIOD;
+const SPINE_HALF = PERIOD * 2;
 
-function createSpine(length) {
+function createSpine({ lite = false } = {}) {
   const group = new Group();
   const mat = iridescent({ opacity: 0.92, strength: 1.2 });
-  const top = 8;
-  const bottom = -length - 8;
+  const top = SPINE_HALF;
+  const bottom = -SPINE_HALF;
   const helix = (phase) => {
     const pts = [];
     for (let y = top; y >= bottom; y -= 0.25) {
-      const a = y * 0.55 + phase;
+      const a = y * COIL + phase;
       pts.push(new Vector3(Math.cos(a) * 0.95, y, Math.sin(a) * 0.95));
     }
     return new CatmullRomCurve3(pts);
   };
-  const segs = Math.round((top - bottom) * 10);
-  [0, Math.PI].forEach((ph) => group.add(new Mesh(new TubeGeometry(helix(ph), segs, 0.16, 12, false), mat)));
+  const segs = Math.round((top - bottom) * (lite ? 6 : 10));
+  [0, Math.PI].forEach((ph) => group.add(new Mesh(new TubeGeometry(helix(ph), segs, 0.16, lite ? 8 : 12, false), mat)));
 
   // Rungs between the strands, with glowing nodes at their ends.
-  const count = Math.floor((top - bottom) / 0.55);
+  const count = Math.round((top - bottom) / RUNG);
   const rungGeo = new CylinderGeometry(0.045, 0.045, 1.9, 8, 1);
   const rungs = new InstancedMesh(rungGeo, mat, count);
   const nodeMat = new ShaderMaterial({
@@ -268,7 +298,7 @@ function createSpine(length) {
       varying float vY;
       void main() {
         vec3 a = vec3(0.43, 0.89, 0.83); vec3 b = vec3(0.71, 0.64, 1.0);
-        gl_FragColor = vec4(mix(a, b, 0.5 + 0.5 * sin(vY * 0.7)) * 0.85, 1.0);
+        gl_FragColor = vec4(mix(a, b, 0.5 + 0.5 * sin(vY * ${COIL.toFixed(4)})) * 0.85, 1.0);
         ${OUTPUT}
       }`,
   });
@@ -277,8 +307,8 @@ function createSpine(length) {
   const q = new Quaternion();
   const zAxis = new Vector3(0, 0, 1);
   for (let i = 0; i < count; i += 1) {
-    const y = top - i * 0.55;
-    const a = y * 0.55;
+    const y = top - i * RUNG;
+    const a = y * COIL;
     q.setFromAxisAngle(new Vector3(0, 1, 0), -a);
     const tilt = new Quaternion().setFromAxisAngle(zAxis, Math.PI / 2);
     m.compose(new Vector3(0, y, 0), q.clone().multiply(tilt), new Vector3(1, 1, 1));
@@ -290,10 +320,62 @@ function createSpine(length) {
   }
   group.add(rungs, nodes);
 
-  const dust = bokeh({ count: 1400, spread: { r: 5.5, y0: bottom, y1: top }, colors: ['#ff6f91', '#b4a2ff', '#6fe3d3', '#539fe5', '#ffb547'], sizeRange: [8, 60], shape: 'column' });
+  // Fine particles around the spine, repeating with it.
+  const dust = bokeh({
+    count: lite ? 480 : 1400,
+    spread: { r: 5.5, y0: -PERIOD / 2, y1: PERIOD / 2, tile: PERIOD },
+    colors: ['#ff6f91', '#b4a2ff', '#6fe3d3', '#539fe5', '#ffb547'],
+    sizeRange: [8, 60],
+    shape: 'column',
+  });
   dust.material.uniforms.uRise.value = 0.05;
   group.add(dust);
   return { group, mat, dust };
+}
+
+// ---------- The backdrop: a technical grid and atmospheric light ----------
+// A large plane behind the spine. Its grid is locked to the world, so it
+// passes by as the camera travels down the spine; its light and vignette are
+// locked to the camera.
+const BACKDROP = 110;
+function createBackdrop() {
+  const mat = new ShaderMaterial({
+    uniforms: { uOpacity: { value: 0 }, uCamY: { value: 0 }, uTime: { value: 0 } },
+    vertexShader: /* glsl */ `
+      varying vec2 vUv;
+      void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: /* glsl */ `
+      uniform float uOpacity; uniform float uCamY; uniform float uTime;
+      varying vec2 vUv;
+      float gridLine(vec2 g) {
+        vec2 f = abs(fract(g - 0.5) - 0.5) / fwidth(g);
+        return 1.0 - min(min(f.x, f.y), 1.0);
+      }
+      void main() {
+        vec2 p = (vUv - 0.5) * ${BACKDROP.toFixed(1)};
+        vec2 w = vec2(p.x, p.y + uCamY);
+        float fine = gridLine(w / 2.5);
+        float major = gridLine(w / 12.5);
+        float d = length(p * vec2(1.0, 1.25)) / 34.0;
+        float vig = smoothstep(1.0, 0.1, d);
+        vec3 lines = vec3(0.55, 0.85, 0.9) * (fine * 0.012 + major * 0.03) * vig;
+        // Atmosphere: a cool cyan light high on the right, violet low on the left.
+        float c1 = exp(-length(p - vec2(7.0, 10.0)) * 0.075);
+        float c2 = exp(-length(p - vec2(-7.0, -12.0)) * 0.07);
+        float breathe = 0.9 + 0.1 * sin(uTime * 0.25);
+        vec3 glow = vec3(0.12, 0.5, 0.56) * c1 * 0.075 * breathe + vec3(0.34, 0.24, 0.68) * c2 * 0.08;
+        // Light only (premultiplied, no alpha): the page stays visible behind.
+        gl_FragColor = vec4((lines + glow) * uOpacity, 0.0);
+        ${OUTPUT}
+      }`,
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    premultipliedAlpha: true,
+  });
+  const mesh = new Mesh(new PlaneGeometry(BACKDROP, BACKDROP), mat);
+  mesh.renderOrder = -1;
+  return mesh;
 }
 
 // ---------- 3. Cards ----------
@@ -352,6 +434,7 @@ function cardMaterial(card, seed) {
       uGlitch: { value: 1 },
       uOpacity: { value: 0 },
       uFocus: { value: 0 },
+      uBlur: { value: 0 },
     },
     vertexShader: /* glsl */ `
       varying vec2 vUv; varying float vFront; varying vec3 vN; varying vec3 vView;
@@ -366,7 +449,7 @@ function cardMaterial(card, seed) {
     fragmentShader: /* glsl */ `
       uniform sampler2D uFace; uniform sampler2D uImage; uniform float uHasImage;
       uniform vec3 uA; uniform vec3 uB; uniform vec3 uC;
-      uniform float uTime; uniform float uSeed; uniform float uHover; uniform float uGlitch; uniform float uOpacity; uniform float uFocus;
+      uniform float uTime; uniform float uSeed; uniform float uHover; uniform float uGlitch; uniform float uOpacity; uniform float uFocus; uniform float uBlur;
       varying vec2 vUv; varying float vFront; varying vec3 vN; varying vec3 vView;
       ${NOISE}
       ${FILM}
@@ -390,18 +473,20 @@ function cardMaterial(card, seed) {
         surf = mix(surf, vec3(0.43, 0.89, 0.83), smoothstep(0.7, 0.95, fbm(p * 2.6 + 9.0)) * 0.35);
         surf *= 0.35 + 0.9 * f * f;
         if (uHasImage > 0.5) {
-          vec3 img = texture2D(uImage, guv + (q - 0.5) * 0.03).rgb;
+          vec3 img = texture2D(uImage, guv + (q - 0.5) * 0.03, uBlur * 3.0).rgb;
           surf = mix(surf, img, 0.7);
         }
         surf *= 0.85;
         vec2 d = abs(uv - 0.5) * 2.0;
         surf *= 1.0 - 0.45 * pow(max(d.x, d.y), 3.0);
 
-        // Title layer with chromatic aberration.
+        // Title layer with chromatic aberration. Distant cards sample a softer
+        // mip level, a cheap depth-of-field blur.
         float ca = 0.0008 + 0.018 * g;
-        vec4 face = texture2D(uFace, guv);
-        float ar = texture2D(uFace, guv + vec2(ca, 0.0)).a;
-        float ab = texture2D(uFace, guv - vec2(ca, 0.0)).a;
+        float lod = uBlur * 3.5;
+        vec4 face = texture2D(uFace, guv, lod);
+        float ar = texture2D(uFace, guv + vec2(ca, 0.0), lod).a;
+        float ab = texture2D(uFace, guv - vec2(ca, 0.0), lod).a;
         vec3 col = mix(surf, face.rgb, face.a);
         col += vec3(max(ar - face.a, 0.0) * 0.9, 0.0, max(ab - face.a, 0.0) * 1.1);
 
@@ -413,6 +498,7 @@ function cardMaterial(card, seed) {
         col *= 0.93 + 0.07 * sin(uv.y * 820.0);       // scanlines
         col += film(fres * 1.5 + uv.y) * fres * 0.7;  // glass sheen at grazing angles
         col += vec3(0.04) * uHover;
+        col = mix(col, col * 0.7 + vec3(0.02, 0.03, 0.05), uBlur * 0.5); // distant cards sink into the dark
 
         if (vFront < 0.5) {
           // Edges and back: tinted glass.
@@ -427,16 +513,28 @@ function cardMaterial(card, seed) {
   });
 }
 
+// The hero's own motion: how fast the spiral turns by itself (cards per
+// second), and how much a hovered card slows it.
+const DRIFT = 1 / 7;
+const HOVER_SLOW = 0.28;
+// Camera distances
+const CAM_Z = ORBIT + 9.8;
+const HERO_Z = CAM_Z + 3.6;
+
 /**
  * Creates the theatre inside `host`.
- * sections   { intro, statement, work } DOM elements that drive the timeline
- * withMark   the homepage intro (the AI ring and ribbons); without it, the
- *            spine and cards rise as the work section scrolls into view
+ * sections   { hero, intro, statement, work } DOM elements that drive the timeline
+ * withHero   homepage: the spine and cards are on from the first frame,
+ *            centre-right beside the `hero` section, cycling by themselves
+ * heroOnly   with withHero, on phones: only the hero plays (the work section
+ *            is the DOM deck); the scene fades as the hero scrolls away
+ * withMark   the legacy intro (the AI ring and ribbons)
  * onActive   (index) => void, when another card reaches the front
  * onSelect   (card) => void, when a card is clicked
  */
-export async function createTheatre(host, { sections, withMark = true, onActive, onSelect }) {
+export async function createTheatre(host, { sections, withHero = false, heroOnly = false, withMark = false, onActive, onSelect }) {
   const coarse = window.matchMedia('(pointer: coarse)').matches;
+  const lite = heroOnly || (coarse && window.innerWidth < 1024);
   const renderer = new WebGLRenderer({ antialias: !coarse, alpha: true, powerPreference: 'high-performance', stencil: false });
   // Never block the page on the driver: skip the synchronous shader error
   // check in production, and compile shaders in parallel before they draw.
@@ -451,6 +549,7 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
   const scene = new Scene();
   const camera = new PerspectiveCamera(34, 1, 0.1, 200);
   const pr = renderer.getPixelRatio();
+  const hero = withHero && !withMark;
 
   const mark = withMark ? createMark() : null;
   if (mark) {
@@ -458,29 +557,42 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
     mark.dust.material.uniforms.uPixel.value = pr * 4;
   }
 
-  let spine = null;
+  const spine = createSpine({ lite });
+  spine.dust.material.uniforms.uPixel.value = pr * 4;
+  scene.add(spine.group);
+
+  const backdrop = hero ? createBackdrop() : null;
+  if (backdrop) scene.add(backdrop);
+
   const cardsGroup = new Group();
   scene.add(cardsGroup);
   let cards = []; // { card, mesh, mat, appear, target, index }
   let count = 0;
   const loader = new TextureLoader();
 
-  const buildSpine = (n) => {
-    if (spine) {
-      scene.remove(spine.group);
-      spine.group.traverse((o) => { o.geometry?.dispose(); o.material?.dispose?.(); });
-    }
-    spine = createSpine(Math.max(1, n - 1) * STEP);
-    spine.dust.material.uniforms.uPixel.value = pr * 4;
-    scene.add(spine.group);
-  };
+  // ---------- The endless spiral ----------
+  // `pos` is the continuous index of the spiral slot at the front. Card i sits
+  // in the slot nearest `pos` among anchor + i + k * count, so the cards repeat
+  // along the spine and the loop never shows a seam (a card changes slot only
+  // when it is half a lap away, where it is invisible).
+  let pos = 0;
+  let anchor = 0; // the slot that shows card 0 (reset when the cards change)
+  let base = null; // the slot at the start of the scroll run, once the work section has entered
+  let slow = 1; // the hero's drift, eased down while a card is hovered
+  const slotOf = (index) => anchor + index + count * Math.round((pos - anchor - index) / Math.max(1, count));
+  const cardAt = (slot) => (((Math.round(slot) - anchor) % Math.max(1, count)) + count) % Math.max(1, count);
 
   const geometry = cardGeometry();
   const halo = haloGeometry();
   const setCards = (list) => {
+    const shown = heroOnly ? list.slice(0, 6) : list;
     // Old cards leave (fade, glitch) and are removed once gone.
     cards.forEach((c) => { c.target = 0; c.leaving = true; });
-    const next = list.map((card, index) => {
+    count = shown.length;
+    // The new card 0 takes the slot at the start of the run (or, while the
+    // hero drifts, the front). Elsewhere the run always starts at slot 0.
+    anchor = hero ? base ?? Math.round(pos) : 0;
+    const next = shown.map((card, index) => {
       const mat = cardMaterial(card, Math.random() * 10);
       const mesh = new Mesh(geometry, mat);
       mesh.renderOrder = 2; // cards always draw over the spine
@@ -507,8 +619,6 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
       return { card, mesh, mat, glow, appear: 0, target: 1, index, hover: 0, born: elapsed, delay: index * 0.06 };
     });
     cards = [...cards, ...next];
-    count = list.length;
-    buildSpine(count);
     lastActive = -1;
     // New materials compile in the background; drawing waits for them.
     compiling += 1;
@@ -519,12 +629,23 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
   // ---------- Sizing ----------
   let width = 1;
   let height = 1;
+  let shiftX = 0;
+  let shiftY = 0;
   const resize = () => {
     width = host.clientWidth || window.innerWidth;
     height = host.clientHeight || window.innerHeight;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    camera.setViewOffset(width, height, width >= 1024 ? -width * 0.05 : 0, 0, width, height);
+    shiftX = NaN; // re-apply the view offset on the next frame
+    camera.updateProjectionMatrix();
+  };
+  // Where the spine stands on screen: `x` moves it right of centre (a fraction
+  // of the width), `y` moves it down.
+  const frame3d = (x, y) => {
+    if (x === shiftX && y === shiftY) return;
+    shiftX = x;
+    shiftY = y;
+    camera.setViewOffset(width, height, -x * width, -y * height, width, height);
     camera.updateProjectionMatrix();
   };
   resize();
@@ -579,22 +700,26 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
 
     const a = progressOf(sections.intro, false); // intro scrolled away 0 → 1
     const b = progressOf(sections.statement, true); // statement 0 → 1
-    const c = progressOf(sections.work, true); // work 0 → 1
-    const workRect = sections.work?.getBoundingClientRect();
+    const c = heroOnly ? 0 : progressOf(sections.work, true); // work 0 → 1
+    const workRect = heroOnly ? null : sections.work?.getBoundingClientRect();
+    const heroRect = hero ? sections.hero?.getBoundingClientRect() : null;
     // How far the work section has entered (0: below the fold, 1: at the top).
     const entered = workRect ? clamp01(1 - workRect.top / height) : 0;
     const inWork = mark ? smooth(0.86, 1, b) : smooth(0.2, 0.9, entered);
-    // As the work section leaves, the scene travels up with it, like the rest
-    // of the page, and fades out on the way (no hard edge, no overlap).
-    const presence = workRect ? smooth(0.3, 0.9, workRect.bottom / height) : 1;
-    const lift = workRect ? Math.max(0, height - workRect.bottom) : 0;
+    // How much of the spine and cards is on: in the hero they are always on.
+    const present = hero ? 1 : inWork;
+    // As the section that owns the scene leaves, the scene travels up with it,
+    // like the rest of the page, and fades out on the way (no hard edge).
+    const owner = workRect || heroRect;
+    const presence = owner ? smooth(0.3, 0.9, owner.bottom / height) : 1;
+    const lift = owner ? Math.max(0, height - owner.bottom) : 0;
     canvas.style.opacity = presence.toFixed(3);
     canvas.style.transform = lift > 0 ? `translate3d(0, ${(-lift).toFixed(1)}px, 0)` : '';
-    if (presence < 0.005 || (!mark && inWork < 0.005)) return;
+    if (presence < 0.005 || (!mark && !hero && inWork < 0.005)) return;
+    const introIn = easeOutCubic(clamp01(wall / 2.2));
 
     // ----- 1 & 2. The mark -----
     if (mark) {
-    const introIn = easeOutCubic(clamp01(wall / 2.2));
     mark.ribbonMat.uniforms.uDraw.value = easeOutCubic(clamp01((wall - 0.4) / 2.6));
     mark.ribbonMat.uniforms.uOpacity.value = 1 - smooth(0.1, 0.7, a);
     mark.ribbonMat.uniforms.uTime.value = elapsed;
@@ -619,42 +744,77 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
     mark.group.visible = markOpacity > 0.01;
     }
 
-    // ----- 3. Spine and cards -----
+    // ----- 3. The spiral's position -----
     const span = Math.max(1, count - 1);
-    const pos = c * span; // continuous index of the card at the front
-    const camY = -pos * STEP;
-    if (spine) {
-      spine.group.visible = inWork > 0.01;
-      spine.group.position.y = MathUtils.lerp(-26, 0, easeOutCubic(inWork));
-      spine.group.rotation.y = -pos * TURN * 0.5 + elapsed * 0.04;
-      spine.mat.uniforms.uTime.value = elapsed;
-      spine.mat.uniforms.uOpacity.value = 0.92 * inWork;
-      spine.dust.material.uniforms.uTime.value = elapsed;
-      spine.dust.material.uniforms.uOpacity.value = inWork;
+    if (hero) {
+      // The hero turns the spiral by itself. Once the work section enters, the
+      // spiral settles on a whole card and the scroll takes it from there; it
+      // drifts again when the work section has gone back below the fold.
+      slow += ((hovered ? HOVER_SLOW : 1) - slow) * Math.min(1, dt * 2);
+      if (entered > 0 && !heroOnly) {
+        if (base === null) base = Math.round(pos);
+        pos += DRIFT * slow * dt * (1 - inWork);
+        pos += (base + c * span - pos) * Math.min(1, dt * (2 + 8 * inWork));
+      } else {
+        base = null;
+        pos += DRIFT * slow * dt;
+      }
+    } else {
+      pos = c * span;
     }
-    cardsGroup.rotation.y = -pos * TURN;
-    cardsGroup.position.y = MathUtils.lerp(-20, 0, easeOutCubic(inWork));
+    const camY = -pos * STEP;
+    const rise = MathUtils.lerp(-20, 0, easeOutCubic(present));
 
-    // Camera
-    camPos.set(pointer.x * 0.45, camY + pointer.y * 0.3 + 0.2, ORBIT + 9.8);
-    if (inWork < 1) camPos.lerp(tmp.set(pointer.x * 0.3, pointer.y * 0.2, 17), 1 - inWork);
+    // The spine repeats every PERIOD: keep it around the camera.
+    spine.group.visible = present > 0.01;
+    spine.group.position.y = PERIOD * Math.round(camY / PERIOD) + rise * 1.3;
+    spine.group.rotation.y = -pos * TURN * 0.5 + elapsed * 0.04;
+    spine.group.rotation.x = hero ? -pointer.y * 0.03 : 0;
+    spine.group.rotation.z = hero ? pointer.x * 0.02 : 0;
+    spine.mat.uniforms.uTime.value = elapsed;
+    spine.mat.uniforms.uOpacity.value = 0.92 * present * (hero ? introIn : 1);
+    spine.dust.material.uniforms.uTime.value = elapsed;
+    spine.dust.material.uniforms.uOpacity.value = present * (hero ? introIn : 1);
+    cardsGroup.rotation.y = -pos * TURN;
+    cardsGroup.position.y = rise;
+
+    // Camera. The hero frames the spine centre-right (and lower, under the
+    // copy, on phones), a little further back than the work section does.
+    const narrow = camera.aspect < 1;
+    const heroZ = Math.max(HERO_Z, 17 / camera.aspect, width < 1200 ? HERO_Z + 2.4 : 0);
+    if (hero) {
+      frame3d(
+        MathUtils.lerp(narrow ? 0 : width >= 1200 ? 0.24 : 0.27, width >= 1024 ? 0.05 : 0, inWork),
+        heroOnly || narrow ? 0.36 : 0
+      );
+    } else frame3d(width >= 1024 ? 0.05 : 0, 0);
+    const z = hero ? MathUtils.lerp(heroZ + (1 - introIn) * 3, CAM_Z, inWork) : CAM_Z;
+    camPos.set(pointer.x * 0.45, camY + pointer.y * 0.3 + 0.2 + Math.sin(elapsed * 0.3) * (hero ? 0.12 : 0), z);
+    if (!hero && inWork < 1) camPos.lerp(tmp.set(pointer.x * 0.3, pointer.y * 0.2, 17), 1 - inWork);
     camera.position.lerp(camPos, k);
-    look.set(0, MathUtils.lerp(0, camY, inWork), 0);
+    look.set(0, MathUtils.lerp(0, camY, present), 0);
     camera.lookAt(look);
+
+    if (backdrop) {
+      backdrop.position.set(camera.position.x * 0.3, camY, -9);
+      backdrop.material.uniforms.uCamY.value = camY;
+      backdrop.material.uniforms.uTime.value = elapsed;
+      backdrop.material.uniforms.uOpacity.value = introIn;
+    }
 
     // Hover
     raycaster.setFromCamera(ndc, camera);
     const live = cards.filter((x) => !x.leaving && x.appear > 0.5);
-    const hit = inWork > 0.6 && ndc.x !== 9 ? raycaster.intersectObjects(live.map((x) => x.mesh), false)[0] : null;
+    const hit = present > 0.6 && ndc.x !== 9 ? raycaster.intersectObjects(live.map((x) => x.mesh), false)[0] : null;
     hovered = hit ? live.find((x) => x.mesh === hit.object) : null;
     canvas.style.cursor = hovered ? 'pointer' : '';
 
-    const active = Math.round(pos);
-    if (active !== lastActive && inWork > 0.5) {
+    const active = cardAt(pos);
+    if (active !== lastActive && present > 0.5) {
       lastActive = active;
       onActive?.(active);
       const front = cards.find((x) => !x.leaving && x.index === active);
-      if (front) front.mat.uniforms.uGlitch.value = 1;
+      if (front) front.mat.uniforms.uGlitch.value = hero ? 0.7 : 1;
     }
 
     cards = cards.filter((x) => {
@@ -673,21 +833,28 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
         x.glow.material.dispose();
         return false;
       }
-      const theta = x.index * TURN;
-      const dist = Math.abs(x.index - pos);
+      const slot = slotOf(x.index);
+      const theta = slot * TURN;
+      const dist = Math.abs(slot - pos);
       const isHover = hovered === x;
       x.hover += ((isHover ? 1 : 0) - x.hover) * Math.min(1, dt * 6);
       const r = ORBIT + x.hover * 0.35 + (1 - x.appear) * 2.5;
-      x.mesh.position.set(Math.sin(theta) * r, -x.index * STEP + (1 - x.appear) * -1.5, Math.cos(theta) * r);
+      x.mesh.position.set(Math.sin(theta) * r, -slot * STEP + (1 - x.appear) * -1.5, Math.cos(theta) * r);
       x.mesh.rotation.set(Math.sin(elapsed * 0.5 + x.index) * 0.03, theta, Math.sin(elapsed * 0.4 + x.index * 2) * 0.02);
       x.mesh.scale.setScalar((0.86 + 0.14 * x.appear) * (1 + x.hover * 0.04));
       u.uTime.value = elapsed;
       u.uHover.value = x.hover;
-      x.glow.material.uniforms.uOpacity.value = x.hover * x.appear * inWork;
+      x.glow.material.uniforms.uOpacity.value = x.hover * x.appear * present;
       u.uGlitch.value = Math.max(0, u.uGlitch.value - dt * 2.2);
       u.uFocus.value = 1 - clamp01(dist);
-      // Cards far from the front recede into the dark.
-      u.uOpacity.value = x.appear * inWork * (1 - smooth(1.5, 4.5, dist) * 0.75);
+      u.uBlur.value = smooth(0.7, 2.6, dist) * (1 - x.hover);
+      // Cards far from the front recede into the dark, and are gone before
+      // they move to the other end of the spiral.
+      const half = Math.max(1.6, count / 2);
+      // On a tall, narrow screen the scene stands beneath the copy, so the
+      // cards already passed (above the front one) leave quickly.
+      const above = hero && narrow && inWork < 1 ? 1 - smooth(0.1, 0.9, pos - slot) * (1 - inWork) : 1;
+      u.uOpacity.value = x.appear * present * above * (1 - smooth(1.5, 4.5, dist) * 0.75) * (1 - smooth(half - 1.2, half - 0.2, dist));
       x.mesh.visible = u.uOpacity.value > 0.01;
       return true;
     });
@@ -699,6 +866,12 @@ export async function createTheatre(host, { sections, withMark = true, onActive,
   return {
     setCards,
     resize,
+    /** Where in the scroll run (0 → 1) card `index` is at the front. */
+    fractionFor(index) {
+      const n = Math.max(1, count);
+      const start = hero ? base ?? Math.round(pos) : 0;
+      return (((index - start + anchor) % n) + n) % n / Math.max(1, n - 1);
+    },
     dispose() {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);

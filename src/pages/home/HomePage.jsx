@@ -1,7 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { m, useScroll, useTransform } from 'framer-motion';
-import AILogo from '../../components/brand/AILogo';
 import GlitchText from '../../components/fx/GlitchText';
 import SectionHeader from '../../components/ui/SectionHeader';
 import { Arrow } from '../../components/ui/Icon';
@@ -24,38 +23,30 @@ export default function HomePage() {
     'Linkfields AI: AI solutions, AI services and live AI demos from Linkfields Innovations, for banking, telecom, insurance and more.'
   );
   const { reduced } = useMotion();
-  const intro = useRef(null);
-  const statement = useRef(null);
-  const before = useMemo(() => ({ intro, statement }), []);
+  const hero = useRef(null);
+  const before = useMemo(() => ({ hero }), []);
   // 'theatre' (WebGL) where the device can run it, otherwise the DOM 'deck'.
   const [mode, setMode] = useState(() => (!reduced && canUseTheatre() ? 'theatre' : 'deck'));
+  // Whether the WebGL stage (the DNA hero) is live; otherwise the hero keeps a still.
+  const [stage, setStage] = useState(false);
   const theatre = mode === 'theatre';
 
-  // The statement hands over to the cards: it lifts and fades as they rise.
-  const { scrollYProgress: statementP } = useScroll({ target: statement, offset: ['start start', 'end end'] });
-  const statementOpacity = useTransform(statementP, [0.74, 0.9], [1, 0]);
-  const statementY = useTransform(statementP, [0.74, 0.95], [0, -80]);
+  // The hero copy hands over to the cards: it lifts and fades as the DNA
+  // theatre scrolls in behind it.
+  const { scrollYProgress: heroP } = useScroll({ target: hero, offset: ['start start', 'end start'] });
+  const heroOpacity = useTransform(heroP, [0.2, 0.75], [1, 0]);
+  const heroY = useTransform(heroP, [0.2, 0.9], [0, -70]);
 
   return (
-    <div className={`th${theatre ? ' is-theatre' : ''}`}>
-      {/* ---------- 1. Intro ---------- */}
-      <section ref={intro} className="th-intro" aria-label="Linkfields AI">
-        {!theatre && (
-          <div className="th-intro__mark">
-            <AILogo size={200} intro />
-          </div>
-        )}
-        <p className="th-scroll" aria-hidden="true">Scroll down</p>
-      </section>
-
-      {/* ---------- 2. Statement ---------- */}
-      <section ref={statement} className="th-statement" aria-labelledby="hero-title">
-        <div className="th-sticky">
-          <m.div className="th-statement__grid" style={theatre ? { opacity: statementOpacity, y: statementY } : undefined}>
-            <h1 id="hero-title" className="th-statement__title">
+    <div className={`th${theatre ? ' is-theatre' : ''}${stage ? ' has-stage' : ''}`}>
+      {/* ---------- 1. The DNA hero ---------- */}
+      <section ref={hero} className={`th-hero${stage ? '' : ' th-hero--still'}`} aria-labelledby="hero-title">
+        <m.div className="th-hero__inner" style={theatre ? { opacity: heroOpacity, y: heroY } : undefined}>
+          <div className="th-hero__copy">
+            <h1 id="hero-title" className="th-hero__title">
               <GlitchText text="Intelligence that moves business forward." />
             </h1>
-            <div className="th-statement__copy">
+            <div className="th-hero__text">
               <p><GlitchText text={`Founded in ${company.founded}`} delay={200} duration={700} /></p>
               <p>
                 We blend AI, data and engineering as an in-house team across {offices.length} offices on four continents.
@@ -68,19 +59,23 @@ export default function HomePage() {
                 <Link to="/contact" className="lf-btn lf-btn--secondary">Talk to our team</Link>
               </div>
             </div>
-          </m.div>
-        </div>
+          </div>
+          {/* The DNA stands here, on the fixed stage behind the page. */}
+          <div className="th-hero__visual" aria-hidden="true" />
+        </m.div>
+        <p className="th-scroll" aria-hidden="true">Scroll down</p>
       </section>
 
-      {/* ---------- 3. Work: the card theatre ---------- */}
+      {/* ---------- 2. Work: the card theatre ---------- */}
       <CardTheatre
         id="work"
         cards={HOME_CARDS}
         featured={FEATURED}
         filters={CARD_FILTERS}
-        withMark
+        withHero
         before={before}
         onModeChange={setMode}
+        onStage={setStage}
         label="Linkfields AI solutions, services, industries and tools"
       />
 

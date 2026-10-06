@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import TheatreStage, { canUseTheatre } from './TheatreStage';
+import TheatreStage, { canUseStage, canUseTheatre } from './TheatreStage';
 import { getLenis } from '../motion/SmoothScroll';
 import { useMotion } from '../motion/MotionProvider';
 import { selectCards } from '../../content/theatreCards';
@@ -63,10 +63,13 @@ function DeckCard({ card, index }) {
 /**
  * The card theatre used on every page: glass cards spiralling around the
  * iridescent data spine as the page scrolls, with the "What are you looking
- * for?" filters and "Ask me anything". On the homepage it continues the ring
- * intro (`withMark` plus the intro and statement sections); elsewhere the
- * spine and cards rise as the section scrolls in. Phones, reduced motion and
- * browsers without WebGL get the same cards as a deck.
+ * for?" filters and "Ask me anything". On the homepage (`withHero`, with the
+ * hero section in `before`) the spine and cards are on from the first frame
+ * as the DNA hero, cycling by themselves until this section scrolls in;
+ * elsewhere they rise as the section scrolls in. Phones, reduced motion and
+ * browsers without WebGL get the same cards as a deck (phones still get the
+ * DNA hero, in a lighter form). `onStage` reports whether the WebGL stage
+ * is live.
  */
 export default function CardTheatre({
   id = 'work',
@@ -77,8 +80,10 @@ export default function CardTheatre({
   label,
   ask = true,
   withMark = false,
+  withHero = false,
   before,
   onModeChange,
+  onStage,
 }) {
   const navigate = useNavigate();
   const { reduced } = useMotion();
@@ -89,6 +94,8 @@ export default function CardTheatre({
   const [debounced, setDebounced] = useState('');
   const [active, setActive] = useState(0);
   const [mode, setMode] = useState(() => (!reduced && canUseTheatre() ? 'theatre' : 'deck'));
+  // Phones: the DNA hero plays on the stage while this section is the deck.
+  const [heroOnly] = useState(() => withHero && !reduced && !canUseTheatre() && canUseStage({ phones: true }));
 
   useEffect(() => {
     const t = window.setTimeout(() => setDebounced(query), 250);
@@ -98,10 +105,11 @@ export default function CardTheatre({
 
   const cards = useMemo(() => selectCards(all, { filter, query: debounced }, featured || all), [all, featured, filter, debounced]);
 
-  // The engine reads its timeline from the sections: the page's own (intro,
-  // statement) where given, and this work section.
+  // The engine reads its timeline from the sections: the page's own (the
+  // homepage hero; or the legacy intro and statement) where given, and this
+  // work section.
   const sections = useMemo(
-    () => ({ get current() { return { intro: before?.intro?.current, statement: before?.statement?.current, work: work.current }; } }),
+    () => ({ get current() { return { hero: before?.hero?.current, intro: before?.intro?.current, statement: before?.statement?.current, work: work.current }; } }),
     [before]
   );
 
@@ -109,9 +117,10 @@ export default function CardTheatre({
   const onEngine = useCallback(
     (e) => {
       engine.current = e;
+      onStage?.(Boolean(e));
       if (e) {
         e.setCards(cards);
-        setMode('theatre');
+        if (!heroOnly) setMode('theatre');
       }
     },
     // The first set is applied here; later sets by the effect above.
@@ -135,7 +144,8 @@ export default function CardTheatre({
       if (!el) return;
       const top = el.getBoundingClientRect().top + window.scrollY;
       const span = (runVh(cards.length) / 100) * window.innerHeight;
-      const y = top + (cards.length > 1 ? (i / (cards.length - 1)) * span : 0) + 2;
+      const fraction = engine.current?.fractionFor?.(i) ?? (cards.length > 1 ? i / (cards.length - 1) : 0);
+      const y = top + fraction * span + 2;
       const lenis = getLenis();
       if (lenis) lenis.scrollTo(y, { duration: 1.4 });
       else window.scrollTo({ top: y });
@@ -161,7 +171,16 @@ export default function CardTheatre({
 
   return (
     <>
-      <TheatreStage sections={sections} withMark={withMark} onEngine={onEngine} onActive={setActive} onSelect={open} onFail={() => setMode('deck')} />
+      <TheatreStage
+        sections={sections}
+        withMark={withMark}
+        withHero={withHero}
+        heroOnly={heroOnly}
+        onEngine={onEngine}
+        onActive={setActive}
+        onSelect={open}
+        onFail={() => setMode('deck')}
+      />
       <section
         ref={work}
         id={id}

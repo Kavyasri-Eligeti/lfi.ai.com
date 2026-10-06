@@ -85,23 +85,24 @@ test('mobile menu opens, traps the page behind and closes with Escape', async ({
   await expect(button).toBeFocused();
 });
 
-test('desktop hero upgrades to the WebGL field', async ({ page }, info) => {
-  test.skip(info.project.name !== 'desktop', 'desktop only');
+test('the homepage hero plays the WebGL DNA theatre', async ({ page }, info) => {
   const errors = watchConsole(page);
   await page.goto('/');
-  await expect(page.locator('.lf-field-stage.is-webgl canvas')).toBeVisible({ timeout: 15000 });
+  await expect(page.locator('.th-stage.is-ready canvas')).toBeVisible({ timeout: 15000 });
+  await expect(page.locator('.th-hero--still')).toHaveCount(0);
   await page.mouse.move(1100, 400);
   await page.waitForTimeout(1500);
-  await page.screenshot({ path: 'e2e/screenshots/desktop-hero-webgl.png' });
+  await page.screenshot({ path: `e2e/screenshots/${info.project.name}-hero-webgl.png` });
   expect(errors).toEqual([]);
 });
 
-test('reduced motion keeps the static CSS field', async ({ browser }, info) => {
+test('reduced motion keeps the still hero and the card deck', async ({ browser }, info) => {
   test.skip(info.project.name !== 'desktop', 'desktop only');
   const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.goto('/');
   await page.waitForTimeout(3500);
-  await expect(page.locator('.lf-field-stage canvas')).toHaveCount(0);
+  await expect(page.locator('.th-stage canvas')).toHaveCount(0);
+  await expect(page.locator('.th-hero--still')).toHaveCount(1);
   await context.close();
 });
