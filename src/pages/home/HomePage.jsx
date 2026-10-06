@@ -63,7 +63,7 @@ export default function HomePage() {
           {/* The DNA stands here, on the fixed stage behind the page. */}
           <div className="th-hero__visual" aria-hidden="true" />
         </m.div>
-        <p className="th-scroll" aria-hidden="true">Scroll down</p>
+        <m.p className="th-scroll" aria-hidden="true" style={theatre ? { opacity: heroOpacity } : undefined}>Scroll down</m.p>
       </section>
 
       {/* ---------- 2. Work: the card theatre ---------- */}
