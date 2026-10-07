@@ -9,7 +9,7 @@
 // Scroll position comes from three DOM sections, so the page's real content,
 // links and focus order stay in the DOM.
 import {
-  AdditiveBlending,
+  NormalBlending,
   BufferAttribute,
   BufferGeometry,
   CanvasTexture,
@@ -163,13 +163,13 @@ function bokeh({ count, spread, colors, sizeRange = [6, 26], shape = 'box' }) {
         // Bokeh: a soft disc with a brighter rim.
         float disc = smoothstep(1.0, 0.82, d);
         float rim = smoothstep(0.7, 0.95, d) * disc;
-        float a = (disc * 0.45 + rim * 0.55) * vTw * uOpacity;
-        gl_FragColor = vec4(vColor * 1.4, a);
+        float a = (disc * 0.3 + rim * 0.4) * vTw * uOpacity;
+        gl_FragColor = vec4(vColor, a);
         ${OUTPUT}
       }`,
     transparent: true,
     depthWrite: false,
-    blending: AdditiveBlending,
+    blending: NormalBlending,
   });
   return new Points(geo, mat);
 }
@@ -327,12 +327,12 @@ function haloMaterial() {
         vec3 cyan = vec3(0.13, 0.83, 0.93);
         float t = clamp(vUv.x * 0.65 + (1.0 - vUv.y) * 0.35, 0.0, 1.0);
         vec3 col = mix(violet, mix(blue, cyan, smoothstep(0.4, 1.0, t)), smoothstep(0.0, 0.6, t));
-        gl_FragColor = vec4(col * 1.4, glow * uOpacity);
+        gl_FragColor = vec4(col, glow * uOpacity * 0.8);
         ${OUTPUT}
       }`,
     transparent: true,
     depthWrite: false,
-    blending: AdditiveBlending,
+    blending: NormalBlending,
   });
 }
 

@@ -6,7 +6,7 @@
   padding: 0 14px;
   border-radius: var(--radius-pill);
   box-shadow: inset 0 0 0 1px var(--border);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: var(--glass), #fff;
   color: var(--text);
   font: 600 0.875rem/1 var(--font-sans);
   text-decoration: none;

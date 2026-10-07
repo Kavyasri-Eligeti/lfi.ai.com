@@ -1,64 +1,64 @@
 /*
- * Linkfields AI design tokens: "Theatre" (dark, cinematic, monospace).
- * Near-black teal space, light type, lavender and teal light, film grain.
+ * Linkfields AI design tokens: "Theatre", light ("Glacier") colourway.
+ * Ice-blue page, navy type, cyan and indigo light, navy ink blocks.
  * Display and UI type: Share Tech Mono (SIL OFL, self-hosted via @fontsource).
  * Long-form reading: Open Sans (SIL OFL, self-hosted).
- * The Linkfields logo is never recoloured; it sits on dark surfaces.
+ * The Linkfields logo is never recoloured; it sits on navy ink surfaces.
  */
 :root {
-  /* Light sources */
-  --th-teal: #6fe3d3;
-  --th-teal-deep: #1d4a52;
-  --th-lavender: #b4a2ff;
-  --th-violet: #3a2a6b;
-  --th-rose: #ff6f91;
-  --th-amber: #ffb547;
+  /* Light sources (deep enough to read as text on the light page) */
+  --th-teal: #0e7490;
+  --th-teal-deep: #d4eef5;
+  --th-lavender: #4f46e5;
+  --th-violet: #e0e7ff;
+  --th-rose: #be185d;
+  --th-amber: #b45309;
 
   /* Kept names (components reference them) */
-  --aws-squid-ink: #0b1118;
-  --aws-squid-ink-2: #070b10;
-  --aws-space: #04070b;
+  --aws-squid-ink: #0f2242;
+  --aws-squid-ink-2: #0a1a33;
+  --aws-space: #0b1d3a;
   --aws-orange: var(--th-amber);
-  --aws-orange-hover: #ffc976;
+  --aws-orange-hover: #92400e;
   --aws-blue: var(--th-lavender);
-  --aws-blue-dark: #d6ccff;
+  --aws-blue-dark: #3730a3;
   --aws-blue-light: var(--th-teal);
 
-  --lf-yellow: var(--th-amber);
-  --lf-orange: var(--th-amber);
+  --lf-yellow: #f59e0b;
+  --lf-orange: #ea7a14;
   --lf-blue: var(--th-lavender);
-  --lf-mist: #e9eef2;
-  --lf-charcoal: #05080c;
-  --lf-blue-700: #d6ccff;
-  --lf-blue-50: rgba(180, 162, 255, 0.08);
-  --lf-blue-100: rgba(180, 162, 255, 0.16);
+  --lf-mist: #eef3f8;
+  --lf-charcoal: #0f1c2e;
+  --lf-blue-700: #3730a3;
+  --lf-blue-50: rgba(79, 70, 229, 0.07);
+  --lf-blue-100: rgba(79, 70, 229, 0.14);
   --lf-orange-700: var(--th-amber);
-  --lf-orange-50: rgba(255, 181, 71, 0.08);
-  --lf-yellow-50: rgba(255, 181, 71, 0.08);
-  --lf-yellow-300: #ffc976;
+  --lf-orange-50: rgba(234, 122, 20, 0.1);
+  --lf-yellow-50: rgba(245, 158, 11, 0.12);
+  --lf-yellow-300: #fcd34d;
 
   /* Surfaces */
-  --surface: #070a0f;
-  --surface-2: #0b1017;
-  --surface-3: #111822;
-  --surface-ink: #05070b;
-  --surface-ink-2: #0b1017;
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --text: #e9eef2;
-  --text-2: #b3bcc5;
-  --text-3: #8a95a0;
+  --surface: #eef3f8;
+  --surface-2: #ffffff;
+  --surface-3: #dde6f0;
+  --surface-ink: #0b1d3a;
+  --surface-ink-2: #13294d;
+  --border: rgba(15, 28, 46, 0.1);
+  --border-strong: rgba(15, 28, 46, 0.2);
+  --text: #0f1c2e;
+  --text-2: #41526a;
+  --text-3: #5f6f86;
   --text-on-ink: #ffffff;
-  --text-on-ink-2: #b3bcc5;
+  --text-on-ink-2: #c3d1e6;
   --link: var(--th-lavender);
-  --link-hover: #d6ccff;
+  --link-hover: #3730a3;
 
-  /* Status tones (on dark) */
-  --tone-blue-bg: rgba(180, 162, 255, 0.12);   --tone-blue-fg: #cfc4ff;
-  --tone-green-bg: rgba(111, 227, 211, 0.12);  --tone-green-fg: #8ff0e2;
-  --tone-orange-bg: rgba(255, 181, 71, 0.12);  --tone-orange-fg: #ffcf85;
-  --tone-violet-bg: rgba(180, 162, 255, 0.12); --tone-violet-fg: #cfc4ff;
-  --tone-neutral-bg: rgba(255, 255, 255, 0.06); --tone-neutral-fg: #c9d1d8;
+  /* Status tones (on the light page) */
+  --tone-blue-bg: rgba(79, 70, 229, 0.1);    --tone-blue-fg: #4338ca;
+  --tone-green-bg: rgba(14, 116, 144, 0.1);  --tone-green-fg: #155e75;
+  --tone-orange-bg: rgba(180, 83, 9, 0.1);   --tone-orange-fg: #92400e;
+  --tone-violet-bg: rgba(79, 70, 229, 0.1);  --tone-violet-fg: #4338ca;
+  --tone-neutral-bg: rgba(15, 28, 46, 0.06); --tone-neutral-fg: #33445c;
 
   /* Typography */
   --font-mono: 'Share Tech Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
@@ -99,11 +99,11 @@
   --radius-leaf-tl: var(--radius);
 
   /* Glass and light */
-  --glass: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
-  --glass-edge: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 30px -18px rgba(0, 0, 0, 0.9);
-  --shadow-2: 0 20px 50px -24px rgba(0, 0, 0, 0.95);
-  --shadow-3: 0 30px 80px -30px rgba(0, 0, 0, 1), 0 0 60px -30px rgba(111, 227, 211, 0.35);
+  --glass: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+  --glass-edge: inset 0 0 0 1px rgba(15, 28, 46, 0.08), inset 0 1px 0 #ffffff;
+  --shadow-1: 0 1px 2px rgba(15, 28, 46, 0.05), 0 12px 30px -20px rgba(15, 28, 46, 0.25);
+  --shadow-2: 0 20px 50px -26px rgba(15, 28, 46, 0.35);
+  --shadow-3: 0 30px 70px -32px rgba(15, 28, 46, 0.4), 0 0 60px -30px rgba(6, 182, 212, 0.35);
 
   /* Motion */
   --dur-micro: 160ms;
@@ -117,7 +117,7 @@
   --header-h: 88px;
   --focus-color: var(--th-teal);
   --focus-ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--focus-color);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 [data-motion='reduced'] {

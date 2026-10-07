@@ -12,7 +12,7 @@
   min-width: 0;
   padding: clamp(1.5rem, 1rem + 1vw, 2rem);
   border-radius: var(--radius-leaf);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: var(--glass), #fff;
   box-shadow: inset 0 0 0 1px var(--border);
   scroll-margin-top: calc(var(--header-h) + 24px);
   transition: box-shadow var(--dur-ui), transform var(--dur-ui) var(--ease-out);
@@ -57,7 +57,7 @@
   gap: var(--sp-4);
   padding: var(--sp-5);
   border-radius: var(--radius-leaf);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: var(--glass), #fff;
   box-shadow: var(--shadow-1);
   margin-bottom: var(--sp-5);
 }
@@ -89,7 +89,7 @@
   display: flex;
   flex-direction: column;
   padding: var(--sp-5) var(--sp-5) var(--sp-5);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: var(--glass), #fff;
   border-radius: var(--radius);
   box-shadow: var(--shadow-1);
   overflow: hidden;

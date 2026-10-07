@@ -5,7 +5,7 @@ import { company } from '../../content/company';
 import './recognition.css';
 
 // One accent per card, cycling through the site palette.
-const ACCENTS = ['#6fe3d3', '#b4a2ff', '#ffb547', '#ff6f91', '#539fe5', '#ffd27a', '#6fe3d3'];
+const ACCENTS = ['#0e7490', '#4f46e5', '#b45309', '#be185d', '#1d4ed8', '#8a6100', '#0e7490'];
 
 const membershipItem = () => ({
   value: 'Member',

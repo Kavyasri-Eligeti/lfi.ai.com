@@ -11,7 +11,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--surface-2);
+  background: var(--surface-3);
   color: var(--text);
   transition: background-color var(--dur-ui), color var(--dur-ui), transform var(--dur-ui) var(--ease-out);
 }
@@ -23,6 +23,7 @@
 .lf-demo-card--feature .lf-demo-card__go { background: var(--lf-yellow); color: var(--lf-charcoal); width: 48px; height: 48px; }
 .lf-demo-card--feature:hover .lf-demo-card__go { background: #fff; color: var(--lf-charcoal); }
 .lf-demo-card--feature .lf-badge--green { background: rgba(111, 211, 160, 0.16); color: #8fe3b6; }
+.lf-demo-card--feature .lf-meta, .lf-demo-card--feature .lf-demo-card__subs { color: var(--text-on-ink-2); }
 .lf-demo-card__host { font: 400 0.8125rem/1 var(--font-mono) !important; color: var(--lf-yellow) !important; }
 .lf-demo-card__modules {
   position: absolute;
@@ -105,7 +106,7 @@
   min-height: 36px;
   padding: 0 12px;
   border-radius: var(--radius-pill);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: #fff;
   box-shadow: inset 0 0 0 1px var(--border);
   color: var(--text);
   font: 600 0.875rem/1 var(--font-sans);
@@ -128,7 +129,7 @@
   place-items: center;
   aspect-ratio: 5 / 3;
   border-radius: var(--radius-leaf);
-  background: linear-gradient(160deg, #30353d, #22262d);
+  background: linear-gradient(160deg, #1b3358, #0f2242);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.07);
   transition: transform var(--dur-ui) var(--ease-out), box-shadow var(--dur-ui) var(--ease-out);
 }
@@ -141,7 +142,7 @@
 /* ---------- Office map ---------- */
 .lf-officemap { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: clamp(1.5rem, 1rem + 2.5vw, 3.5rem); align-items: start; }
 .lf-officemap__map svg { width: 100%; height: auto; overflow: visible; }
-.lf-officemap__land { fill: none; stroke: #c9d1dc; stroke-width: 0.66; stroke-dasharray: 0.66 0.34; }
+.lf-officemap__land { fill: none; stroke: #a9b6c6; stroke-width: 0.66; stroke-dasharray: 0.66 0.34; }
 .lf-ink .lf-officemap__land { stroke: #3a4250; }
 .lf-officemap__pin { cursor: pointer; }
 .lf-officemap__halo { fill: var(--lf-orange); opacity: 0.18; transition: r var(--dur-ui) var(--ease-out), opacity var(--dur-ui); }
@@ -186,8 +187,8 @@
   gap: var(--sp-3);
   padding: var(--sp-5);
   border-radius: var(--radius-leaf);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
-  box-shadow: inset 0 0 0 1px var(--border);
+  background: var(--glass), #fff;
+  box-shadow: inset 0 0 0 1px var(--border), var(--shadow-1);
   transition: box-shadow var(--dur-ui), transform var(--dur-ui) var(--ease-out);
 }
 .lf-insight:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px var(--border), var(--shadow-2); }
@@ -255,7 +256,7 @@
   display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 10px; padding: 14%;
   background: radial-gradient(80% 60% at 30% 20%, var(--lf-blue-50), var(--surface-2));
 }
-.lf-industry-art i { border-radius: 4px 4px 22px 4px; background: var(--glass), rgba(12, 18, 26, 0.8); box-shadow: var(--shadow-1); }
+.lf-industry-art i { border-radius: 4px 4px 22px 4px; background: var(--glass), #fff; box-shadow: var(--shadow-1); }
 .lf-industry-art i:nth-child(2) { background: var(--lf-orange); }
 .lf-industry-art i:nth-child(4) { background: var(--lf-blue); }
 .lf-industry-art i:nth-child(6) { background: var(--lf-yellow); border-radius: 22px 4px 22px 4px; }

@@ -31,9 +31,9 @@ html::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(70vw 60vh at 0% 0%, rgba(29, 74, 82, 0.55), transparent 70%),
-    radial-gradient(60vw 70vh at 0% 100%, rgba(58, 42, 107, 0.45), transparent 70%),
-    radial-gradient(50vw 50vh at 100% 10%, rgba(29, 74, 82, 0.25), transparent 70%);
+    radial-gradient(70vw 60vh at 0% 0%, rgba(6, 182, 212, 0.13), transparent 70%),
+    radial-gradient(60vw 70vh at 0% 100%, rgba(129, 140, 248, 0.14), transparent 70%),
+    radial-gradient(50vw 50vh at 100% 10%, rgba(56, 189, 248, 0.14), transparent 70%);
 }
 
 /* Film grain over everything (static noise tile, nudged a few times a second). */
@@ -43,8 +43,8 @@ body::after {
   inset: -8%;
   z-index: 9000;
   pointer-events: none;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.2 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.11  0 0 0 0 0.18  0 0 0 1.2 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   animation: lf-grain 0.9s steps(4) infinite;
 }
 @keyframes lf-grain {
@@ -65,8 +65,8 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background: var(--lf-mark) center / contain no-repeat; /* set in index.js */
-  opacity: 0.055;
-  filter: saturate(0.85);
+  opacity: 0.14;
+  filter: saturate(1.1);
 }
 #root { position: relative; z-index: 1; }
 
@@ -109,7 +109,7 @@ button { font: inherit; color: inherit; }
 /* Programmatic focus targets (hash navigation, route headings) need no ring */
 [tabindex='-1']:focus-visible { box-shadow: none; }
 
-::selection { background: var(--th-teal); color: #04070b; }
+::selection { background: var(--th-teal); color: #ffffff; }
 
 [hidden] { display: none !important; }
 
@@ -145,7 +145,7 @@ button { font: inherit; color: inherit; }
 .lf-container--narrow { max-width: calc(var(--container-narrow) + 2 * var(--gutter)); }
 
 .lf-section { padding-block: var(--section-y); position: relative; }
-.lf-section--tint { background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.035)); }
+.lf-section--tint { background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.25)); }
 .lf-section--ink { background: var(--surface-ink); color: var(--text-on-ink); }
 .lf-route-loading { min-height: 100vh; display: grid; place-items: center; background: var(--aws-space); }
 

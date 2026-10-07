@@ -5,7 +5,7 @@
 .lf-enquiry {
   padding: clamp(1.5rem, 1rem + 2vw, 3rem);
   border-radius: var(--radius-leaf-lg);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: var(--glass), #fff;
   box-shadow: var(--shadow-3), inset 0 0 0 1px var(--border);
 }
 .lf-enquiry__title { font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem); letter-spacing: -0.01em; margin-bottom: var(--sp-2); }

@@ -17,7 +17,7 @@
   background: conic-gradient(from var(--lf-ai-turn), #6fe3d3, #b4a2ff, #ff6f91, #ffb547, #6fe3d3);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 0.5px));
   mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 0.5px));
-  filter: drop-shadow(0 0 calc(var(--s) * 0.05) rgba(180, 162, 255, 0.45));
+  filter: drop-shadow(0 0 calc(var(--s) * 0.05) rgba(79, 70, 229, 0.3));
   animation: lf-ai-turn 9s linear infinite;
 }
 /* Glass highlight on the ring */
@@ -35,7 +35,7 @@
 .lf-ailogo__mark {
   font: 400 calc(var(--s) * 0.36) / 1 var(--font-mono);
   letter-spacing: 0.02em;
-  background: linear-gradient(115deg, #ffffff 30%, #d9cfff 45%, #ffffff 60%);
+  background: linear-gradient(115deg, #0f1c2e 30%, #4f46e5 45%, #0f1c2e 60%);
   background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -53,3 +53,5 @@
 
 [data-motion='reduced'] .lf-ailogo__ring,
 [data-motion='reduced'] .lf-ailogo__mark { animation: none !important; }
+/* On the navy header capsule the mark keeps its light lettering. */
+.lf-header__capsule .lf-ailogo__mark { background-image: linear-gradient(115deg, #ffffff 30%, #d9cfff 45%, #ffffff 60%); }

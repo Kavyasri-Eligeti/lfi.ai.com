@@ -1,5 +1,5 @@
 /* ---------- Footer ---------- */
-.lf-footer { background: var(--aws-space); color: var(--text-on-ink-2); position: relative; overflow: hidden; }
+.lf-footer { background: radial-gradient(60vw 50vh at 100% 0%, rgba(129, 140, 248, 0.22), transparent 70%), radial-gradient(50vw 40vh at 0% 100%, rgba(6, 182, 212, 0.16), transparent 70%), var(--surface-ink); color: var(--text-on-ink-2); position: relative; overflow: hidden; }
 .lf-footer__top {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
@@ -74,9 +74,9 @@
   place-items: center;
   pointer-events: none;
   background:
-    radial-gradient(70vw 60vh at 0% 100%, rgba(58, 42, 107, 0.65), transparent 70%),
-    radial-gradient(70vw 60vh at 100% 0%, rgba(29, 74, 82, 0.6), transparent 70%),
-    #05080d;
+    radial-gradient(70vw 60vh at 0% 100%, rgba(129, 140, 248, 0.2), transparent 70%),
+    radial-gradient(70vw 60vh at 100% 0%, rgba(6, 182, 212, 0.2), transparent 70%),
+    var(--surface);
   will-change: transform;
 }
 /* A light seam along the curtain's leading and trailing edges */
@@ -88,14 +88,14 @@
   top: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--th-teal), var(--th-lavender), transparent);
-  box-shadow: 0 0 24px 2px rgba(111, 227, 211, 0.45);
+  box-shadow: 0 0 24px 2px rgba(6, 182, 212, 0.35);
 }
 /* Scanlines and a fine light seam on the curtain */
 .lf-curtain::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px);
+  background: repeating-linear-gradient(0deg, rgba(15, 28, 46, 0.025) 0 1px, transparent 1px 4px);
 }
 .lf-curtain__inner { position: relative; display: grid; justify-items: center; gap: 22px; padding-inline: var(--gutter); text-align: center; }
 .lf-curtain__label {
@@ -103,7 +103,7 @@
   font: 400 clamp(2.5rem, 1rem + 6vw, 6.5rem)/0.95 var(--font-mono);
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--text);
 }
 .lf-curtain__line {
   display: block;

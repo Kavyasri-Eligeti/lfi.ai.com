@@ -1,5 +1,5 @@
 /* ---------- Next-page handoff ---------- */
-.lf-next { position: relative; height: 160vh; color: #fff; }
+.lf-next { position: relative; height: 160vh; color: var(--text); }
 .lf-next__sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
 .lf-next__content {
   position: relative;
@@ -13,19 +13,19 @@
 }
 .lf-next__dial { position: relative; display: grid; place-items: center; width: 160px; height: 160px; margin-bottom: var(--sp-5); }
 .lf-next__ring { position: absolute; inset: 0; transform: rotate(-90deg); overflow: visible; }
-.lf-next__track { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 1.5; }
-.lf-next__progress { fill: none; stroke: var(--th-teal); stroke-width: 2; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(111, 227, 211, 0.8)); }
+.lf-next__track { fill: none; stroke: var(--border); stroke-width: 1.5; }
+.lf-next__progress { fill: none; stroke: var(--th-teal); stroke-width: 2; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.5)); }
 .lf-next__eyebrow { margin: 0 0 var(--sp-3); font: 400 0.875rem/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--th-lavender); }
 .lf-next__title {
   margin: 0;
   font: 400 clamp(3rem, 1rem + 8vw, 9rem)/0.95 var(--font-mono);
   text-transform: uppercase;
-  color: #fff;
+  color: var(--text);
 }
 .lf-next__line { display: block; width: min(60vw, 640px); height: 1px; margin: var(--sp-5) 0; background: linear-gradient(90deg, transparent, var(--th-teal), var(--th-lavender), transparent); transform-origin: center; }
-.lf-next__hint { margin: 0 0 var(--sp-5); font: 400 0.75rem/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); }
+.lf-next__hint { margin: 0 0 var(--sp-5); font: 400 0.75rem/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-3); }
 .lf-next__fade { position: absolute; inset: 0; z-index: 3; background: var(--surface); pointer-events: none; }
-.lf-next :focus-visible { box-shadow: 0 0 0 2px #04070b, 0 0 0 4px var(--th-teal); }
+.lf-next :focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--th-teal); }
 
 .lf-next--static { height: auto; padding-block: var(--sp-8); border-top: 1px solid var(--border); }
 .lf-next__static { text-align: center; }

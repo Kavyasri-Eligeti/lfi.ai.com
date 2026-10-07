@@ -28,7 +28,7 @@
 
 /* ---------- Vision / mission ---------- */
 .lf-vm { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
-.lf-vm__card { padding: clamp(1.75rem, 1rem + 2.5vw, 3.5rem); border-radius: var(--radius-leaf-lg); background: var(--glass), rgba(8, 12, 18, 0.72); box-shadow: var(--shadow-1); }
+.lf-vm__card { padding: clamp(1.75rem, 1rem + 2.5vw, 3.5rem); border-radius: var(--radius-leaf-lg); background: var(--glass), #fff; box-shadow: var(--glass-edge), var(--shadow-1); }
 .lf-vm__card--mission { background: var(--surface-ink); box-shadow: none; }
 .lf-vm__text { margin: 0; font: 400 clamp(1.25rem, 1rem + 0.9vw, 1.75rem)/1.4 var(--font-sans); letter-spacing: -0.015em; max-width: 34ch; }
 .lf-vm__card--mission .lf-vm__text { color: #fff; }

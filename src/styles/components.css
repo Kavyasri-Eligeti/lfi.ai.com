@@ -22,6 +22,7 @@
 .lf-lead { font-size: var(--fs-lead); color: var(--text-2); line-height: 1.6; }
 .lf-ink .lf-lead { color: var(--text-on-ink-2); }
 .lf-meta { font-size: var(--fs-meta); color: var(--text-3); }
+.lf-ink .lf-meta { color: var(--text-on-ink-2); }
 .lf-accent { color: var(--lf-blue); }
 .lf-num { font-variant-numeric: tabular-nums; }
 
@@ -53,14 +54,14 @@
   padding: 0 1.6rem;
   border: 0;
   border-radius: var(--radius-pill);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)), rgba(6, 10, 16, 0.6);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)), var(--lf-charcoal);
   color: #fff;
   font: 400 0.875rem/1 var(--font-mono);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 0 0 0 transparent;
+  box-shadow: inset 0 0 0 1px var(--lf-charcoal), 0 10px 24px -14px rgba(15, 28, 46, 0.6);
   transition: box-shadow var(--dur-ui) var(--ease-out), transform var(--dur-micro) var(--ease-out), color var(--dur-micro);
 }
 /* The light under a pill, as on the navigation */
@@ -77,13 +78,18 @@
 }
 .lf-btn:hover {
   color: #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)), var(--th-lavender);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--btn-glow) 80%, transparent), 0 0 32px -8px var(--btn-glow);
 }
 .lf-btn:hover::after { left: 6%; right: 6%; opacity: 1; }
 .lf-btn:active { transform: translateY(1px); }
 .lf-btn .lf-arrow { transition: transform var(--dur-ui) var(--ease-out); }
 .lf-btn:hover .lf-arrow { transform: translateX(4px); }
-.lf-btn--secondary { --btn-glow: var(--th-lavender); background: transparent; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+.lf-btn--secondary { --btn-glow: var(--th-lavender); background: rgba(255, 255, 255, 0.6); color: var(--text); box-shadow: inset 0 0 0 1.5px var(--border-strong); }
+.lf-btn--secondary:hover { background: #fff; color: var(--th-lavender); }
+.lf-ink .lf-btn { background: #fff; color: var(--lf-charcoal); box-shadow: inset 0 0 0 1px #fff; }
+.lf-ink .lf-btn:hover { background: var(--lf-yellow); color: var(--lf-charcoal); }
+.lf-ink .lf-btn--secondary { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4); }
 .lf-btn--ink, .lf-btn--yellow { --btn-glow: var(--th-amber); }
 .lf-btn--sm { min-height: 40px; padding: 0 1.15rem; font-size: 0.8125rem; }
 .lf-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
@@ -104,7 +110,8 @@
 .lf-link .lf-arrow { transition: transform var(--dur-ui) var(--ease-out); }
 .lf-link:hover .lf-arrow { transform: translateX(3px); }
 .lf-ink .lf-link { color: #fff; }
-.lf-ink .lf-link:hover { color: var(--aws-orange); }
+.lf-ink .lf-eyebrow, .lf-ink .lf-eyebrow::before { color: var(--lf-yellow); }
+.lf-ink .lf-link:hover { color: var(--lf-yellow); }
 
 /* ---------- Badges and chips ---------- */
 .lf-badge {
@@ -132,7 +139,7 @@
   padding: 0 14px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-strong);
-  background: rgba(8, 12, 18, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   color: var(--text);
   font: 400 0.8125rem/1 var(--font-mono);
   letter-spacing: 0.04em;
@@ -141,15 +148,15 @@
   cursor: pointer;
   transition: background-color var(--dur-micro), border-color var(--dur-micro), color var(--dur-micro);
 }
-.lf-chip:hover { border-color: var(--th-teal); color: #fff; }
-.lf-chip[aria-pressed='true'], .lf-chip.is-active { background: rgba(111, 227, 211, 0.14); border-color: var(--th-teal); color: #fff; box-shadow: 0 0 22px -8px var(--th-teal); }
+.lf-chip:hover { border-color: var(--th-teal); color: var(--th-teal); }
+.lf-chip[aria-pressed='true'], .lf-chip.is-active { background: var(--th-teal); border-color: var(--th-teal); color: #fff; box-shadow: 0 8px 22px -10px var(--th-teal); }
 .lf-chip__count { font: 400 0.75rem/1 var(--font-mono); opacity: 0.7; }
 .lf-tag {
   display: inline-block;
   padding: 3px 8px;
   border-radius: var(--radius-xs);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background: rgba(15, 28, 46, 0.04);
+  box-shadow: inset 0 0 0 1px var(--border);
   color: var(--text-2);
   font: 400 0.75rem/1.4 var(--font-mono);
   letter-spacing: 0.03em;
@@ -164,15 +171,15 @@
   min-width: 0;
   padding: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
   border-radius: var(--radius);
-  background: var(--glass), rgba(8, 12, 18, 0.7);
+  background: var(--glass), #ffffff;
   box-shadow: var(--glass-edge), var(--shadow-1);
   color: var(--text);
   transition: transform var(--dur-ui) var(--ease-out), box-shadow var(--dur-ui) var(--ease-out);
 }
 .lf-card--outline { box-shadow: inset 0 0 0 1px var(--border); }
-.lf-card--tint { background: var(--glass), rgba(12, 18, 26, 0.8); }
+.lf-card--tint { background: linear-gradient(160deg, #ffffff, #eaf0f7); }
 .lf-card--ink { background: var(--surface-ink); color: var(--text-on-ink); box-shadow: none; }
-.lf-card--interactive:hover, .lf-card--interactive:focus-within { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(111, 227, 211, 0.4), var(--shadow-3); }
+.lf-card--interactive:hover, .lf-card--interactive:focus-within { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(14, 116, 144, 0.4), var(--shadow-3); }
 .lf-card--dashed { background: transparent; box-shadow: none; outline: 1.5px dashed var(--border-strong); outline-offset: -1.5px; }
 .lf-card h3, .lf-card h4 { margin: 0; }
 .lf-card p { margin: 0; color: var(--text-2); }
@@ -212,16 +219,16 @@
   padding: 0.7rem 0.9rem;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background: rgba(6, 10, 16, 0.7);
+  background: #ffffff;
   color: var(--text);
   font: 400 1rem/1.4 var(--font-sans);
   transition: border-color var(--dur-micro), box-shadow var(--dur-micro);
 }
 .lf-textarea { min-height: 140px; resize: vertical; }
 .lf-input:hover, .lf-select:hover, .lf-textarea:hover { border-color: var(--text-3); }
-.lf-input:focus-visible, .lf-select:focus-visible, .lf-textarea:focus-visible { border-color: var(--th-teal); box-shadow: 0 0 0 3px rgba(111, 227, 211, 0.18); border-radius: var(--radius-sm); }
-.lf-input[aria-invalid='true'], .lf-select[aria-invalid='true'], .lf-textarea[aria-invalid='true'] { border-color: #ff6f91; }
-.lf-field__error { display: flex; gap: 6px; align-items: flex-start; font: 600 0.8125rem/1.4 var(--font-sans); color: #ff8fa8; }
+.lf-input:focus-visible, .lf-select:focus-visible, .lf-textarea:focus-visible { border-color: var(--th-teal); box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.18); border-radius: var(--radius-sm); }
+.lf-input[aria-invalid='true'], .lf-select[aria-invalid='true'], .lf-textarea[aria-invalid='true'] { border-color: var(--th-rose); }
+.lf-field__error { display: flex; gap: 6px; align-items: flex-start; font: 600 0.8125rem/1.4 var(--font-sans); color: var(--th-rose); }
 
 .lf-search { position: relative; }
 .lf-search .lf-input { padding-left: 2.6rem; border-radius: var(--radius-pill); }

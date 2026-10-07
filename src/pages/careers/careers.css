@@ -20,7 +20,7 @@
   gap: var(--sp-4);
   padding: var(--sp-5);
   border-radius: var(--radius-leaf);
-  background: var(--glass), rgba(8, 12, 18, 0.72);
+  background: var(--glass), #fff;
   box-shadow: var(--shadow-1);
   font: 400 clamp(1.125rem, 1rem + 0.5vw, 1.375rem)/1.25 var(--font-display);
   letter-spacing: -0.015em;
