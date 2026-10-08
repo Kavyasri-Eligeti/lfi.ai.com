@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import PageHero from '../../components/ui/PageHero';
-import CardTheatre from '../../features/theatre/CardTheatre';
-import { PAGE_THEATRES } from '../../content/theatreCards';
 import SmartLink from '../../components/ui/SmartLink';
 import Icon, { Arrow } from '../../components/ui/Icon';
 import { allServices } from '../../content/services';
@@ -121,9 +119,6 @@ export default function ServicesPage() {
           by end-to-end AI services: strategy, generative AI, agents, RAG, MLOps and responsible AI.
         </p>
       </PageHero>
-
-      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
-      <CardTheatre id="explore" cards={PAGE_THEATRES.services.cards} filters={PAGE_THEATRES.services.filters} label="Linkfields practices and AI services" />
 
       <section className="lf-section lf-services-layout" aria-label="Linkfields services">
         <div className="lf-container lf-services-layout__inner">

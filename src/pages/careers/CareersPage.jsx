@@ -1,7 +1,5 @@
 import { m } from 'framer-motion';
 import PageHero from '../../components/ui/PageHero';
-import CardTheatre from '../../features/theatre/CardTheatre';
-import { PAGE_THEATRES } from '../../content/theatreCards';
 import SmartLink from '../../components/ui/SmartLink';
 import { Arrow } from '../../components/ui/Icon';
 import { careers } from '../../content/careers';
@@ -51,9 +49,6 @@ export default function CareersPage() {
       >
         <p className="lf-lead"><strong>{careers.subtitle}.</strong> {careers.intro}</p>
       </PageHero>
-
-      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
-      <CardTheatre id="explore" cards={PAGE_THEATRES.careers.cards} filters={PAGE_THEATRES.careers.filters} label="Life and roles at Linkfields" />
 
       <section className="lf-section lf-careers-intro" aria-label="Our workplace">
         <div className="lf-container">

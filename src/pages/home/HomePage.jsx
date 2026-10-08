@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { m, useScroll, useTransform } from 'framer-motion';
 import AILogo from '../../components/brand/AILogo';
 import GlitchText from '../../components/fx/GlitchText';
 import SectionHeader from '../../components/ui/SectionHeader';
@@ -8,10 +7,8 @@ import { Arrow } from '../../components/ui/Icon';
 import FeaturedBento from '../../components/sections/FeaturedBento';
 import PartnerWall from '../../components/sections/PartnerWall';
 import RecognitionWall from '../../components/sections/RecognitionWall';
-import CardTheatre from '../../features/theatre/CardTheatre';
-import { canUseTheatre } from '../../features/theatre/TheatreStage';
+import TheatreStage, { canUseTheatre } from '../../features/theatre/TheatreStage';
 import { useMotion } from '../../features/motion/MotionProvider';
-import { CARD_FILTERS, FEATURED, HOME_CARDS } from '../../content/theatreCards';
 import { company, offices } from '../../content/company';
 import { demos } from '../../content/demos';
 import { usePageMeta } from '../../hooks/usePageMeta';
@@ -26,32 +23,32 @@ export default function HomePage() {
   const { reduced } = useMotion();
   const intro = useRef(null);
   const statement = useRef(null);
-  const before = useMemo(() => ({ intro, statement }), []);
-  // 'theatre' (WebGL) where the device can run it, otherwise the DOM 'deck'.
-  const [mode, setMode] = useState(() => (!reduced && canUseTheatre() ? 'theatre' : 'deck'));
-  const theatre = mode === 'theatre';
-
-  // The statement hands over to the cards: it lifts and fades as they rise.
-  const { scrollYProgress: statementP } = useScroll({ target: statement, offset: ['start start', 'end end'] });
-  const statementOpacity = useTransform(statementP, [0.74, 0.9], [1, 0]);
-  const statementY = useTransform(statementP, [0.74, 0.95], [0, -80]);
+  // The 3D stage reads its timeline from the intro and statement sections.
+  const sections = useMemo(() => ({ get current() { return { intro: intro.current, statement: statement.current }; } }), []);
+  // The 3D ring (WebGL) where the device can run it, otherwise the DOM logo.
+  const [theatre, setTheatre] = useState(() => !reduced && canUseTheatre());
+  // The DOM logo shows at once, so the intro is never empty; it hands over to
+  // the 3D ring as soon as the ring is drawing.
+  const [ringReady, setRingReady] = useState(false);
 
   return (
-    <div className={`th${theatre ? ' is-theatre' : ''}`}>
+    <div className={`th${theatre ? ' is-theatre' : ''}${ringReady ? ' is-ring-ready' : ''}`}>
+      {theatre && <TheatreStage sections={sections} onReady={() => setRingReady(true)} onFail={() => setTheatre(false)} />}
+
       {/* ---------- 1. Intro ---------- */}
       <section ref={intro} className="th-intro" aria-label="Linkfields AI">
-        {!theatre && (
+        <div className="th-intro__fallback">
           <div className="th-intro__mark">
             <AILogo size={200} intro />
           </div>
-        )}
+        </div>
         <p className="th-scroll" aria-hidden="true">Scroll down</p>
       </section>
 
       {/* ---------- 2. Statement ---------- */}
       <section ref={statement} className="th-statement" aria-labelledby="hero-title">
         <div className="th-sticky">
-          <m.div className="th-statement__grid" style={theatre ? { opacity: statementOpacity, y: statementY } : undefined}>
+          <div className="th-statement__grid">
             <h1 id="hero-title" className="th-statement__title">
               <GlitchText text="Intelligence that moves business forward." />
             </h1>
@@ -68,21 +65,9 @@ export default function HomePage() {
                 <Link to="/contact" className="lf-btn lf-btn--secondary">Talk to our team</Link>
               </div>
             </div>
-          </m.div>
+          </div>
         </div>
       </section>
-
-      {/* ---------- 3. Work: the card theatre ---------- */}
-      <CardTheatre
-        id="work"
-        cards={HOME_CARDS}
-        featured={FEATURED}
-        filters={CARD_FILTERS}
-        withMark
-        before={before}
-        onModeChange={setMode}
-        label="Linkfields AI solutions, services, industries and tools"
-      />
 
       {/* ---------- Flagship products and partners ---------- */}
       <section className="lf-section" aria-labelledby="featured-title">

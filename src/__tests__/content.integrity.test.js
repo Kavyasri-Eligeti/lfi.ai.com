@@ -14,7 +14,6 @@ import { LEGACY_PATHS } from '../app/navigation';
 import { aiSolutions, aiSolutionById } from '../content/aiSolutions';
 import { aiServicePractice } from '../content/services';
 import { aiTools, aiSecurityTools, constellation } from '../content/aiTools';
-import { theatreCards, FEATURED, CARD_FILTERS, cardsFor, MAX_CARDS, HOME_CARDS } from '../content/theatreCards';
 import { LOGOS, SERVICE_LOGOS, SUB_SERVICE_LOGOS, SOLUTION_LOGOS } from '../content/logos';
 import { DEMO_GLYPHS, GLYPHS, GROUP_ACCENTS, demoMarkFor } from '../content/demoMarks';
 import { DEMO_GROUPS } from '../content/demos';
@@ -188,31 +187,6 @@ describe('AI solutions, AI services and the universe', () => {
       expect(x.name && x.vendor && x.tag).toBeTruthy();
       expect(publicFile(x.logo)).toBe(true);
     });
-  });
-
-  test('the theatre cards cover every offering and lead somewhere real', () => {
-    expect(new Set(theatreCards.map((c) => c.id)).size).toBe(theatreCards.length);
-    theatreCards.forEach((c) => {
-      expect(c.to).toMatch(/^\/(solutions|services|industries)(#[a-z0-9-]+)?$/);
-      expect(c.palette).toHaveLength(3);
-      if (c.logo) expect(publicFile(c.logo)).toBe(true);
-      if (c.image) expect(publicFile(c.image)).toBe(true);
-    });
-    expect(FEATURED.length).toBe(MAX_CARDS);
-    // Telecom, Manufacturing, Banking and Insurance are not part of the homepage flow.
-    expect(HOME_CARDS.map((c) => c.id)).not.toEqual(expect.arrayContaining(['industries-telecom']));
-    expect(HOME_CARDS.map((c) => c.id)).not.toContain('industries-manufacturing');
-    ['Telecom', 'Manufacturing', 'Banking', 'Insurance'].forEach((name) =>
-      expect(cardsFor({ filter: 'industries' }).map((c) => c.title)).not.toContain(name)
-    );
-    expect(FEATURED.filter((c) => c.category === 'industries')).toHaveLength(0);
-    // Machine Learning, Deep Learning, Cyber Security and AI Security replace Claude, ChatGPT and Gemini.
-    const home = FEATURED.map((c) => c.title);
-    ['Machine Learning', 'Deep Learning', 'Cyber Security', 'AI Security'].forEach((t) => expect(home).toContain(t));
-    ['Claude', 'ChatGPT', 'Gemini'].forEach((t) => expect(HOME_CARDS.map((c) => c.title)).not.toContain(t));
-    FEATURED.forEach((c) => (c.logos || []).forEach((l) => expect(publicFile(l.src)).toBe(true)));
-    CARD_FILTERS.forEach((f) => expect(cardsFor({ filter: f.id }).length).toBeGreaterThan(0));
-    expect(cardsFor({ query: 'guardrails' }).map((c) => c.title)).toEqual(expect.arrayContaining(['Bedrock Guardrails', 'NeMo Guardrails']));
   });
 
   test('every service, sub-service and solution shows official logos that exist', () => {

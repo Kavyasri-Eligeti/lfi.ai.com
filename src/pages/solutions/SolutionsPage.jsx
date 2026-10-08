@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, m } from 'framer-motion';
 import PageHero from '../../components/ui/PageHero';
-import CardTheatre from '../../features/theatre/CardTheatre';
-import { PAGE_THEATRES } from '../../content/theatreCards';
 import SectionHeader from '../../components/ui/SectionHeader';
 import SmartLink from '../../components/ui/SmartLink';
 import StatusBadge from '../../components/ui/StatusBadge';
@@ -137,9 +135,6 @@ export default function SolutionsPage() {
           predictive analytics, delivered by Linkfields on the platforms you already run. Each one links to live demos.
         </p>
       </PageHero>
-
-      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
-      <CardTheatre id="explore" cards={PAGE_THEATRES.solutions.cards} filters={PAGE_THEATRES.solutions.filters} label="Linkfields AI solutions and enterprise platforms" />
 
       {/* ---------- AI solutions ---------- */}
       <section className="lf-section" id="ai-solutions" aria-labelledby="ai-solutions-title">

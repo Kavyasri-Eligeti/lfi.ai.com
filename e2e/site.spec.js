@@ -2,14 +2,17 @@
 // mobile sizes. Full-page screenshots are written to e2e/screenshots/.
 const { test, expect } = require('@playwright/test');
 
+// [route, page heading, a heading that must be visible first (when the h1 is
+// for screen readers only)]
 const ROUTES = [
   ['/', /intelligence that moves business forward/i],
-  ['/solutions', /enterprise solutions and ai products/i],
-  ['/services', /seven practices/i],
+  ['/solutions', /ai solutions for the modern enterprise/i],
+  ['/services', /seven proven practices/i],
   ['/industries', /eight industries/i],
   ['/company', /driving innovation and transformation/i],
   ['/careers', /world-leading innovative team/i],
-  ['/contact', /what you want to build/i],
+  // Contact opens straight on the contact details; its h1 is visually hidden.
+  ['/contact', /contact linkfields/i, /send an enquiry/i],
 ];
 
 const watchConsole = (page) => {
@@ -19,11 +22,17 @@ const watchConsole = (page) => {
   return errors;
 };
 
-for (const [route, title] of ROUTES) {
+for (const [route, title, visibleFirst] of ROUTES) {
   test(`${route} renders cleanly`, async ({ page }, info) => {
     const errors = watchConsole(page);
     await page.goto(route, { waitUntil: 'networkidle' });
-    await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
+    const h1 = page.getByRole('heading', { level: 1, name: title });
+    if (visibleFirst) {
+      await expect(h1).toBeAttached();
+      await expect(page.getByRole('heading', { name: visibleFirst })).toBeInViewport();
+    } else {
+      await expect(h1).toBeVisible();
+    }
     // No horizontal page scroll at this viewport.
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(0);
@@ -85,23 +94,45 @@ test('mobile menu opens, traps the page behind and closes with Escape', async ({
   await expect(button).toBeFocused();
 });
 
-test('desktop hero upgrades to the WebGL field', async ({ page }, info) => {
+test('desktop home upgrades to the 3D AI ring', async ({ page }, info) => {
   test.skip(info.project.name !== 'desktop', 'desktop only');
   const errors = watchConsole(page);
   await page.goto('/');
-  await expect(page.locator('.lf-field-stage.is-webgl canvas')).toBeVisible({ timeout: 15000 });
+  // The DOM logo shows at once; the 3D ring takes over when it draws.
+  await expect(page.locator('.th-intro__fallback')).toBeVisible();
+  await expect(page.locator('.th-stage.is-ready canvas')).toBeVisible({ timeout: 15000 });
   await page.mouse.move(1100, 400);
   await page.waitForTimeout(1500);
-  await page.screenshot({ path: 'e2e/screenshots/desktop-hero-webgl.png' });
+  await page.screenshot({ path: 'e2e/screenshots/desktop-home-ring.png' });
   expect(errors).toEqual([]);
 });
 
-test('reduced motion keeps the static CSS field', async ({ browser }, info) => {
+test('going back to home from another page shows the ring in place, without a refresh', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', 'desktop only');
+  await page.goto('/services');
+  await page.waitForTimeout(1500);
+  await page.locator('header a[href="/"]').first().click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('.th-stage.is-ready canvas')).toBeVisible({ timeout: 15000 });
+  await page.waitForTimeout(1500);
+  // While the page change animates, the fixed stage once measured the whole
+  // page as its height: the ring drew faint and thousands of pixels off screen.
+  const canvas = await page.evaluate(() => {
+    const c = document.querySelector('.th-canvas');
+    return { opacity: c.style.opacity, transform: c.style.transform, height: c.height / (window.devicePixelRatio || 1) };
+  });
+  expect(canvas.opacity).toBe('1');
+  expect(canvas.transform).toBe('');
+  expect(canvas.height).toBeLessThanOrEqual(page.viewportSize().height + 1);
+});
+
+test('reduced motion keeps the static DOM logo', async ({ browser }, info) => {
   test.skip(info.project.name !== 'desktop', 'desktop only');
   const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.goto('/');
   await page.waitForTimeout(3500);
-  await expect(page.locator('.lf-field-stage canvas')).toHaveCount(0);
+  await expect(page.locator('.th-stage')).toHaveCount(0);
+  await expect(page.locator('.th-intro__fallback')).toBeVisible();
   await context.close();
 });

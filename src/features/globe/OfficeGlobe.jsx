@@ -33,11 +33,27 @@ export default function OfficeGlobe({ offices, active, onSelect, onFail }) {
   const handlers = useRef({ onFail });
   handlers.current = { onFail };
 
+  // The globe sits low on its pages, so it is built only when it comes within
+  // about a screen of view: the page above it loads and scrolls without the
+  // cost of the 3D engine, its textures and shader compilation.
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    if (near || !host.current) return undefined;
+    if (typeof IntersectionObserver === 'undefined') {
+      setNear(true);
+      return undefined;
+    }
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: '100% 0px' });
+    io.observe(host.current);
+    return () => io.disconnect();
+  }, [near]);
+
   useEffect(() => {
     if (reduced || !canUseGlobe()) {
       handlers.current.onFail?.();
       return undefined;
     }
+    if (!near) return undefined;
     let cancelled = false;
     import(/* webpackChunkName: "globe" */ './globeEngine')
       .then(({ createGlobe }) => {
@@ -51,7 +67,7 @@ export default function OfficeGlobe({ offices, active, onSelect, onFail }) {
       engine.current?.dispose();
       engine.current = null;
     };
-  }, [reduced, offices]);
+  }, [reduced, offices, near]);
 
   // Fly to an office only when one is chosen; the list's initial selection
   // leaves the opening view (which shows the northern offices) alone.

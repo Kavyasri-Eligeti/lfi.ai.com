@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { m } from 'framer-motion';
 import PageHero from '../../components/ui/PageHero';
-import CardTheatre from '../../features/theatre/CardTheatre';
-import { PAGE_THEATRES } from '../../content/theatreCards';
 import SmartLink from '../../components/ui/SmartLink';
 import Icon, { Arrow } from '../../components/ui/Icon';
 import { industries } from '../../content/industries';
@@ -95,8 +93,6 @@ export default function IndustriesPage() {
         </p>
       </PageHero>
 
-      {/* The same card theatre as the homepage: this page's cards spiral around the data spine. */}
-      <CardTheatre id="explore" cards={PAGE_THEATRES.industries.cards} filters={PAGE_THEATRES.industries.filters} label="Industries Linkfields serves" />
       <section className="lf-section" aria-label="Industries">
         <div className="lf-container lf-industries">
           {industries.map((ind, i) => <IndustryPanel key={ind.id} industry={ind} index={i} />)}

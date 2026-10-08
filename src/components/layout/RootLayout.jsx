@@ -10,6 +10,7 @@ import { CHAPTER_SEQUENCE, nextChapterFor } from '../../app/navigation';
 import { EASE } from '../../features/motion/tokens';
 import { useMotion } from '../../features/motion/MotionProvider';
 import { getLenis, jumpTo } from '../../features/motion/SmoothScroll';
+import { warmTheatre } from '../../features/theatre/TheatreStage';
 
 // Scrolls to #hash targets after navigation (e.g. /solutions#sap), gliding
 // with the smooth scroller when it is running.
@@ -60,15 +61,15 @@ function FrozenOutlet() {
 
 // The page change runs on events, not a fixed clock, so a slow page never
 // shows through:
-//  1. the curtain sweeps up and covers the screen (0.5 s) while the old page
+//  1. the curtain sweeps up and covers the screen (0.4 s) while the old page
 //     eases back and dims behind it
 //  2. once the old page has gone and the new one has been built, the
 //     curtain holds a beat on the destination's name
 //  3. the curtain lifts away upwards and the new page rises into place
 const page = {
   initial: { opacity: 0, y: 90, scale: 1.02 },
-  enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 1.1, delay: 0.1, ease: EASE.cinematic } },
-  exit: { opacity: 0, y: -50, scale: 0.955, transition: { duration: 0.5, ease: EASE.inOut } },
+  enter: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, delay: 0.05, ease: EASE.cinematic } },
+  exit: { opacity: 0, y: -50, scale: 0.955, transition: { duration: 0.35, ease: EASE.inOut } },
 };
 const pageReduced = {
   initial: { opacity: 0 },
@@ -89,14 +90,14 @@ function Curtain({ pathname, phase, onGone }) {
       aria-hidden="true"
       initial={{ y: '100%' }}
       animate={{ y: covering ? '0%' : '-100%' }}
-      transition={{ duration: covering ? 0.55 : 0.85, ease: CURTAIN_EASE }}
+      transition={{ duration: covering ? 0.4 : 0.6, ease: CURTAIN_EASE }}
       onAnimationComplete={() => { if (!covering) onGone(); }}
     >
       <m.div
         className="lf-curtain__inner"
         initial={{ opacity: 0, y: 40 }}
         animate={covering ? { opacity: 1, y: 0 } : { opacity: 0, y: -70 }}
-        transition={{ duration: covering ? 0.6 : 0.55, delay: covering ? 0.15 : 0, ease: 'easeOut' }}
+        transition={{ duration: covering ? 0.4 : 0.35, delay: covering ? 0.08 : 0, ease: 'easeOut' }}
       >
         <AILogo size={84} />
         <p className="lf-curtain__label"><GlitchText text={label} trigger="mount" duration={600} /></p>
@@ -104,7 +105,7 @@ function Curtain({ pathname, phase, onGone }) {
           className="lf-curtain__line"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: 'easeInOut' }}
+          transition={{ duration: 0.5, delay: 0.1, ease: 'easeInOut' }}
         />
       </m.div>
     </m.div>
@@ -117,6 +118,9 @@ export default function RootLayout() {
   const firstRender = useRef(true);
   useEffect(() => {
     firstRender.current = false;
+    // Fetch the homepage's 3D ring in the background, whatever page the visit
+    // starts on, so going home later shows it without a wait.
+    warmTheatre();
   }, []);
   useRouteFocus(pathname, hash);
 
@@ -140,7 +144,7 @@ export default function RootLayout() {
     if (curtainPath.current === pathname) return;
     curtainPath.current = pathname;
     if (reduced) return;
-    coveredAt.current = performance.now() + 500;
+    coveredAt.current = performance.now() + 400;
     setCurtain({ path: pathname, phase: 'in' });
   }, [pathname, reduced]);
 
@@ -151,13 +155,13 @@ export default function RootLayout() {
     // for the curtain to have fully covered, plus a short beat on the name.
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        const wait = Math.max(0, coveredAt.current - performance.now()) + 160;
+        const wait = Math.max(0, coveredAt.current - performance.now()) + 60;
         window.setTimeout(() => setCurtain((c) => (c ? { ...c, phase: 'out' } : c)), wait);
-        resumeTimer.current = window.setTimeout(() => getLenis()?.start(), wait + 500);
+        resumeTimer.current = window.setTimeout(() => getLenis()?.start(), wait + 300);
       })
     );
     // Safety net: never leave the curtain up.
-    window.setTimeout(() => setCurtain((c) => (c && c.phase === 'in' ? { ...c, phase: 'out' } : c)), 2500);
+    window.setTimeout(() => setCurtain((c) => (c && c.phase === 'in' ? { ...c, phase: 'out' } : c)), 1800);
   };
 
   return (

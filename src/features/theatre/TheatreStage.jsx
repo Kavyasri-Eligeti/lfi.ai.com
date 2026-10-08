@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useMotion } from '../motion/MotionProvider';
 
 // The WebGL theatre runs from tablet width up, unless data saving is on.
-// Phones, reduced motion and browsers without WebGL get the DOM deck.
+// Phones, reduced motion and browsers without WebGL get the DOM logo.
 export function canUseTheatre() {
   if (typeof window === 'undefined' || !window.matchMedia) return false;
   if (!window.matchMedia('(min-width: 768px)').matches) return false;
@@ -15,16 +15,34 @@ export function canUseTheatre() {
   }
 }
 
+const loadEngine = () => import(/* webpackChunkName: "theatre" */ './theatreEngine');
+
 /**
- * The fixed, full-screen canvas behind the homepage. Loads the theatre
- * engine when the browser is idle and reports it through `onEngine`.
+ * Downloads the theatre engine in the background, once the current page is
+ * idle, so a later visit to the homepage draws the 3D ring at once. Only on
+ * devices that will run it: phones, reduced motion and data saving skip it.
  */
-export default function TheatreStage({ sections, withMark = true, onEngine, onActive, onSelect, onFail }) {
+export function warmTheatre() {
+  if (!canUseTheatre()) return;
+  if (document.documentElement.dataset.motion === 'reduced') return;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  const go = () => loadEngine().catch(() => {});
+  if ('requestIdleCallback' in window) window.requestIdleCallback(go, { timeout: 4000 });
+  else window.setTimeout(go, 2500);
+}
+
+/**
+ * The fixed, full-screen canvas behind the homepage intro and statement.
+ * Loads the theatre engine straight away (warmTheatre has usually fetched it
+ * while the visitor was on other pages); calls `onReady` once the first frame
+ * is on screen, or `onFail` where it cannot run.
+ */
+export default function TheatreStage({ sections, onReady, onFail }) {
   const { reduced } = useMotion();
   const host = useRef(null);
   const [ready, setReady] = useState(false);
-  const handlers = useRef({ onActive, onSelect, onEngine, onFail });
-  handlers.current = { onActive, onSelect, onEngine, onFail };
+  const handlers = useRef({ onReady, onFail });
+  handlers.current = { onReady, onFail };
 
   useEffect(() => {
     if (reduced || !canUseTheatre()) {
@@ -34,13 +52,15 @@ export default function TheatreStage({ sections, withMark = true, onEngine, onAc
     let engine = null;
     let cancelled = false;
     const load = () =>
-      import(/* webpackChunkName: "theatre" */ './theatreEngine')
+      loadEngine()
         .then(({ createTheatre }) =>
           createTheatre(host.current, {
             sections: sections.current,
-            withMark,
-            onActive: (i) => handlers.current.onActive?.(i),
-            onSelect: (card) => handlers.current.onSelect?.(card),
+            onFirstFrame: () => {
+              if (cancelled) return;
+              setReady(true);
+              handlers.current.onReady?.();
+            },
           })
         )
         .then((e) => {
@@ -49,24 +69,23 @@ export default function TheatreStage({ sections, withMark = true, onEngine, onAc
             return;
           }
           engine = e;
-          handlers.current.onEngine?.(e);
-          setReady(true);
         })
         .catch((err) => {
           if (process.env.NODE_ENV === 'development') console.warn('Theatre unavailable:', err);
           handlers.current.onFail?.();
         });
+    // A short idle wait keeps the first paint of the page smooth; the DOM logo
+    // covers the intro meanwhile.
     const idle = 'requestIdleCallback' in window;
-    const handle = idle ? window.requestIdleCallback(load, { timeout: 400 }) : window.setTimeout(load, 50);
+    const handle = idle ? window.requestIdleCallback(load, { timeout: 120 }) : window.setTimeout(load, 16);
     return () => {
       cancelled = true;
       if (idle) window.cancelIdleCallback(handle);
       else window.clearTimeout(handle);
       engine?.dispose();
-      handlers.current.onEngine?.(null);
       setReady(false);
     };
-  }, [reduced, sections, withMark]);
+  }, [reduced, sections]);
 
   return <div ref={host} className={`th-stage${ready ? ' is-ready' : ''}`} aria-hidden="true" />;
 }

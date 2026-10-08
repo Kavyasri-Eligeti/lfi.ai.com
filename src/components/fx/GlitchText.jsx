@@ -73,10 +73,15 @@ export default function GlitchText({ text, trigger = 'view', delay = 0, duration
     };
   }, [text, trigger, delay, duration, reduced]);
 
+  // An invisible copy of the final text holds the layout, and the decoding
+  // text is drawn over it. Scrambled glyphs can wrap differently, and the text
+  // starts empty, so drawing it in the flow made headings change height (and
+  // the page below them jump) while they decoded.
   return (
-    <span ref={ref} className={`lf-glitch${active ? ' is-active' : ''} ${className}`} data-text={shown || ' '}>
+    <span ref={ref} className={`lf-glitch${active ? ' is-active' : ''} ${className}`}>
       <span className="lf-visually-hidden">{text}</span>
-      <span aria-hidden="true">{shown || ' '}</span>
+      <span className="lf-glitch__ghost" aria-hidden="true">{text}</span>
+      <span className="lf-glitch__live" aria-hidden="true">{shown}</span>
     </span>
   );
 }

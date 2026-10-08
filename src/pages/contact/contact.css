@@ -1,4 +1,5 @@
-.lf-contact { padding-top: clamp(1rem, 0.5rem + 2vw, 2.5rem); }
+/* First on the page: clear the fixed header. */
+.lf-contact { padding-top: calc(var(--header-h) + clamp(1.5rem, 1rem + 2vw, 3rem)); }
 .lf-contact__inner { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(1.5rem, 1rem + 3vw, 4rem); align-items: start; }
 @media (max-width: 900px) { .lf-contact__inner { grid-template-columns: 1fr; } }
 

@@ -17,7 +17,9 @@
 .lf-globe__canvas { display: block; width: 100% !important; height: 100% !important; cursor: grab; touch-action: pan-y; }
 
 /* Linkfields marks on the branches */
-.lf-globe__markers { position: absolute; inset: 0; pointer-events: none; }
+/* Marks on the far side of the globe are placed outside the stage; clip them
+   so they never widen the page (on phones they pushed it ~2000px wide). */
+.lf-globe__markers { position: absolute; inset: 0; pointer-events: none; overflow: hidden; overflow: clip; }
 .lf-globe__markers li { position: absolute; left: 0; top: 0; }
 .lf-globe__marker {
   position: absolute;

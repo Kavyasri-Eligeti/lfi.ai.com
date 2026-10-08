@@ -13,8 +13,7 @@ html :is(
   .lf-insight,
   .lf-channel,
   .lf-contact__social-link,
-  .lf-partner,
-  .th-card
+  .lf-partner
 ) {
   transition:
     box-shadow 0.45s var(--ease-out),
@@ -31,8 +30,7 @@ html :is(
   .lf-insight,
   .lf-channel,
   .lf-contact__social-link,
-  .lf-partner,
-  .th-card
+  .lf-partner
 ):is(:hover, :focus-within) {
   transform: translateY(-4px);
   box-shadow:
@@ -57,6 +55,6 @@ html .lf-partner:is(:hover, :focus-within) {
     0 0 30px 4px rgba(45, 88, 192, 0.2);
 }
 
-[data-motion='reduced'] :is(.lf-card--interactive, .lf-demo-card, .lf-aisol, .lf-solution, .lf-capindex__card, .lf-insight, .lf-channel, .lf-contact__social-link, .lf-partner, .th-card):is(:hover, :focus-within) {
+[data-motion='reduced'] :is(.lf-card--interactive, .lf-demo-card, .lf-aisol, .lf-solution, .lf-capindex__card, .lf-insight, .lf-channel, .lf-contact__social-link, .lf-partner):is(:hover, :focus-within) {
   transform: none;
 }
