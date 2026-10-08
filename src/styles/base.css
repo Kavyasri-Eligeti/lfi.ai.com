@@ -56,18 +56,6 @@ body::after {
 }
 [data-motion='reduced'] body::after { animation: none; }
 
-/* The Linkfields mark, translucent, behind every page. Fixed to the window and
-   sized so the whole mark always fits inside it. The app sits above it. */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 9vh 6vw;
-  z-index: 0;
-  pointer-events: none;
-  background: var(--lf-mark) center / contain no-repeat; /* set in index.js */
-  opacity: 0.055;
-  filter: saturate(0.85);
-}
 #root { position: relative; z-index: 1; }
 
 #main { position: relative; display: block; }
