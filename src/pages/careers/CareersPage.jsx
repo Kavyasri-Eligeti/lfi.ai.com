@@ -7,6 +7,7 @@ import { company, emails } from '../../content/company';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './careers.css';
 import Reveal from '../../features/motion/Reveal';
+import CareersGallery from './CareersGallery';
 
 const imgClip = {
   initial: { clipPath: 'inset(6% 6% 6% 6% round 6px 6px 48px 6px)' },
@@ -20,7 +21,7 @@ function Photo({ image, sizes, eager = false, className = '' }) {
     <m.figure className={`lf-careers-photo ${className}`} {...imgClip}>
       <img
         src={image.src}
-        srcSet={`${image.srcSm} ${Math.round(image.width / 2)}w, ${image.src} ${image.width}w`}
+        srcSet={image.srcSet}
         sizes={sizes}
         width={image.width}
         height={image.height}
@@ -68,6 +69,19 @@ export default function CareersPage() {
             <Photo image={careers.images.team} sizes="(max-width: 860px) 100vw, 45vw" />
             <Photo image={careers.images.meeting} sizes="(max-width: 860px) 100vw, 35vw" className="lf-careers-photo--offset" />
           </div>
+        </div>
+      </section>
+
+      <section className="lf-section" id="gallery" aria-labelledby="gallery-title">
+        <div className="lf-container">
+          <Reveal as="div" className="lf-gal-head">
+            <div>
+              <p className="lf-eyebrow">Gallery</p>
+              <h2 id="gallery-title">Life at Linkfields</h2>
+            </div>
+            <p>Our offices and our people. Select a photo to see it full screen in HD.</p>
+          </Reveal>
+          <CareersGallery photos={careers.gallery} titleId="gallery-title" />
         </div>
       </section>
 

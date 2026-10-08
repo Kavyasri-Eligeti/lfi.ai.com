@@ -31,7 +31,7 @@ export default function CareersBand({ headingLevel = 2, id }) {
       >
         <img
           src={img.src}
-          srcSet={`${img.srcSm} 800w, ${img.src} 1600w`}
+          srcSet={img.srcSet}
           sizes="(max-width: 860px) 100vw, 50vw"
           width={img.width}
           height={img.height}

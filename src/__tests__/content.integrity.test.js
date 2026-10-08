@@ -115,10 +115,13 @@ describe('every browsable item leads somewhere real', () => {
     partners.forEach((p) => expect(publicFile(p.logo)).toBe(true));
     industries.filter((i) => i.image).forEach((i) => expect(publicFile(i.image)).toBe(true));
     company.recognition.filter((r) => r.image).forEach((r) => expect(publicFile(r.image)).toBe(true));
-    Object.values(careers.images).forEach((img) => {
-      expect(publicFile(img.src)).toBe(true);
-      expect(publicFile(img.srcSm)).toBe(true);
+    // Every careers photo, in all three widths (640, 1280 and HD).
+    [...Object.values(careers.images), ...careers.gallery].forEach((img) => {
+      img.srcSet.split(', ').forEach((entry) => expect(publicFile(entry.split(' ')[0])).toBe(true));
+      expect(publicFile(img.hd)).toBe(true);
+      expect(img.alt).toBeTruthy();
     });
+    expect(careers.gallery).toHaveLength(9);
     demos.filter((d) => d.image).forEach((d) => expect(publicFile(d.image)).toBe(true));
   });
 

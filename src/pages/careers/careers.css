@@ -34,3 +34,160 @@
 .lf-careers-cta__inner { display: grid; gap: var(--sp-6); }
 .lf-careers-cta h2 { color: #fff; font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); max-width: 20ch; }
 .lf-careers-cta__note { margin: 0; color: var(--text-on-ink-2); }
+
+/* ---------- Gallery: every careers photo, animated, viewable in HD ---------- */
+.lf-gal-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--sp-4); margin-bottom: var(--sp-7); }
+.lf-gal-head h2 { margin: 0; font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); }
+.lf-gal-head p { margin: 0; max-width: 40ch; color: var(--text-2); }
+
+/* A 12-column mosaic: wide and narrow photos alternate row by row. */
+.lf-gal {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: clamp(200px, 19vw, 330px);
+  gap: clamp(0.75rem, 0.5rem + 0.8vw, 1.25rem);
+  margin: 0;
+}
+.lf-gal__tile { position: relative; grid-column: span 4; min-width: 0; border-radius: 22px; }
+/* Rows 1-2: a large photo beside two. Row 3: three equal. Rows 4-5: two
+   wide photos beside a tall one. Every row fills the 12 columns. */
+.lf-gal__tile--1 { grid-column: span 7; grid-row: span 2; }
+.lf-gal__tile--2, .lf-gal__tile--3 { grid-column: span 5; }
+.lf-gal__tile--7, .lf-gal__tile--9 { grid-column: span 7; }
+.lf-gal__tile--8 { grid-column: span 5; grid-row: span 2; }
+
+.lf-gal__open {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background: var(--surface-3);
+  cursor: zoom-in;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 1px var(--border);
+  transition: box-shadow 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+/* The image is taller than its tile, so the parallax never shows an edge. */
+.lf-gal__para { position: absolute; inset: -9% 0; display: block; }
+.lf-gal__zoom { display: block; width: 100%; height: 100%; }
+.lf-gal__zoom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.001);
+  transition: transform 1.4s var(--ease-out), filter 0.8s var(--ease-out);
+  filter: saturate(0.92) brightness(0.92);
+}
+/* The caption rises over a soft shade at the foot of the photo. */
+.lf-gal__open::after {
+  content: '';
+  position: absolute;
+  inset: 45% 0 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent, rgba(4, 7, 11, 0.85));
+  opacity: 0.55;
+  transition: opacity 0.6s var(--ease-out);
+}
+.lf-gal__caption {
+  position: absolute;
+  left: clamp(14px, 1.5vw, 24px);
+  right: clamp(14px, 1.5vw, 24px);
+  bottom: clamp(12px, 1.4vw, 22px);
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  text-align: left;
+  font: 400 clamp(0.875rem, 0.8rem + 0.3vw, 1.0625rem)/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.lf-gal__num { font: 400 0.75rem/1 var(--font-mono); letter-spacing: 0.14em; color: var(--th-teal); }
+
+.lf-gal__open:hover, .lf-gal__open:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(180, 162, 255, 0.55), 0 24px 60px -24px rgba(180, 162, 255, 0.55), 0 0 0 1px rgba(111, 227, 211, 0.18);
+}
+.lf-gal__open:hover img, .lf-gal__open:focus-visible img { transform: scale(1.07); filter: saturate(1.05) brightness(1); }
+.lf-gal__open:hover::after, .lf-gal__open:focus-visible::after { opacity: 1; }
+.lf-gal__open:hover .lf-gal__caption, .lf-gal__open:focus-visible .lf-gal__caption { opacity: 1; transform: none; }
+.lf-gal__open:focus-visible { outline: 2px solid var(--th-teal); outline-offset: 3px; }
+/* Touch screens have no hover: captions always show. */
+@media (hover: none) {
+  .lf-gal__caption { opacity: 1; transform: none; }
+  .lf-gal__open::after { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .lf-gal { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: clamp(170px, 34vw, 280px); }
+  .lf-gal__tile, .lf-gal__tile[class*='--'] { grid-column: span 1; grid-row: span 1; }
+  .lf-gal__tile--1, .lf-gal__tile--8, .lf-gal__tile--9 { grid-column: span 2; }
+}
+@media (max-width: 520px) {
+  .lf-gal { grid-template-columns: 1fr; grid-auto-rows: 62vw; }
+  .lf-gal__tile[class*='--'] { grid-column: span 1; }
+}
+
+/* ---------- Full-screen HD viewer ---------- */
+.lf-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(8px, 2vw, 28px);
+  padding: clamp(12px, 3vw, 48px);
+  background: rgba(3, 5, 9, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.lf-lightbox__figure { grid-column: 2; margin: 0; display: grid; gap: var(--sp-4); justify-items: center; min-height: 0; }
+.lf-lightbox__figure img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  max-height: calc(100svh - 160px);
+  border-radius: 18px;
+  box-shadow: 0 40px 120px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.lf-lightbox__figure figcaption { display: flex; gap: 14px; align-items: baseline; font: 400 0.9375rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: #fff; }
+.lf-lightbox__btn {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font: 300 1.75rem/1 var(--font-sans);
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s var(--ease-out);
+}
+.lf-lightbox__btn:hover, .lf-lightbox__btn:focus-visible { background: rgba(180, 162, 255, 0.2); border-color: rgba(180, 162, 255, 0.6); }
+.lf-lightbox__prev { grid-column: 1; grid-row: 1; }
+.lf-lightbox__prev:hover { transform: translateX(-3px); }
+.lf-lightbox__next { grid-column: 3; grid-row: 1; }
+.lf-lightbox__next:hover { transform: translateX(3px); }
+.lf-lightbox__close { position: absolute; top: clamp(12px, 2vw, 28px); right: clamp(12px, 2vw, 28px); }
+@media (max-width: 640px) {
+  .lf-lightbox { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; }
+  .lf-lightbox__figure { grid-column: 1 / -1; grid-row: 1; }
+  .lf-lightbox__prev { grid-column: 1; grid-row: 2; justify-self: end; }
+  .lf-lightbox__next { grid-column: 2; grid-row: 2; justify-self: start; }
+}
+
+[data-motion='reduced'] .lf-gal__zoom img,
+[data-motion='reduced'] .lf-gal__open,
+[data-motion='reduced'] .lf-gal__caption { transition: none; }
+[data-motion='reduced'] .lf-gal__open:hover img { transform: none; }
