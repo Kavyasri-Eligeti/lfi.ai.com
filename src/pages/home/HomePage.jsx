@@ -14,6 +14,7 @@ import { demos } from '../../content/demos';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './home.css';
 import './theatre.css';
+import HeroFill from './HeroFill';
 
 export default function HomePage() {
   usePageMeta(
@@ -33,6 +34,7 @@ export default function HomePage() {
 
   return (
     <div className={`th${theatre ? ' is-theatre' : ''}${ringReady ? ' is-ring-ready' : ''}`}>
+      <HeroFill />
       {theatre && <TheatreStage sections={sections} onReady={() => setRingReady(true)} onFail={() => setTheatre(false)} />}
 
       {/* ---------- 1. Intro ---------- */}

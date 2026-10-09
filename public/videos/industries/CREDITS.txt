@@ -1,0 +1,12 @@
+Industry video clips from Mixkit (https://mixkit.co), used under the Mixkit Stock Video Free
+License (https://mixkit.co/license/#videoFree). Trimmed to 12 seconds, cropped to 4:5, audio
+removed and re-encoded (H.264); the .webp files are poster frames from the same clips.
+
+manufacturing.mp4  https://mixkit.co/free-stock-video/robot-working-in-a-production-line-47257/
+telecom.mp4  https://mixkit.co/free-stock-video/telecommunications-antenna-1650/
+banking.mp4  https://mixkit.co/free-stock-video/corporate-and-business-buildings-in-the-city-4170/
+insurance.mp4  https://mixkit.co/free-stock-video/flying-over-suburban-houses-with-quiet-streets-48394/
+fintech.mp4  https://mixkit.co/free-stock-video/using-a-bank-terminal-during-a-card-payment-6367/
+fmcg.mp4  https://mixkit.co/free-stock-video/browsing-items-in-a-supermarket-25438/
+mining.mp4  https://mixkit.co/free-stock-video/opencast-mining-quarry-with-lots-of-machinery-at-work-48993/
+oil-gas.mp4  https://mixkit.co/free-stock-video/old-fossil-fuel-energy-pumping-unit-48353/

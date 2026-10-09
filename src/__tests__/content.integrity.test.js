@@ -114,6 +114,7 @@ describe('every browsable item leads somewhere real', () => {
   test('bundled images exist in public/', () => {
     partners.forEach((p) => expect(publicFile(p.logo)).toBe(true));
     industries.filter((i) => i.image).forEach((i) => expect(publicFile(i.image)).toBe(true));
+    industries.forEach((i) => [i.video, i.poster].forEach((f) => expect(publicFile(f)).toBe(true)));
     company.recognition.filter((r) => r.image).forEach((r) => expect(publicFile(r.image)).toBe(true));
     // Every careers photo, in all three widths (640, 1280 and HD).
     [...Object.values(careers.images), ...careers.gallery].forEach((img) => {

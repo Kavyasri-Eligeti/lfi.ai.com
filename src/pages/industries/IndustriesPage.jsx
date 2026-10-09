@@ -10,9 +10,9 @@ import './industries.css';
 import Reveal from '../../features/motion/Reveal';
 import IndustryScene, { hasScene } from '../../components/sections/IndustryScene';
 
-// Each industry has an animated scene; the published photo is the fallback.
+// Each industry shows real footage; the published photo is the fallback.
 function IndustryArt({ industry }) {
-  if (hasScene(industry.id)) return <IndustryScene id={industry.id} />;
+  if (hasScene(industry)) return <IndustryScene industry={industry} />;
   if (industry.image) {
     return <img src={industry.image} alt="" width="480" height="800" loading="lazy" decoding="async" />;
   }

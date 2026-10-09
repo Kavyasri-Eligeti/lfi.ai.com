@@ -10,6 +10,8 @@ import { company, offices } from '../../content/company';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './company.css';
 import Reveal from '../../features/motion/Reveal';
+import VisionMission from './VisionMission';
+import ValueMark from './ValueMark';
 
 // Only dated facts published by Linkfields.
 const milestones = [
@@ -63,18 +65,7 @@ export default function CompanyPage() {
       </section>
 
       {/* ---------- Vision and mission ---------- */}
-      <section className="lf-section lf-section--tint" aria-label="Vision and mission">
-        <div className="lf-container lf-vm">
-          <Reveal as="article" className="lf-vm__card lf-vm__card--vision" index={0}>
-            <p className="lf-eyebrow">Our vision</p>
-            <p className="lf-vm__text">{company.vision}</p>
-          </Reveal>
-          <Reveal as="article" className="lf-vm__card lf-vm__card--mission lf-ink" index={1}>
-            <p className="lf-eyebrow">Our mission</p>
-            <p className="lf-vm__text">{company.mission}</p>
-          </Reveal>
-        </div>
-      </section>
+      <VisionMission vision={company.vision} mission={company.mission} />
 
       {/* ---------- Values ---------- */}
       <section className="lf-section" id="values" aria-labelledby="values-title">
@@ -84,8 +75,11 @@ export default function CompanyPage() {
           </SectionHeader>
           <ul className="lf-list-plain lf-values">
             {company.values.map((v, i) => (
-              <Reveal as="li" key={v.name} className="lf-value" index={i} step={0.05}>
-                <span className="lf-value__module" aria-hidden="true" />
+              <Reveal as="li" key={v.name} className={`lf-value lf-value--${v.name.toLowerCase()}`} index={i} step={0.06}>
+                <div className="lf-value__top">
+                  <ValueMark name={v.name} />
+                  <span className="lf-value__num lf-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                </div>
                 <h3>{v.name}</h3>
                 <p>{v.text}</p>
               </Reveal>

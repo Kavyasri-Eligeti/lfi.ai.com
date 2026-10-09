@@ -1,6 +1,8 @@
 // Industries. Source: linkfields.com home page cards and /industries/* pages (verbatim).
 // Retrieved 2026-10-01. Photos: professional photography from Unsplash
 // (Unsplash License; see public/images/industries/photo/CREDITS.txt).
+// Videos: real footage from Mixkit (Mixkit Free License; see
+// public/videos/industries/CREDITS.txt), with a poster frame for each.
 // relatedDemos only maps an industry to demos that the original LFI AI
 // catalogue itself filed under that industry. No new industry expertise is implied.
 import { STATUS } from './status';
@@ -98,5 +100,7 @@ export const industries = [
 ].map((industry) => ({
   ...industry,
   status: STATUS.CORPORATE,
+  video: `/videos/industries/${industry.id}.mp4`,
+  poster: `/videos/industries/${industry.id}.webp`,
   href: `${CORPORATE_SITE}/industries/${industry.id}`,
 }));

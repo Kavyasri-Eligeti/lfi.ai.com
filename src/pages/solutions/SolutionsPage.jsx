@@ -53,11 +53,11 @@ function AiSolutionCard({ solution, index }) {
   return (
     <Reveal as="article" id={solution.id} className="lf-aisol" index={index} step={0.04} style={{ '--a': solution.mark.accent }}>
       <div className="lf-aisol__head">
-        <ElementMark code={solution.mark.code} index={index + 1} accent={solution.mark.accent} size={60} className="lf-aisol__mark" />
+        <ElementMark code={solution.mark.code} index={index + 1} accent={solution.mark.accent} size={38} className="lf-aisol__mark" />
       </div>
       <h3 className="lf-aisol__name">{solution.name}</h3>
       <p className="lf-aisol__tagline">{solution.tagline}</p>
-      <p className="lf-aisol__summary">{solution.summary}</p>
+      <p className="lf-aisol__summary" title={solution.summary}>{solution.summary}</p>
       <h4 className="lf-aisol__label">Use cases</h4>
       <ul className="lf-aisol__uses">
         {solution.useCases.map((u) => <li key={u}>{u}</li>)}
