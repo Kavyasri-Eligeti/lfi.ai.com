@@ -1,0 +1,170 @@
+/*
+ * Graphite cards on the white page.
+ *
+ * Every card is a deep graphite panel (a near-black slate with a faint violet
+ * cast). Inside a card the colour tokens are re-mapped to their light-on-dark
+ * values, so headings, copy, badges, tags, links and inputs follow without
+ * per-component overrides. The coloured backlight (glow.css, card-light.css)
+ * blooms far more vividly around graphite than around a pale card.
+ *
+ * Specificity: the list carries `.lf-card:not(.lf-card--dashed)` (0,2,0), so
+ * every entry here outranks the light card rules loaded before this file.
+ */
+:root {
+  --graphite: linear-gradient(160deg, #262a3a 0%, #191c27 48%, #12141c 100%);
+  --graphite-solid: #171a24;
+}
+
+html :is(
+  .lf-card:not(.lf-card--dashed),
+  .lf-capindex__card,
+  .lf-insight,
+  .lf-solution,
+  .lf-aisol,
+  .lf-vm__card,
+  .lf-value,
+  .lf-recog__card,
+  .lf-enquiry,
+  .lf-service__group,
+  .lf-nurture li,
+  .lf-principles li,
+  .mh-final__card,
+  .lf-globe__card
+) {
+  /* Light-on-dark tokens, scoped to the card */
+  --text: #eceef5;
+  --text-strong: #ffffff;
+  --text-2: #b8bfcd;
+  --text-3: #8f98a9;
+  --text-on-ink: #ffffff;
+  --text-on-ink-2: #b8bfcd;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-3: rgba(255, 255, 255, 0.1);
+  --link: #b4a9ff;
+  --link-hover: #d6d0ff;
+  --th-lavender: #a99cff;
+  --th-teal: #5eead4;
+  --th-amber: #fbbf24;
+  --lf-blue: #8b7cff;
+  --m-text: #ffffff;
+  --m-text-2: #b8bfcd;
+  --m-text-3: #8f98a9;
+  --tone-blue-bg: rgba(139, 124, 255, 0.18);   --tone-blue-fg: #cdc6ff;
+  --tone-green-bg: rgba(94, 234, 212, 0.14);   --tone-green-fg: #8af0df;
+  --tone-orange-bg: rgba(251, 191, 36, 0.14);  --tone-orange-fg: #fcd581;
+  --tone-violet-bg: rgba(139, 124, 255, 0.18); --tone-violet-fg: #cdc6ff;
+  --tone-neutral-bg: rgba(255, 255, 255, 0.08); --tone-neutral-fg: #d3d8e2;
+
+  color: var(--text);
+  background: var(--graphite);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 2px 4px rgba(15, 23, 42, 0.08),
+    0 20px 44px -24px rgba(15, 23, 42, 0.55);
+}
+
+/* Cards that carry an accent keep it as a glow in the graphite */
+html .lf-value.lf-value {
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--va) 26%, transparent), transparent 62%),
+    var(--graphite);
+}
+html .lf-demo-card--feature.lf-demo-card--feature {
+  background:
+    radial-gradient(90% 70% at 0% 0%, rgba(var(--glow-violet), 0.3), transparent 60%),
+    radial-gradient(80% 70% at 100% 100%, rgba(var(--glow-teal), 0.22), transparent 60%),
+    linear-gradient(160deg, #22263a, #12141c);
+}
+html .lf-solution:first-child.lf-solution {
+  background:
+    radial-gradient(80% 80% at 100% 0%, rgba(var(--glow-violet), 0.24), transparent 60%),
+    var(--graphite);
+}
+html .lf-vm__card--mission.lf-vm__card {
+  background:
+    radial-gradient(90% 80% at 100% 0%, rgba(var(--glow-teal), 0.2), transparent 60%),
+    var(--graphite);
+}
+
+/* The homepage capability tiles: the coloured orb glows in graphite */
+html .mh-cap .mh-cap__media { background: radial-gradient(90% 80% at 50% 40%, color-mix(in srgb, var(--cap) 14%, #1b1e2a), #12141c); }
+
+/* ---------- Inside a card ---------- */
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-recog__card, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card)
+  :is(h1, h2, h3, h4) { color: var(--text-strong); }
+
+/* Buttons: the primary flips to a white pill, the secondary to a fine outline */
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn {
+  background: #ffffff;
+  color: #0b1220;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.6);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn:hover {
+  color: #0b1220;
+  box-shadow: 0 0 0 1px rgba(var(--glow-violet), 0.5), 0 12px 30px -10px rgba(var(--glow-violet), 0.8);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn--secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn--secondary:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(var(--glow-teal), 0.7), 0 12px 28px -12px rgba(var(--glow-teal), 0.7);
+}
+
+/* Tags and chips */
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card) :is(.lf-tag, .lf-solution__offerings li) {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Form fields in the enquiry card */
+html .lf-enquiry :is(.lf-input, .lf-select, .lf-textarea) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+html .lf-enquiry :is(.lf-input, .lf-textarea)::placeholder { color: rgba(255, 255, 255, 0.4); }
+html .lf-enquiry :is(.lf-input, .lf-select, .lf-textarea):focus { border-color: rgba(var(--glow-violet), 0.8); box-shadow: 0 0 0 3px rgba(var(--glow-violet), 0.25); }
+html .lf-enquiry option { color: #0b1220; background: #ffffff; }
+
+/* ---------- Hover on graphite ---------- */
+/* The cursor sheen needs a little more strength on dark */
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .mh-final__card)::before {
+  background:
+    radial-gradient(420px circle at var(--lx, 50%) var(--ly, 0%), rgba(var(--glow-violet), 0.2), rgba(var(--glow-teal), 0.08) 38%, transparent 66%);
+}
+/* Backlight: a vivid violet, sky and teal bloom behind the graphite */
+html body :is(
+  .lf-card--interactive,
+  .lf-demo-card,
+  .lf-aisol,
+  .lf-solution,
+  .lf-capindex__card,
+  .lf-insight,
+  .mh-final__card
+):is(:hover, :focus-within) {
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--glow-violet), 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    -16px -12px 46px -16px rgba(var(--glow-violet), 0.75),
+    18px -2px 46px -16px rgba(var(--glow-sky), 0.6),
+    8px 22px 54px -16px rgba(var(--glow-teal), 0.65),
+    0 30px 60px -30px rgba(15, 23, 42, 0.5);
+}
+html body :is(.lf-value, .lf-vm__card, .lf-service__group, .lf-nurture li, .lf-principles li, .lf-enquiry):hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--glow-violet), 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 22px 50px -24px rgba(var(--glow-violet), 0.55),
+    0 20px 44px -24px rgba(15, 23, 42, 0.55);
+}
+
+/* The demo host link reads in warm amber on graphite */
+html .lf-demo-card .lf-demo-card__host { color: #fbbf24 !important; }

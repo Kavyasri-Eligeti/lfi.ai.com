@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# Linkfields AI website (lfiai.com)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The Linkfields Innovations AI website, in the **"Modular Intelligence"** design. It presents the
+company's AI products and 38 live demos alongside its verified solutions, services, industries, company
+information, careers and contact details. It also preserves every page and link of the original demo
+catalogue.
 
-## Available Scripts
+- **Signature hero:** a field of tiles derived from the three modules of the Linkfields mark. It renders
+  in CSS 3D on first paint and upgrades to an on-demand Three.js scene on capable desktops.
+- **Light, editorial design system:** Hanken Grotesk and Open Sans, the brand "leaf" radius, and the exact
+  logo colours. The official logo is never modified.
+- **Honest content:** everything comes from linkfields.com or the original catalogue, and each item
+  carries a status (*Linkfields offering*, *Live demo*, *Proposed*, and so on). Tests enforce this.
 
-In the project directory, you can run:
+## Quick start
 
-### `npm start`
+```bash
+npm ci
+npm start             # dev server on http://localhost:3000
+npm test              # content-integrity and rendering tests (Jest)
+npm run build         # production build in ./build
+npm run serve:build   # serve ./build on http://localhost:5050
+npm run test:e2e      # browser tests and screenshots (Playwright + installed Chrome)
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+public/             index.html (SEO content + static hero shell), brand/, fonts/, images/, sitemap, robots
+src/app/            router, navigation
+src/content/        all copy and data (company, services, solutions, industries, demos, capabilities, insights, careers, proposals)
+src/components/     layout (header, footer), ui primitives, sections
+src/features/       field (hero, CSS + WebGL tiers), motion, map
+src/pages/          one folder per page
+src/legacy/         the original production app, unchanged
+e2e/                Playwright tests
+docs/               audit, content inventory, architecture, design system, routes, quality, deployment
+```
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Read `docs/08-deployment-and-rollback.md` before deploying. **Every push to `main` in the Azure DevOps
+repository deploys to production.**

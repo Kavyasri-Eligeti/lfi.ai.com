@@ -1,0 +1,124 @@
+/* ---------- Enterprise solutions: editorial modules ---------- */
+.lf-solutions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+.lf-solution {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 0;
+  padding: clamp(1.5rem, 1rem + 1vw, 2rem);
+  border-radius: var(--radius-leaf);
+  background: var(--glass), rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px var(--border);
+  scroll-margin-top: calc(var(--header-h) + 24px);
+  transition: box-shadow var(--dur-ui), transform var(--dur-ui) var(--ease-out);
+}
+.lf-solution:hover { box-shadow: inset 0 0 0 1px var(--border), var(--shadow-2); transform: translateY(-2px); }
+.lf-solution::before {
+  /* a single brand module marks each card; the colour rotates */
+  content: '';
+  position: absolute;
+  top: 0;
+  right: clamp(1.5rem, 1rem + 1vw, 2rem);
+  width: 28px;
+  height: 6px;
+  border-radius: 0 0 6px 6px;
+  background: var(--lf-blue);
+}
+.lf-solution--1::before { background: var(--lf-orange); }
+.lf-solution--2::before { background: var(--lf-yellow); }
+.lf-solution:first-child { grid-column: span 2; background: var(--surface-ink); color: var(--text-on-ink); box-shadow: none; border-radius: var(--radius-leaf-lg); }
+.lf-solution:first-child .lf-solution__headline { color: var(--text-strong); font-size: clamp(1.375rem, 1.1rem + 1vw, 2rem); }
+.lf-solution:first-child .lf-solution__intro { color: var(--text-on-ink-2); }
+.lf-solution:first-child .lf-solution__offerings li { background: rgba(255, 255, 255, 0.9); color: var(--text-on-ink); box-shadow: inset 0 0 0 1px var(--border); }
+.lf-solution:first-child .lf-link { color: var(--text-strong); }
+.lf-solution:first-child .lf-link:hover { color: var(--link); }
+.lf-solution:first-child .lf-solution__group { color: var(--text-on-ink-2); }
+.lf-solution:first-child .lf-badge--blue { background: var(--tone-blue-bg); color: var(--tone-blue-fg); }
+.lf-solution__head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
+.lf-solution__group { font: 700 var(--fs-label)/1 var(--font-sans); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--text-3); }
+.lf-solution__name { margin: var(--sp-2) 0 0; font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2rem); letter-spacing: -0.01em; line-height: 1; }
+.lf-solution__headline { margin: 0; font: 600 1.0625rem/1.4 var(--font-sans); color: var(--text); }
+.lf-solution__intro { margin: 0; color: var(--text-2); font-size: 0.9375rem; }
+.lf-solution__offerings { display: flex; flex-wrap: wrap; gap: 6px; }
+.lf-solution__offerings li { padding: 4px 9px; border-radius: var(--radius-xs); background: var(--surface-2); font: 600 0.8125rem/1.4 var(--font-sans); color: var(--text-2); }
+.lf-solution__more { margin-top: auto; align-self: flex-start; padding-top: var(--sp-3); }
+@media (max-width: 1024px) { .lf-solutions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .lf-solutions { grid-template-columns: 1fr; } .lf-solution:first-child { grid-column: auto; } }
+
+/* ---------- Catalogue ---------- */
+.lf-catalogue-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--radius-leaf);
+  background: var(--glass), rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow-1);
+  margin-bottom: var(--sp-5);
+}
+.lf-catalogue-filters__caps { grid-column: 1 / -1; border: 0; margin: 0; padding: 0; min-width: 0; }
+.lf-catalogue-filters__caps legend { font: 600 0.875rem/1.3 var(--font-sans); margin-bottom: 8px; padding: 0; }
+@media (max-width: 760px) {
+  .lf-catalogue-filters { grid-template-columns: 1fr 1fr; }
+  .lf-catalogue-filters__search { grid-column: 1 / -1; }
+}
+@media (max-width: 420px) { .lf-catalogue-filters { grid-template-columns: 1fr; } }
+.lf-catalogue-status { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: 40px; margin-bottom: var(--sp-3); }
+.lf-catalogue-status .lf-meta { margin: 0; font-weight: 600; color: var(--text-2); }
+.lf-catalogue-capnote { color: var(--text-2); margin-bottom: var(--sp-5); }
+.lf-catalogue-grid { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); }
+.lf-catalogue-grid > li { min-width: 0; }
+.lf-catalogue-empty { margin-top: var(--sp-4); }
+.lf-catalogue-empty__reset { border: 0; background: none; padding: 0; color: var(--link); font-weight: 600; text-decoration: underline; cursor: pointer; }
+.lf-catalogue-legend { display: grid; gap: 10px; margin: var(--sp-7) 0 var(--sp-4); padding-top: var(--sp-5); border-top: 1px solid var(--border); font-size: 0.875rem; color: var(--text-2); }
+.lf-catalogue-legend li { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+
+/* ---------- Proposed ---------- */
+.lf-proposed-note { margin-bottom: var(--sp-6); }
+.lf-proposed-note .lf-icon { flex: 0 0 auto; color: var(--lf-orange-700); margin-top: 2px; }
+
+/* ---------- AI solutions (AWS card style) ---------- */
+/* Compact cards: four to a row on desktop. */
+.lf-aisols { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: var(--sp-4); }
+.lf-aisol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 16px;
+  background: var(--glass), rgba(255, 255, 255, 0.72);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  transition: box-shadow var(--dur-ui) var(--ease-out), translate var(--dur-ui) var(--ease-out);
+}
+.lf-aisol::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--a), color-mix(in srgb, var(--a) 30%, transparent));
+}
+.lf-aisol:hover { box-shadow: var(--shadow-3); translate: 0 -4px; }
+.lf-aisol__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.lf-aisol__mark { transition: transform 0.9s var(--ease-cinematic); }
+.lf-aisol:hover .lf-aisol__mark { transform: translateY(-3px) rotate(-4deg); }
+.lf-aisol__name { font-size: 1.0625rem; line-height: 1.3; margin-bottom: 6px; }
+.lf-aisol__tagline { font-weight: 700; font-size: 0.8125rem; line-height: 1.4; color: var(--text); margin-bottom: 6px; }
+/* The summary shows three lines; the full text stays in the page. */
+.lf-aisol__summary { color: var(--text-2); font-size: 0.75rem; line-height: 1.5; margin-bottom: 8px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+.lf-aisol__label { font: 700 0.625rem/1.4 var(--font-sans); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--text-3); margin: 0 0 4px; }
+.lf-aisol__uses { padding-left: 1.1em; margin: 0 0 10px; font-size: 0.75rem; line-height: 1.45; color: var(--text-2); }
+.lf-aisol__uses li + li { margin-top: 0; }
+.lf-aisol__stack { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; }
+.lf-aisol__stack > .lf-tag { padding: 2px 6px; font-size: 0.625rem; }
+.lf-aisol__live { margin: auto 0 0; padding-top: 8px; border-top: 1px solid var(--border); font-size: 0.75rem; line-height: 1.45; }
+.lf-aisol__live > span:first-child { font-weight: 700; }
+
+.lf-solution__logos { margin: var(--sp-3) 0 var(--sp-2); }
+.lf-aisol__logos { margin: 0 0 8px; gap: 5px; }
+.lf-aisol__logos .lf-logos__tile { --t: 28px; padding: 0 6px; border-radius: 7px; }

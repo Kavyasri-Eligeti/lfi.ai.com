@@ -1,0 +1,102 @@
+.lf-services-layout__inner { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; }
+.lf-services-index { position: sticky; top: calc(var(--header-h) + 24px); }
+.lf-services-index ul { display: grid; gap: 2px; border-left: 2px solid var(--border); }
+.lf-services-index a {
+  display: block;
+  margin-left: -2px;
+  padding: 7px 0 7px 14px;
+  border-left: 2px solid transparent;
+  color: var(--text-2);
+  font: 600 0.9375rem/1.3 var(--font-sans);
+  text-decoration: none;
+  transition: color var(--dur-micro), border-color var(--dur-ui);
+}
+.lf-services-index a:hover { color: var(--text); }
+.lf-services-index a[aria-current='true'] { color: var(--lf-blue); border-left-color: var(--lf-blue); }
+@media (max-width: 960px) {
+  .lf-services-layout__inner { grid-template-columns: 1fr; }
+  .lf-services-index { display: none; }
+}
+
+.lf-services-list { display: grid; }
+.lf-service {
+  display: grid;
+  gap: var(--sp-6);
+  padding-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  border-top: 1px solid var(--border);
+  scroll-margin-top: calc(var(--header-h) + 8px);
+}
+.lf-service__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: var(--sp-5) clamp(1.5rem, 1rem + 3vw, 4rem);
+}
+.lf-service:first-child { border-top: 2px solid var(--text); }
+.lf-service__head { display: grid; gap: var(--sp-3); align-content: start; position: sticky; top: calc(var(--header-h) + 24px); }
+.lf-service__name { margin: 0; font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.625rem); letter-spacing: -0.01em; line-height: 1; }
+.lf-service__headline { margin: 0; font: 600 var(--fs-lead)/1.45 var(--font-sans); color: var(--text-2); max-width: 30ch; }
+.lf-service__head .lf-link { margin-top: var(--sp-2); justify-self: start; display: inline; }
+.lf-service__head .lf-link .lf-arrow { display: inline; vertical-align: -3px; margin-left: 4px; }
+.lf-service__overview-title { margin: 0 0 var(--sp-3); font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.75rem); }
+.lf-service__overview { color: var(--text-2); }
+.lf-service__offer { color: var(--text-2); }
+.lf-service__subs { margin-top: var(--sp-5); }
+.lf-subservice > summary { padding: var(--sp-4) 0; }
+.lf-subservice__name { font: 400 1.125rem/1.3 var(--font-display); }
+.lf-subservice__body { padding: 0 0 var(--sp-5); display: grid; gap: var(--sp-3); }
+.lf-subservice__body p { margin: 0; color: var(--text-2); }
+.lf-subservice__tagline { font-weight: 600; color: var(--text) !important; }
+/* Grouped offerings (IT Infrastructure): full-width bands under the row.
+   Each band reads left to right: the group, then its offerings side by side. */
+.lf-service__groups { display: grid; gap: var(--sp-3); }
+.lf-service__group {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.9fr) minmax(0, 4fr);
+  gap: var(--sp-4) clamp(1.25rem, 1rem + 2vw, 3rem);
+  align-items: start;
+  padding: var(--sp-5);
+  border-radius: var(--radius-leaf);
+  background: var(--glass), rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.lf-service__group-name {
+  margin: 0;
+  padding-left: var(--sp-3);
+  border-left: 2px solid var(--th-teal);
+  font-size: 1.125rem;
+  line-height: 1.2;
+}
+.lf-service__group-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-4); }
+.lf-service__group-items li { display: grid; gap: 6px; align-content: start; font-size: 0.875rem; line-height: 1.5; color: var(--text-2); }
+.lf-service__group-items li + li { padding-left: var(--sp-4); border-left: 1px solid var(--border); }
+.lf-service__group-items strong { color: var(--text); font-size: 0.9375rem; line-height: 1.3; }
+@media (max-width: 1100px) {
+  .lf-service__group-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lf-service__group-items li:nth-child(odd) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 640px) {
+  .lf-service__group { grid-template-columns: 1fr; }
+  .lf-service__group-items { grid-template-columns: 1fr; }
+  .lf-service__group-items li + li { padding-left: 0; border-left: 0; padding-top: var(--sp-3); border-top: 1px solid var(--border); }
+}
+@media (max-width: 860px) {
+  .lf-service__row { grid-template-columns: 1fr; }
+  .lf-service__head { position: static; }
+}
+
+/* New AI practice */
+.lf-service--new { position: relative; }
+.lf-service__new {
+  display: inline-flex;
+  margin: 0 0 var(--sp-3);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font: 700 var(--fs-meta)/1.3 var(--font-sans);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--aws-space);
+  background: var(--aws-orange);
+}
+
+.lf-service__logos { margin: var(--sp-4) 0; }
+.lf-subservice__logos { margin: var(--sp-3) 0 var(--sp-4); }

@@ -1,0 +1,83 @@
+/* ---------- Homepage theatre: the AI ring intro and the statement ---------- */
+.th { position: relative; }
+
+/* The fixed WebGL stage behind the intro and statement */
+.th-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-out);
+}
+.th-stage.is-ready { opacity: 1; }
+.th-stage .th-canvas { position: absolute; top: 0; left: 0; width: 100vw !important; height: 100vh !important; pointer-events: none; }
+.th-intro, .th-statement { position: relative; z-index: 1; pointer-events: none; }
+.th-intro a, .th-intro button, .th-statement a, .th-statement button { pointer-events: auto; }
+/* After the statement, content sits above the stage, which travels up with
+   the statement and fades out (no hard edge). */
+.th-statement ~ .lf-section, .th-statement ~ .lf-contact-band { position: relative; z-index: 2; }
+
+.th-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+
+/* ---------- 1. Intro ---------- */
+.th-intro { height: 100vh; height: 100svh; display: grid; place-items: center; }
+.th-intro__mark { animation: th-rise 1.6s var(--ease-cinematic) both; }
+/* The DOM logo holds the intro until the 3D ring is drawing, then fades out. */
+.th-intro__fallback { transition: opacity 0.6s var(--ease-out); }
+.is-ring-ready .th-intro__fallback { opacity: 0; pointer-events: none; }
+.th-scroll {
+  position: absolute;
+  top: 29%;
+  left: 50%;
+  translate: -50% 0;
+  margin: 0;
+  font: 400 0.875rem/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(11, 18, 32, 0.62);
+  animation: th-blink 2.6s var(--ease-in-out) 1.2s infinite both;
+}
+.th-scroll::after { content: '_'; animation: th-caret 1s steps(1) infinite; }
+@keyframes th-blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.85; } }
+@keyframes th-caret { 50% { opacity: 0; } }
+@keyframes th-rise { from { opacity: 0; transform: translateY(30px) scale(0.92); } to { opacity: 1; transform: none; } }
+
+/* ---------- 2. Statement ---------- */
+.th-statement { height: 220vh; }
+.th-statement__grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--header-h) clamp(1.25rem, 0.5rem + 6vw, 10rem) var(--sp-7);
+}
+.th-statement__title {
+  margin: 0;
+  font-size: clamp(3rem, 0.6rem + 6.4vw, 7.5rem);
+  line-height: 0.96;
+  letter-spacing: 0.005em;
+  max-width: 11ch;
+}
+.th-statement__copy {
+  align-self: end;
+  padding-bottom: 12vh;
+  font: 400 clamp(0.9375rem, 0.85rem + 0.3vw, 1.0625rem)/1.75 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+.th-statement__copy p { margin: 0 0 var(--sp-5); max-width: 34ch; }
+.th-statement__copy .lf-actions { margin-top: var(--sp-6); }
+
+
+@media (max-width: 900px) {
+  .th-statement { height: auto; }
+  .th-statement .th-sticky { position: relative; height: auto; overflow: visible; }
+  .th-statement__grid { position: static; grid-template-columns: 1fr; padding-block: var(--sp-8); }
+  .th-statement__copy { padding-bottom: 0; }
+}
+
+[data-motion='reduced'] .th-scroll, [data-motion='reduced'] .th-intro__mark { animation: none; }

@@ -1,0 +1,55 @@
+/* Linkfields AI mark: an iridescent glass ring around "AI". Sizes follow --s. */
+@property --lf-ai-turn { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.lf-ailogo {
+  --s: 120px;
+  --w: max(2px, calc(var(--s) * 0.075));
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: var(--s);
+  height: var(--s);
+}
+.lf-ailogo__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from var(--lf-ai-turn), #14b8a6, #7c6cff, #ec4899, #f59e0b, #14b8a6);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 0.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 0.5px));
+  filter: drop-shadow(0 0 calc(var(--s) * 0.05) rgba(124, 108, 255, 0.35));
+  animation: lf-ai-turn 9s linear infinite;
+}
+/* Glass highlight on the ring */
+.lf-ailogo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.85), transparent 30%, transparent 70%, rgba(255, 255, 255, 0.35));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--w) * 0.6), #000 calc(100% - var(--w) * 0.6 + 0.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--w) * 0.6), #000 calc(100% - var(--w) * 0.6 + 0.5px));
+  opacity: 0.6;
+  pointer-events: none;
+}
+.lf-ailogo__mark {
+  font: 400 calc(var(--s) * 0.36) / 1 var(--font-mono);
+  letter-spacing: 0.02em;
+  background: linear-gradient(115deg, #0b1220 30%, #6d5df5 45%, #0b1220 60%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: lf-ai-sheen 6s var(--ease-in-out) infinite;
+  translate: 0 calc(var(--s) * 0.02);
+}
+@keyframes lf-ai-turn { to { --lf-ai-turn: 360deg; } }
+@keyframes lf-ai-sheen { 0%, 40% { background-position: 100% 0; } 80%, 100% { background-position: 0 0; } }
+
+.lf-ailogo--intro .lf-ailogo__ring { animation: lf-ai-draw 1.6s var(--ease-cinematic) both, lf-ai-turn 9s linear 1.6s infinite; }
+.lf-ailogo--intro .lf-ailogo__mark { animation: lf-ai-resolve 1.2s var(--ease-cinematic) 0.4s both, lf-ai-sheen 6s var(--ease-in-out) 1.6s infinite; }
+@keyframes lf-ai-draw { from { opacity: 0; transform: scale(0.7) rotate(-90deg); } to { opacity: 1; transform: none; } }
+@keyframes lf-ai-resolve { from { opacity: 0; filter: blur(8px); } to { opacity: 1; filter: none; } }
+
+[data-motion='reduced'] .lf-ailogo__ring,
+[data-motion='reduced'] .lf-ailogo__mark { animation: none !important; }

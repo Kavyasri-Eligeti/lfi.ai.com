@@ -1,0 +1,13 @@
+.lf-glitch { position: relative; display: inline-block; max-width: 100%; }
+/* Holds the final text's size; the decoding text is drawn over it. */
+.lf-glitch__ghost { visibility: hidden; white-space: pre-wrap; }
+.lf-glitch__live { position: absolute; inset: 0; white-space: pre-wrap; }
+.lf-glitch.is-active > .lf-glitch__live {
+  text-shadow: -0.04em 0 rgba(255, 70, 120, 0.75), 0.04em 0 rgba(80, 220, 255, 0.75);
+  animation: lf-glitch-jitter 0.12s steps(2) infinite;
+}
+@keyframes lf-glitch-jitter {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-0.02em); }
+  100% { transform: translateX(0.015em); }
+}

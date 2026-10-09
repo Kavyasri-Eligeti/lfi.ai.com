@@ -1,0 +1,117 @@
+/* ---------- Footer ---------- */
+.lf-footer { background: var(--aws-space); color: var(--text-on-ink-2); position: relative; overflow: hidden; }
+.lf-footer__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  gap: var(--sp-7) var(--sp-6);
+  padding-block: clamp(3.5rem, 2rem + 4vw, 5.5rem) var(--sp-7);
+}
+.lf-footer__brand p { margin: var(--sp-5) 0; max-width: 40ch; font-size: 0.9375rem; }
+.lf-footer__title { font: 700 var(--fs-label)/1 var(--font-sans); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--text-strong); margin: 0 0 var(--sp-4); }
+.lf-footer__col li + li { margin-top: 10px; }
+.lf-footer a { color: var(--text-on-ink-2); text-decoration: none; font-size: 0.9375rem; }
+.lf-footer a:hover { color: var(--text-strong); text-decoration: underline; text-underline-offset: 4px; }
+.lf-footer__social { display: flex; gap: var(--sp-2); list-style: none; margin: 0; padding: 0; }
+.lf-footer__social-link {
+  display: grid !important;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.126);
+  color: var(--text-strong) !important;
+  transition: background-color var(--dur-micro), color var(--dur-micro);
+}
+.lf-footer__social-link:hover { background: var(--lf-yellow); color: var(--lf-charcoal) !important; text-decoration: none !important; }
+.lf-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-4) var(--sp-6);
+  padding-block: var(--sp-5) var(--sp-6);
+  border-top: 1px solid rgba(15, 23, 42, 0.075);
+  font-size: var(--fs-meta);
+}
+.lf-footer__bottom p { margin: 0; max-width: 72ch; }
+.lf-footer__legal { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); list-style: none; margin: 0; padding: 0; align-items: center; }
+.lf-footer__legal a { font-size: var(--fs-meta); }
+.lf-footer__motion {
+  border: 0;
+  background: none;
+  padding: 6px 0;
+  color: var(--text-on-ink-2);
+  font: 600 var(--fs-meta)/1 var(--font-sans);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.lf-footer__motion::before {
+  content: '';
+  width: 28px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+  box-shadow: inset 0 0 0 2px transparent;
+  transition: background-color var(--dur-micro);
+}
+.lf-footer__motion[aria-pressed='true']::before { background: var(--lf-yellow); }
+.lf-footer__motion:hover { color: var(--text-strong); }
+@media (max-width: 900px) {
+  .lf-footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lf-footer__brand { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .lf-footer__top { grid-template-columns: 1fr; }
+}
+
+/* ---------- Page transition curtain ---------- */
+.lf-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background:
+    radial-gradient(70vw 60vh at 0% 100%, rgba(var(--glow-violet), 0.16), transparent 70%),
+    radial-gradient(70vw 60vh at 100% 0%, rgba(var(--glow-teal), 0.14), transparent 70%),
+    #fbfbfe;
+  will-change: transform;
+}
+/* A light seam along the curtain's leading and trailing edges */
+.lf-curtain::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--th-teal), var(--th-lavender), transparent);
+  box-shadow: 0 0 24px 2px rgba(var(--glow-violet), 0.35);
+}
+/* Coming down (going back), the lit seam leads along the bottom edge */
+.lf-curtain--down::after { top: auto; bottom: 0; }
+/* Scanlines and a fine light seam on the curtain */
+.lf-curtain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.018) 0 1px, transparent 1px 4px);
+}
+.lf-curtain__inner { position: relative; display: grid; justify-items: center; gap: 22px; padding-inline: var(--gutter); text-align: center; }
+.lf-curtain__label {
+  margin: 0;
+  font: 400 clamp(2.5rem, 1rem + 6vw, 6.5rem)/0.95 var(--font-mono);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+.lf-curtain__line {
+  display: block;
+  width: min(56vw, 560px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--th-teal), var(--th-lavender), transparent);
+  transform-origin: center;
+}
+.lf-page { transform-origin: 50% 0; }

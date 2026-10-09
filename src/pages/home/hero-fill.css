@@ -1,0 +1,138 @@
+/* ---------- Homepage hero background fill (from the design canvas) ---------- */
+/* Behind the fixed, transparent 3D stage; covers the intro screen only. */
+.hf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100svh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  --hf-cx: 55%; /* the AI ring's centre */
+  --hf-cy: 50%;
+}
+
+/* Drifting colour glows */
+.hf-aur {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--c), transparent);
+  animation: hf-aur 12s ease-in-out infinite;
+}
+@keyframes hf-aur { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(40px, -30px) scale(1.1); } }
+
+/* Dot grid, cleared around the ring */
+.hf-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(201, 207, 216, 0.16) 1px, transparent 1.6px);
+  background-size: 30px 30px;
+  -webkit-mask: radial-gradient(520px 430px at 54.5% 55%, transparent 62%, #000 100%);
+  mask: radial-gradient(520px 430px at 54.5% 55%, transparent 62%, #000 100%);
+}
+
+/* Perspective floor at the sides of the bottom edge */
+.hf-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 300px;
+  perspective: 520px;
+  /* Sides only, fading out towards the top: two masks, intersected. */
+  -webkit-mask: linear-gradient(90deg, #000 0, #000 26%, transparent 36%, transparent 64%, #000 74%, #000 100%), linear-gradient(transparent, #000 70%);
+  -webkit-mask-composite: source-in;
+  mask: linear-gradient(90deg, #000 0, #000 26%, transparent 36%, transparent 64%, #000 74%, #000 100%), linear-gradient(transparent, #000 70%);
+  mask-composite: intersect;
+}
+.hf-floor__grid {
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  bottom: -30px;
+  height: 560px;
+  transform: rotateX(74deg);
+  transform-origin: bottom;
+  background-image: linear-gradient(rgba(79, 224, 194, 0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(79, 224, 194, 0.22) 1px, transparent 1px);
+  background-size: 56px 56px;
+  animation: hf-floor 4s linear infinite;
+}
+@keyframes hf-floor { from { background-position: 0 0; } to { background-position: 0 56px; } }
+
+/* Node networks with travelling pulses */
+.hf-net { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hf-tw { animation: hf-tw 3s ease-in-out infinite; }
+.hf-tw--1 { animation-duration: 4.2s; }
+.hf-tw--2 { animation-duration: 5.4s; }
+@keyframes hf-tw { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+.hf-pulse { stroke-dasharray: 28 1400; animation: hf-pulse 6s linear infinite; }
+@keyframes hf-pulse { from { stroke-dashoffset: 1428; } to { stroke-dashoffset: 0; } }
+
+/* Orbit rings, tilted, around the AI ring */
+.hf-orbits {
+  position: absolute;
+  inset: 0;
+  perspective: 1400px;
+  perspective-origin: var(--hf-cx) var(--hf-cy);
+  transform-style: preserve-3d;
+}
+.hf-orbit {
+  position: absolute;
+  left: var(--hf-cx);
+  top: var(--hf-cy);
+  transform: rotateX(77deg);
+  transform-style: preserve-3d;
+}
+.hf-orbit__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 207, 216, 0.16);
+  animation: hf-spin linear infinite;
+}
+.hf-orbit__ring--rev { animation-direction: reverse; }
+.hf-orbit__ring span { position: absolute; left: 50%; border-radius: 50%; }
+@keyframes hf-spin { to { transform: rotateZ(360deg); } }
+
+/* Wireframe cubes */
+.hf-cube { position: absolute; perspective: 500px; }
+.hf-cube__body { position: absolute; inset: 0; transform-style: preserve-3d; animation: hf-cube 16s linear infinite; }
+.hf-cube__body span { position: absolute; inset: 0; border: 1px solid; }
+@keyframes hf-cube { from { transform: rotateX(-25deg) rotateY(0); } to { transform: rotateX(-25deg) rotateY(360deg); } }
+
+/* Floating capability chips */
+.hf-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  background-color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-mono), 'Share Tech Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--text-2);
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.084);
+  animation: hf-float 7s ease-in-out infinite;
+}
+.hf-chip--b { animation-duration: 8.5s; animation-direction: reverse; }
+.hf-chip i { width: 7px; height: 7px; border-radius: 50%; }
+@keyframes hf-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+/* Smaller screens: keep the glows, grid and orbits; drop what would crowd the ring. */
+@media (max-width: 1100px) {
+  .hf-chips, .hf-cube { display: none; }
+}
+@media (max-width: 700px) {
+  .hf { --hf-cx: 50%; } /* the ring is centred on phones */
+  .hf-net, .hf-floor { display: none; }
+}
+
+[data-motion='reduced'] .hf *,
+[data-motion='reduced'] .hf { animation: none !important; }

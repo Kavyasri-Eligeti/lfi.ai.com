@@ -1,0 +1,55 @@
+/* Demo mark: a line glyph on a small accent tile, the card logo for demos
+   without a product logo. Sized by --s; colour by --accent (the group colour). */
+.lf-demo-mark {
+  --accent: var(--th-teal);
+  --s: 40px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--s);
+  height: var(--s);
+  flex: 0 0 auto;
+  border-radius: calc(var(--s) * 0.3) calc(var(--s) * 0.3) calc(var(--s) * 0.3) calc(var(--s) * 0.12);
+  color: var(--accent);
+  background:
+    radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 62%),
+    linear-gradient(150deg, var(--surface-2), var(--surface-2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 28%, rgba(255, 255, 255, 0.08)),
+    0 8px 18px -10px color-mix(in srgb, var(--accent) 55%, transparent);
+  transition: transform var(--dur-ui) var(--ease-out), box-shadow var(--dur-ui) var(--ease-out);
+}
+.lf-demo-mark svg { display: block; }
+.lf-card--interactive:hover .lf-demo-mark,
+.lf-card--interactive:focus-within .lf-demo-mark {
+  transform: translateY(-2px) rotate(-4deg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 12px 22px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+/* On the large charcoal feature card the tile grows with the title. */
+.lf-demo-card--feature .lf-demo-mark { --s: 56px; }
+[data-motion='reduced'] .lf-demo-mark { transition: none; }
+
+/* Product logo: the official wordmark on a light tile, same height and corner
+   as the glyph tiles, so the five product cards sit in the same system. */
+.lf-demo-logo {
+  --s: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--s);
+  padding: 0 calc(var(--s) * 0.25);
+  flex: 0 0 auto;
+  border-radius: calc(var(--s) * 0.3) calc(var(--s) * 0.3) calc(var(--s) * 0.3) calc(var(--s) * 0.12);
+  background: linear-gradient(160deg, #ffffff, #eef2f6);
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.16), 0 8px 18px -10px rgba(15, 23, 42, 0.144);
+  transition: transform var(--dur-ui) var(--ease-out);
+}
+.lf-demo-logo .lf-demo-card__logo { height: calc(var(--s) * 0.6); max-width: calc(var(--s) * 2.6); width: auto; }
+.lf-card--interactive:hover .lf-demo-logo,
+.lf-card--interactive:focus-within .lf-demo-logo { transform: translateY(-2px); }
+.lf-demo-card--feature .lf-demo-logo { --s: 56px; }
+[data-motion='reduced'] .lf-demo-logo { transition: none; }

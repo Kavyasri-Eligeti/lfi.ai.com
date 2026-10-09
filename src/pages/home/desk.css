@@ -1,0 +1,211 @@
+/* Homepage palette (scoped variables; the rest of the site keeps its tokens). */
+:root {
+  --m-ink: #ffffff;
+  --m-ink-2: #ffffff;
+  --m-ink-3: #f4f6fb;
+  --m-ink-4: #e9edf5;
+  --m-text: #0b1220;
+  --m-text-2: #3d4757;
+  --m-text-3: #5f6b7d;
+  --m-accent: #5a4ae3;
+  --m-accent-hover: #4535cf;
+  --m-accent-soft: #8b7cff;
+  --m-beige: #f5f6fb;
+  --m-paper-text: #0b1220;
+  --ease-ui: cubic-bezier(0, 0, 0.2, 1);
+  --ease-theme: cubic-bezier(0, 0, 0.6, 1);
+}
+
+/* ---------- Homepage desk scene ---------- */
+.dk { position: relative; height: 340vh; margin-top: calc(-1 * var(--header-h)); }
+.dk__pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--surface); }
+.dk__stage { position: absolute; inset: 0; }
+.dk__stage .desk3d__canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; opacity: 0; transition: opacity 1.2s var(--ease-out); }
+.dk.is-ready .desk3d__canvas { opacity: 1; }
+.dk__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.2s var(--ease-out); }
+.dk.is-ready .dk__poster { opacity: 0; }
+/* Reads the copy against the sky, and darkens the edges like a lens. */
+.dk__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* Shade the two sides, where the copy sits; keep the middle clear */
+    linear-gradient(90deg, rgba(10, 10, 22, 0.66) 0%, rgba(10, 10, 22, 0.32) 26%, rgba(10, 10, 22, 0) 42%, rgba(10, 10, 22, 0) 58%, rgba(10, 10, 22, 0.3) 74%, rgba(10, 10, 22, 0.62) 100%),
+    linear-gradient(180deg, rgba(12, 12, 24, 0.5) 0%, rgba(12, 12, 24, 0.12) 22%, rgba(12, 12, 24, 0) 40%, rgba(12, 12, 24, 0) 70%, rgba(12, 12, 24, 0.32) 100%),
+    radial-gradient(120% 90% at 50% 45%, transparent 60%, rgba(10, 10, 18, 0.45) 100%);
+}
+
+.dk-copy {
+  /* Split: the statement on the left, the offer and actions on the right,
+     leaving the desk and laptop clear in the middle. */
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 4vw;
+  padding: calc(var(--header-h) + 13vh) clamp(1.5rem, 1rem + 4vw, 6rem) 0;
+  color: #fff;
+  pointer-events: none;
+}
+.dk-copy a { pointer-events: auto; }
+/* One type scale for both sides, so they read as a pair */
+.dk-copy { --hero-fs: clamp(2rem, 0.9rem + 2.7vw, 3.5rem); }
+.dk-copy__lead { justify-self: start; display: grid; justify-items: start; gap: 18px; font-size: var(--hero-fs); }
+.dk-copy__lead .dk-eyebrow { font-size: 0.8125rem; }
+.dk-tag { margin: 0; }
+/* The right column mirrors the left: right-aligned, same type */
+.dk-copy__side { justify-self: end; display: grid; justify-items: end; gap: 18px; text-align: right; font-size: var(--hero-fs); }
+.dk-copy__side .dk-actions { justify-content: flex-end; }
+.dk-copy__side .dk-actions { font-size: 1rem; margin-top: 10px; }
+.dk-copy__rule { display: block; width: 72px; height: 2px; margin: 12.5px 0; border-radius: 2px; background: linear-gradient(90deg, #6ff2db, #a493ff); box-shadow: 0 0 14px rgba(140, 118, 255, 0.7); }
+@media (max-width: 900px) {
+  .dk-copy { grid-template-columns: 1fr; gap: 20px; padding-top: calc(var(--header-h) + 6vh); text-align: center; }
+  .dk-copy__lead, .dk-copy__side { justify-self: center; justify-items: center; margin-top: 0; text-align: center; }
+  .dk-copy { --hero-fs: clamp(1.6rem, 1rem + 3vw, 2.2rem); }
+  .dk-copy__side { text-align: center; }
+  .dk-copy__side .dk-actions { justify-content: center; }
+  .dk-copy__rule { display: none; }
+}
+.dk-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  padding: 7px 16px 7px 12px;
+  border-radius: 999px;
+  background: rgba(14, 16, 26, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 8px 24px -10px rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  font: 400 0.8125rem/1 var(--font-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.dk-eyebrow__dot { width: 7px; height: 7px; border-radius: 50%; background: #5eead4; box-shadow: 0 0 10px 2px rgba(94, 234, 212, 0.8); animation: dk-pulse 2.4s ease-in-out infinite; }
+@keyframes dk-pulse { 50% { opacity: 0.45; box-shadow: 0 0 4px 1px rgba(94, 234, 212, 0.5); } }
+.dk-title {
+  margin: 0;
+  font: 700 1em / 1.12 var(--font-display);
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(6, 6, 16, 0.55), 0 4px 18px rgba(6, 6, 16, 0.5);
+}
+/* The key phrase, lit: white into lavender into teal, with a soft glow */
+.dk-hl {
+  display: inline;
+  background: linear-gradient(100deg, #f3efff 0%, #cdc2ff 35%, #a493ff 60%, #6ff2db 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 1px 2px rgba(6, 6, 16, 0.6)) drop-shadow(0 0 22px rgba(140, 118, 255, 0.6));
+}
+.dk-actions { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 10px; margin-top: 8px; }
+@media (max-width: 900px) { .dk-actions { justify-content: center; } }
+.dk-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 40px;
+  font: 440 1rem/1 var(--font-sans);
+  text-decoration: none;
+  transition: background-color 0.3s cubic-bezier(0, 0, 0.2, 1), border-color 0.3s cubic-bezier(0, 0, 0.2, 1);
+}
+.dk-pill { height: 48px; padding: 0 20px; font: 700 0.875rem/1 var(--font-display); letter-spacing: 0.01em; white-space: nowrap; transition: background-color 0.3s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0, 0, 0.2, 1), transform 0.3s cubic-bezier(0, 0, 0.2, 1); }
+.dk-pill--primary { background: linear-gradient(180deg, #7a6bff, #5a4ae3); color: #fff; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 10px 30px -8px rgba(110, 92, 255, 0.85); }
+.dk-pill--primary:hover { color: #fff; transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 14px 40px -8px rgba(110, 92, 255, 1); }
+.dk-pill--ghost { background: rgba(14, 16, 26, 0.38); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4); color: #fff; -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.dk-pill--ghost:hover { background: rgba(255, 255, 255, 0.16); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7); }
+.dk-note {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 2 * var(--gutter));
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(14, 16, 26, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  font: 480 0.75rem/1.4 var(--font-sans);
+  letter-spacing: 0.02em;
+  color: #ededf3;
+  text-align: center;
+}
+
+/* The laptop's display: the Linkfields AI mark on ink */
+
+/* Without WebGL or with reduced motion */
+.dk-still { position: relative; min-height: 88vh; display: grid; align-content: start; overflow: hidden; margin-top: calc(-1 * var(--header-h)); }
+.dk-still__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.dk-still .dk-copy { padding-top: calc(var(--header-h) + 10vh); }
+
+@media (max-width: 760px) {
+  .dk { height: 300vh; }
+  .dk-note { bottom: 14px; }
+}
+
+/* ---------- The website's first view (the zoom's last frame) ----------
+   Fills the viewport exactly under the header, so nothing is cut off. */
+.dk-site {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--header-h) + 8px) 0 clamp(16px, 3vh, 40px);
+  pointer-events: none;
+}
+.dk-site.is-live { pointer-events: auto; }
+.dk-site--static { position: relative; inset: auto; min-height: 100vh; pointer-events: auto; }
+.dk-site .mh-start__grid { width: 100%; max-height: 100%; }
+.dk-site .mh-start__cards { max-height: calc(100vh - var(--header-h) - 64px); }
+.dk-site .mh-start__cards .lf-card { min-height: 0; }
+
+/* ---------- Navigation during the scene ----------
+   Only the Linkfields mark stays; the menu arrives with the site. */
+.lf-header .lf-pill { transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+html.lf-hero-zoom .lf-header .lf-pill { opacity: 0; transform: translateY(-16px); pointer-events: none; }
+
+/* The laptop scene sits above the theatre's fixed stage; the sections after
+   the theatre sit above it too. */
+.dk, .dk-still { z-index: 2; }
+.mh > .th ~ section { position: relative; z-index: 2; }
+/* The theatre's background fill rises out of the dark screen, no seam */
+/* The ring's intro sits under the last screen of the laptop scene, so the
+   display dissolves straight into it with no empty scroll in between. */
+.mh .dk { margin-bottom: -100vh; margin-bottom: -100svh; }
+.dk__pin { will-change: opacity, transform; }
+
+[data-motion='reduced'] .dk-eyebrow__dot { animation: none; }
+
+/* The display, flat: shown once the camera is parked on it. Sized like the
+   3D display at the end of the zoom (it fills the view; designed at 1440). */
+.dk-endscreen {
+  --s: calc(min(100vw, 160vh) / 1433);
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(62vw 62vw at 50% 45%, #ffffff 0%, #eef0f7 100%);
+  pointer-events: none;
+}
+/* The Linkfields logo alone, large, on a soft halo in its own colours */
+.dk-endscreen {
+  background:
+    radial-gradient(calc(var(--s) * 420) calc(var(--s) * 420) at calc(50% - var(--s) * 210) 50%, rgba(255, 214, 0, 0.16), transparent 70%),
+    radial-gradient(calc(var(--s) * 420) calc(var(--s) * 420) at 50% 50%, rgba(255, 120, 0, 0.12), transparent 70%),
+    radial-gradient(calc(var(--s) * 420) calc(var(--s) * 420) at calc(50% + var(--s) * 210) 50%, rgba(45, 88, 192, 0.14), transparent 70%),
+    radial-gradient(62vw 62vw at 50% 45%, #ffffff 0%, #eef0f7 100%);
+}
+.dk-endscreen__logo { width: auto; height: calc(var(--s) * 168); filter: drop-shadow(0 calc(var(--s) * 10) calc(var(--s) * 18) rgba(15, 23, 42, 0.16)); }

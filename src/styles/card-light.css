@@ -1,0 +1,69 @@
+/*
+ * Card light. Every clickable card is lit from behind and follows the cursor:
+ *  - a soft sheen on the surface, centred on the pointer
+ *  - a lit edge that brightens where the pointer is closest
+ *  - a coloured backlight blooming out from behind the card
+ * --lx / --ly come from features/motion/CardLight.jsx.
+ */
+
+/* ---------- Surfaces: a finer glass, with a lit top edge ---------- */
+html :is(.lf-card:not(.lf-card--ink, .lf-card--dashed), .lf-capindex__card, .lf-insight, .mh-final__card) {
+  position: relative;
+  isolation: isolate;
+  /* White card: a whisper of cool tint at the foot, a hairline edge and a
+     soft, short shadow, so it sits on the page rather than floating. */
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #fafbff 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px -20px rgba(15, 23, 42, 0.2);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .mh-final__card) { position: relative; isolation: isolate; }
+
+/* ---------- Sheen and lit edge (both follow the cursor) ---------- */
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .mh-final__card, .mh-tool)::before,
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card, .mh-tool)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .mh-final__card, .mh-tool)::before {
+  z-index: 1;
+  background:
+    radial-gradient(420px circle at var(--lx, 50%) var(--ly, 0%), rgba(var(--glow-violet), 0.09), rgba(var(--glow-teal), 0.05) 38%, transparent 66%);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card, .mh-tool)::after {
+  z-index: 2;
+  padding: 1.5px;
+  background: radial-gradient(360px circle at var(--lx, 50%) var(--ly, 0%), rgba(var(--glow-violet), 0.95), rgba(var(--glow-sky), 0.6) 32%, rgba(var(--glow-teal), 0.3) 58%, transparent 78%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card, .mh-tool):is(:hover, :focus-within)::before,
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card, .mh-tool):is(:hover, :focus-within)::after {
+  opacity: 1;
+}
+html :is(.lf-partner, .lf-aisol, .lf-solution, .mh-tool) { position: relative; isolation: isolate; }
+
+/* ---------- Backlight: a coloured bloom behind the card ---------- */
+html :is(.lf-card--interactive, .lf-demo-card, .lf-aisol, .lf-solution, .lf-capindex__card, .lf-insight, .lf-partner, .mh-final__card):is(:hover, :focus-within) {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--glow-violet), 0.2),
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    -16px -12px 44px -18px rgba(var(--glow-violet), 0.55),
+    18px -2px 44px -18px rgba(var(--glow-sky), 0.45),
+    8px 20px 50px -18px rgba(var(--glow-teal), 0.5),
+    0 28px 60px -30px rgba(15, 23, 42, 0.32);
+}
+
+@media (hover: none) {
+  html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card, .mh-tool)::before,
+  html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card, .mh-tool)::after { display: none; }
+}
+[data-motion='reduced'] :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-partner, .lf-aisol, .lf-solution, .mh-final__card):is(:hover, :focus-within) { transform: none; }

@@ -1,0 +1,135 @@
+/*
+ * Linkfields AI design tokens: "Theatre", light edition.
+ * White paper, ink type, violet and teal light.
+ * Display and UI type: Share Tech Mono (SIL OFL, self-hosted via @fontsource).
+ * Long-form reading: Open Sans (SIL OFL, self-hosted).
+ * The Linkfields logo is never recoloured; on white it uses its dark wordmark.
+ */
+:root {
+  /* Light theme: white paper, ink type, violet and teal light. Accents are
+     deep enough to read on white (AA for text, richer for glows). */
+  --th-teal: #0d9488;
+  --th-teal-deep: #0f5f58;
+  --th-lavender: #6d5df5;
+  --th-violet: #4c3fd1;
+  --th-rose: #e0457b;
+  --th-amber: #d97706;
+  /* Glow colours for backlights (brighter than the text accents) */
+  --glow-violet: 124, 108, 255;
+  --glow-teal: 20, 184, 166;
+  --glow-sky: 56, 152, 255;
+  --glow-rose: 236, 72, 153;
+
+  /* Kept names (components reference them) */
+  --aws-squid-ink: #f4f6fb;
+  --aws-squid-ink-2: #eef1f8;
+  --aws-space: #ffffff;
+  --aws-orange: var(--th-amber);
+  --aws-orange-hover: #b45309;
+  --aws-blue: var(--th-lavender);
+  --aws-blue-dark: var(--th-violet);
+  --aws-blue-light: var(--th-teal);
+
+  --lf-yellow: #f5b301;
+  --lf-orange: #f07c00;
+  --lf-blue: var(--th-lavender);
+  --lf-mist: #f4f6fb;
+  --lf-charcoal: #0b1220;
+  --lf-blue-700: var(--th-violet);
+  --lf-blue-50: rgba(109, 93, 245, 0.06);
+  --lf-blue-100: rgba(109, 93, 245, 0.12);
+  --lf-orange-700: #b45309;
+  --lf-orange-50: rgba(217, 119, 6, 0.08);
+  --lf-yellow-50: rgba(245, 179, 1, 0.1);
+  --lf-yellow-300: #fcd34d;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --surface-2: #f7f8fc;
+  --surface-3: #eef1f8;
+  --surface-ink: #f5f6fb;
+  --surface-ink-2: #eceff7;
+  --border: rgba(15, 23, 42, 0.09);
+  --border-strong: rgba(15, 23, 42, 0.18);
+  --text: #0b1220;
+  --text-strong: #060a14;
+  --text-2: #3d4757;
+  --text-3: #5f6b7d;
+  --text-on-ink: #0b1220;
+  --text-on-ink-2: #3d4757;
+  --link: #5a4ae3;
+  --link-hover: #3f30c4;
+
+  /* Status tones (on white) */
+  --tone-blue-bg: rgba(109, 93, 245, 0.1);    --tone-blue-fg: #4c3fd1;
+  --tone-green-bg: rgba(13, 148, 136, 0.1);   --tone-green-fg: #0b7a70;
+  --tone-orange-bg: rgba(217, 119, 6, 0.11);  --tone-orange-fg: #a3530a;
+  --tone-violet-bg: rgba(109, 93, 245, 0.1);  --tone-violet-fg: #4c3fd1;
+  --tone-neutral-bg: rgba(15, 23, 42, 0.05);  --tone-neutral-fg: #3d4757;
+
+  /* Typography */
+  --font-mono: 'Share Tech Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-display: var(--font-mono);
+  --font-sans: 'Open Sans Variable', 'Open Sans', 'Helvetica Neue', Roboto, Arial, sans-serif;
+
+  --fs-hero: clamp(2.75rem, 1.2rem + 6vw, 7rem);
+  --fs-h1: clamp(2.25rem, 1.3rem + 3.6vw, 4.5rem);
+  --fs-h2: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+  --fs-h3: 1.375rem;
+  --fs-h4: 1.125rem;
+  --fs-lead: clamp(1rem, 0.94rem + 0.25vw, 1.125rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-meta: 0.75rem;
+  --fs-label: 0.8125rem;
+
+  --lh-tight: 1;
+  --lh-heading: 1.08;
+  --lh-body: 1.6;
+  --measure: 70ch;
+  --track-tight: 0.01em;
+  --track-label: 0.08em;
+
+  /* Spacing (4px base) */
+  --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem; --sp-8: 4rem; --sp-9: 6rem; --sp-10: 8rem;
+  --section-y: clamp(3.5rem, 2rem + 6vw, 8rem);
+  --gutter: clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
+  --container: 1320px;
+  --container-narrow: 860px;
+
+  /* Shape */
+  --radius-xs: 4px; --radius-sm: 10px; --radius: 18px; --radius-lg: 26px; --radius-pill: 999px;
+  --leaf: 26px;
+  --radius-leaf: var(--radius);
+  --radius-leaf-lg: var(--radius-lg);
+  --radius-leaf-tl: var(--radius);
+
+  /* Glass and light */
+  --glass: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(250, 251, 255, 0.78));
+  --glass-edge: inset 0 0 0 1px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+  --shadow-1: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 24px -14px rgba(15, 23, 42, 0.14);
+  --shadow-2: 0 2px 4px rgba(15, 23, 42, 0.04), 0 18px 44px -22px rgba(15, 23, 42, 0.22);
+  --shadow-3: 0 2px 6px rgba(15, 23, 42, 0.05), 0 30px 60px -30px rgba(15, 23, 42, 0.3), 0 0 60px -28px rgba(var(--glow-violet), 0.45);
+
+  /* Motion */
+  --dur-micro: 160ms;
+  --dur-ui: 320ms;
+  --dur-section: 1100ms;
+  --dur-hero: 1600ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --header-h: 88px;
+  --focus-color: var(--th-lavender);
+  --focus-ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--focus-color);
+  color-scheme: light;
+}
+
+[data-motion='reduced'] {
+  --dur-micro: 0ms;
+  --dur-ui: 0ms;
+  --dur-section: 0ms;
+  --dur-hero: 0ms;
+}

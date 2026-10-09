@@ -1,0 +1,29 @@
+Third-party logos, used unmodified in their official colours to name tools Linkfields builds with.
+They are trademarks of their owners; their use implies no partnership or endorsement.
+Confirm each vendor's brand guidelines (some require permission) before publishing.
+
+Simple Icons v16.34.0 (CC0 SVG paths, official brand colour from each brand's source):
+  claude, googlegemini, meta, mistralai, googlecloud, huggingface, langgraph,
+  modelcontextprotocol, nvidia, paloaltonetworks, cisco, owasp, cloudflare
+Wikimedia Commons:
+  openai.svg      File:OpenAI logo 2025 (symbol).svg
+  microsoft.svg   File:Microsoft logo (2012).svg
+  aws.svg         File:Amazon Web Services Logo.svg
+  copilot.svg     File:Microsoft 365 Copilot Icon one-color.svg
+  azure.svg       File:Microsoft Azure.svg
+  checkpoint.svg  File:Check-Point-2024-logo-color.svg
+  wiz.svg         File:Wiz logo.svg
+
+Platform logos for services and solutions (content/logos.js):
+Simple Icons v16.34.0: sap, odoo, uipath, n8n, kubernetes, docker, jenkins, githubactions, terraform,
+  react, angular, flutter, python, selenium, cypress, figma, jira, confluence, miro, apachespark,
+  databricks, snowflake, apachekafka, apacheairflow, pytorch, tensorflow, scikitlearn, langchain,
+  crewai, elasticsearch, postgresql, neo4j, opencv, dialogflow, mlflow, grafana, vmware, fortinet,
+  citrix, anthropic, redhat
+Wikimedia Commons: dynamics365.svg  File:Microsoft Dynamics 365 Logo (2021–present).svg
+Linkfields: testoriumz.png (Linkfields' own product logo, from testoriumz.com)
+Partner logos (Salesforce, Automation Anywhere) are the files linkfields.com publishes (public/images/partners).
+
+Reverse colourways (white lettering, for dark backgrounds) made from the official files above, changing only the
+wordmark colour as the brands' own dark-background versions do: aws-reverse.svg, microsoft-reverse.svg,
+odoo-reverse.svg, blue-prism-reverse.svg.
