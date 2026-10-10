@@ -30,9 +30,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    /* Shade the two sides, where the copy sits; keep the middle clear */
-    linear-gradient(90deg, rgba(10, 10, 22, 0.66) 0%, rgba(10, 10, 22, 0.32) 26%, rgba(10, 10, 22, 0) 42%, rgba(10, 10, 22, 0) 58%, rgba(10, 10, 22, 0.3) 74%, rgba(10, 10, 22, 0.62) 100%),
-    linear-gradient(180deg, rgba(12, 12, 24, 0.5) 0%, rgba(12, 12, 24, 0.12) 22%, rgba(12, 12, 24, 0) 40%, rgba(12, 12, 24, 0) 70%, rgba(12, 12, 24, 0.32) 100%),
+    /* No copy over the scene now: a light lens falloff only */
+    linear-gradient(180deg, rgba(12, 12, 24, 0.28) 0%, rgba(12, 12, 24, 0) 22%, rgba(12, 12, 24, 0) 72%, rgba(12, 12, 24, 0.22) 100%),
     radial-gradient(120% 90% at 50% 45%, transparent 60%, rgba(10, 10, 18, 0.45) 100%);
 }
 
@@ -209,3 +208,21 @@ html.lf-hero-zoom .lf-header .lf-pill { opacity: 0; transform: translateY(-16px)
     radial-gradient(62vw 62vw at 50% 45%, #f3f2ed 0%, var(--surface) 100%);
 }
 .dk-endscreen__logo { width: auto; height: calc(var(--s) * 168); filter: drop-shadow(0 calc(var(--s) * 10) calc(var(--s) * 18) rgba(15, 23, 42, 0.16)); }
+
+/* Hero pair: the graphite fill follows the cursor, over the office scene */
+.dk-pill { transition: background-color 0.45s var(--ease-out), color 0.35s var(--ease-out), box-shadow 0.45s var(--ease-out), transform 0.3s var(--ease-out); }
+.dk-pill--primary,
+.dk-pill:is(:hover, :focus-visible),
+.dk-pill--primary:hover {
+  background: #3a3d45;
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 22px -4px rgba(244, 243, 239, 0.45), 0 12px 30px -10px rgba(0, 0, 0, 0.7);
+}
+.dk-pill:is(:hover, :focus-visible) { transform: translateY(-1px); }
+.dk-pill--ghost,
+.dk-actions:has(.dk-pill:is(:hover, :focus-visible)) .dk-pill:not(:hover, :focus-visible) {
+  background: rgba(255, 255, 255, 0.02);
+  color: #ffffff;
+  transform: none;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.7);
+}

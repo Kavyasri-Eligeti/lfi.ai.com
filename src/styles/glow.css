@@ -39,7 +39,7 @@ html :is(
     inset 0 0 0 1px rgba(var(--glow-violet), 0.28),
     0 1px 2px rgba(15, 23, 42, 0.05),
     -14px -12px 40px -16px rgba(var(--glow-violet), 0.55),
-    16px -4px 40px -16px rgba(var(--glow-sky), 0.45),
+    16px -4px 40px -16px rgba(var(--glow-gold), 0.45),
     10px 18px 46px -16px rgba(var(--glow-teal), 0.5),
     0 26px 60px -30px rgba(15, 23, 42, 0.35);
 }
@@ -50,9 +50,9 @@ html .lf-partner:is(:hover, :focus-within) {
   z-index: 2;
   transform: translateY(-2px);
   box-shadow:
-    0 0 0 1px rgba(45, 88, 192, 0.45),
-    0 0 16px 1px rgba(45, 88, 192, 0.22),
-    0 12px 28px -12px rgba(45, 88, 192, 0.35);
+    0 0 0 1px rgba(245, 179, 1, 0.6),
+    0 0 16px 1px rgba(245, 179, 1, 0.3),
+    0 12px 28px -12px rgba(214, 158, 22, 0.5);
 }
 
 [data-motion='reduced'] :is(.lf-card--interactive, .lf-demo-card, .lf-aisol, .lf-solution, .lf-capindex__card, .lf-insight, .lf-channel, .lf-contact__social-link, .lf-partner):is(:hover, :focus-within) {

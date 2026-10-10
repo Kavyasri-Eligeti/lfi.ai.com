@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { m, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import LinkfieldsLogo from '../../components/brand/LinkfieldsLogo';
-import { company } from '../../content/company';
 import { useMotion } from '../../features/motion/MotionProvider';
 import { whenPageSettled } from '../../features/motion/pageSettled';
 import './desk.css';
@@ -18,28 +16,10 @@ export function canUseDesk() {
   }
 }
 
+// The opening view carries no visible text: the scene and the Linkfields
+// branding only. The headline stays for search engines and screen readers.
 function HeroCopy() {
-  return (
-    <>
-      {/* Left: the statement. Right: the offer. Same size and style, mirrored. */}
-      <div className="dk-copy__lead">
-        <p className="dk-eyebrow"><span className="dk-eyebrow__dot" aria-hidden="true" />Linkfields AI</p>
-        <h1 id="hero-title" className="dk-title">
-          Intelligence that<br /><span className="dk-hl">moves business<br />forward.</span>
-        </h1>
-      </div>
-      <div className="dk-copy__side">
-        <span className="dk-copy__rule" aria-hidden="true" />
-        <p className="dk-title dk-tag">
-          AI solutions.<br /><span className="dk-hl">AI services.<br />Live demos.</span>
-        </p>
-        <div className="dk-actions">
-          <Link to="/solutions" className="dk-pill dk-pill--primary">Explore AI solutions</Link>
-          <Link to="/contact" className="dk-pill dk-pill--ghost">Talk to our team</Link>
-        </div>
-      </div>
-    </>
-  );
+  return <h1 id="hero-title" className="lf-visually-hidden">Linkfields AI: intelligence that moves business forward</h1>;
 }
 
 /** Without WebGL or with reduced motion: the copy over a still, then the screen's content. */
@@ -48,7 +28,7 @@ function StillHero() {
     <>
       <section className="dk-still" aria-labelledby="hero-title">
         <img className="dk-still__bg" src={`${process.env.PUBLIC_URL}/media/desk/poster.jpg`} alt="" />
-        <div className="dk-copy"><HeroCopy /></div>
+        <HeroCopy />
       </section>
     </>
   );
@@ -67,11 +47,6 @@ function SceneHero() {
   const [ready, setReady] = useState(false);
 
   const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end end'] });
-  // The section starts under the header (negative margin), so at the top of
-  // the page the progress is already ~0.04: the fades begin after that.
-  const copyOpacity = useTransform(scrollYProgress, [0.06, 0.17], [1, 0]);
-  const copyY = useTransform(scrollYProgress, [0.06, 0.2], [0, -80]);
-  const noteOpacity = useTransform(scrollYProgress, [0.06, 0.11], [1, 0]);
   const vignette = useTransform(scrollYProgress, [0.55, 0.9], [1, 0]);
   // The screen's logo hands over to the AI ring that draws in below.
   // The AI ring's scene is already drawn underneath the last screen of this
@@ -124,10 +99,7 @@ function SceneHero() {
         <m.div className="dk-endscreen" style={{ opacity: endOpacity }} aria-hidden="true">
           <LinkfieldsLogo className="dk-endscreen__logo" />
         </m.div>
-        <m.div className="dk-copy" style={{ opacity: copyOpacity, y: copyY }}><HeroCopy /></m.div>
-        <m.p className="dk-note" style={{ opacity: noteOpacity }}>
-          {company.legalName}, established in {company.foundedIn} in {company.founded}.
-        </m.p>
+        <HeroCopy />
       </m.div>
     </section>
   );

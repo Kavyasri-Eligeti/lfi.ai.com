@@ -95,13 +95,18 @@ describe('the site renders without WebGL (CSS field tier)', () => {
     aiSolutions.forEach((sol) => expect(screen.getByRole('heading', { level: 3, name: sol.name })).toBeInTheDocument());
   });
 
-  test('AI services are listed alongside every published service', async () => {
+  test('every published service and AI services are tabs, one panel at a time', async () => {
     renderAt('/services');
     await screen.findByRole('heading', { level: 1 });
+    // Every service is a tab; the chosen one fills the panel.
     [...corporateServices.map((x) => x.name), 'AI Services'].forEach((name) =>
-      expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument()
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument()
     );
+    expect(screen.getByRole('heading', { level: 2, name: corporateServices[0].name })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('tab', { name: 'AI Services' }));
+    expect(await screen.findByRole('heading', { level: 2, name: 'AI Services' })).toBeInTheDocument();
     expect(screen.getByText('New practice')).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 2, name: corporateServices[0].name })).not.toBeInTheDocument();
   });
 
   test('the enquiry form validates before opening email', async () => {

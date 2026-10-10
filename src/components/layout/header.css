@@ -262,3 +262,12 @@ html.lf-menu-open { overflow: hidden; }
 }
 [data-motion='reduced'] :is(.lf-header__capsule, .lf-pill) { transition: opacity 0.2s linear; }
 [data-motion='reduced'] .lf-header.is-hidden:not(:focus-within) :is(.lf-header__capsule, .lf-pill) { transform: none; }
+
+/* ---------- Linkfields leaf shape ----------
+   The yellow leaf of the Linkfields mark: large rounded top-left and
+   bottom-right corners, crisp top-right and bottom-left. */
+.lf-header__capsule,
+.lf-pill { border-radius: 24px 6px 24px 6px; }
+.lf-nav a,
+.lf-pill__contact,
+.lf-pill__menu { border-radius: 14px 4px 14px 4px; }

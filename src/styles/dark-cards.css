@@ -43,12 +43,12 @@ html :is(
   --border-strong: rgba(255, 255, 255, 0.2);
   --surface-2: rgba(255, 255, 255, 0.06);
   --surface-3: rgba(255, 255, 255, 0.1);
-  --link: #b4a9ff;
-  --link-hover: #d6d0ff;
+  --link: #f0c060;
+  --link-hover: #ffd98a;
   --th-lavender: #a99cff;
   --th-teal: #5eead4;
   --th-amber: #fbbf24;
-  --lf-blue: #8b7cff;
+  --lf-blue: #e0a83a;
   --m-text: #ffffff;
   --m-text-2: #d4d8e0;
   --m-text-3: #aeb4bf;
@@ -139,7 +139,7 @@ html body :is(
     inset 0 0 0 1px rgba(var(--glow-violet), 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     -16px -12px 46px -16px rgba(var(--glow-violet), 0.75),
-    18px -2px 46px -16px rgba(var(--glow-sky), 0.6),
+    18px -2px 46px -16px rgba(var(--glow-gold), 0.6),
     8px 22px 54px -16px rgba(var(--glow-teal), 0.65),
     0 30px 60px -30px rgba(15, 23, 42, 0.5);
 }
@@ -160,29 +160,98 @@ html :is(.lf-card, .lf-insight) .lf-insight__type { color: #fbbf24; }
 html .lf-value .lf-value__num { color: color-mix(in srgb, var(--va) 55%, #ffffff); }
 html .lf-recog__card .lf-recog__value { color: color-mix(in srgb, var(--a) 75%, #ffffff); }
 
-/* ---------- The values-card recipe, on every card ----------
-   Graphite, a coloured glow in the top-left corner, a thin top edge in the
-   same colour, and the accent carried into small details. Six accents rotate
-   through each grid: amber, rose, lavender, teal, coral, blue. */
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(6n+1),
-html :nth-child(6n+1) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #fbbf24; }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(6n+2),
-html :nth-child(6n+2) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #f0457f; }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(6n+3),
-html :nth-child(6n+3) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #a99cff; }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(6n+4),
-html :nth-child(6n+4) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #5eead4; }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(6n+5),
-html :nth-child(6n+5) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #ff8a5c; }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(6n+6),
-html :nth-child(6n+6) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #5fb4ff; }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) {
-  --acc: #a99cff;
-  background:
-    linear-gradient(90deg, var(--acc), color-mix(in srgb, var(--acc) 12%, transparent)) top / 100% 3px no-repeat,
-    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--acc) 24%, transparent), transparent 62%),
-    var(--graphite);
+/* ---------- Linkfields-mark cards ----------
+   Every card takes the Linkfields mark's DNA:
+   - the yellow leaf's silhouette: large rounded top-left and bottom-right
+     corners, crisp top-right and bottom-left
+   - the logo's colours, rotating yellow, orange, blue through each grid,
+     carried by the corner glow, the top edge and the details
+   - the logo's three tiles as a small yellow-orange-blue segment on the top
+     edge, and the mark itself as a faint watermark in the corner */
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(3n+1),
+html :nth-child(3n+1) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #ffd600; --va: #ffd600; }
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(3n+2),
+html :nth-child(3n+2) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #ff7800; --va: #ff7800; }
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card):nth-child(3n+3),
+html :nth-child(3n+3) > :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) { --acc: #5b86f0; --va: #5b86f0; }
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-recog__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) {
+  --acc: #ffd600;
+  --leaf-r: clamp(22px, 1rem + 1vw, 34px);
+  --leaf-s: 6px;
+  border-radius: var(--leaf-r) var(--leaf-s) var(--leaf-r) var(--leaf-s) !important;
 }
-/* The accent in the details: eyebrows, numbers, links */
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) :is(.lf-solution__group, .lf-eyebrow, .lf-insight__type) { color: color-mix(in srgb, var(--acc) 80%, #ffffff); }
-html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) .lf-link { color: color-mix(in srgb, var(--acc) 70%, #ffffff); }
+html :is(.lf-nurture li, .lf-principles li) { --leaf-r: 18px; --leaf-s: 4px; }
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) {
+  background:
+    linear-gradient(90deg, #ffd600 0 33.3%, #ff7800 33.3% 66.6%, #5b86f0 66.6% 100%) left calc(var(--leaf-r) + 4px) top 0 / 46px 3px no-repeat,
+    linear-gradient(90deg, color-mix(in srgb, var(--acc) 70%, transparent), transparent 75%) left calc(var(--leaf-r) + 54px) top 0 / 60% 1.5px no-repeat,
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--acc) 22%, transparent), transparent 62%),
+    var(--graphite) !important;
+}
+html :is(.lf-nurture, .lf-principles) li:nth-child(n) {
+  background:
+    radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--acc) 26%, transparent), transparent 70%),
+    var(--graphite) !important;
+}
+/* The accent in the details */
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) :is(.lf-solution__group, .lf-eyebrow, .lf-insight__type, .lf-value__num) { color: color-mix(in srgb, var(--acc) 82%, #ffffff); }
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) .lf-link { color: color-mix(in srgb, var(--acc) 72%, #ffffff); }
+/* Inner tiles echo the orange and blue tiles: one rounded corner */
+html :is(.lf-card:not(.lf-card--dashed), .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .lf-nurture li, .lf-principles li, .mh-final__card, .lf-globe__card) :is(.lf-value__mark, .lf-element, .lf-demo-card__go) { border-radius: 4px 4px 14px 4px; }
+
+/* ---------- Catalogue filters: a graphite panel ---------- */
+html .lf-catalogue-filters.lf-catalogue-filters {
+  --text: #f3f4f7;
+  --text-strong: #ffffff;
+  --text-2: #d4d8e0;
+  --text-3: #aeb4bf;
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  color: var(--text);
+  background:
+    linear-gradient(90deg, #ffd600 0 33.3%, #ff7800 33.3% 66.6%, #5b86f0 66.6% 100%) left 34px top 0 / 46px 3px no-repeat,
+    radial-gradient(90% 120% at 0% 0%, rgba(91, 134, 240, 0.18), transparent 60%),
+    var(--graphite);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 44px -24px rgba(15, 23, 42, 0.55);
+  border-radius: 28px 6px 28px 6px;
+}
+html .lf-catalogue-filters :is(label, legend, .lf-label, .lf-eyebrow) { color: #d4d8e0; }
+html .lf-catalogue-filters :is(.lf-input, .lf-select, .lf-search input) {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+html .lf-catalogue-filters :is(.lf-input, .lf-search input)::placeholder { color: rgba(255, 255, 255, 0.45); }
+html .lf-catalogue-filters :is(.lf-input, .lf-select, .lf-search input):focus { border-color: #f5b301; box-shadow: 0 0 0 3px rgba(245, 179, 1, 0.28), 0 0 20px -6px rgba(245, 179, 1, 0.6); outline: none; }
+html .lf-catalogue-filters .lf-search svg { color: rgba(255, 255, 255, 0.6); }
+html .lf-catalogue-filters option { color: #0b1220; background: #ffffff; }
+html .lf-catalogue-filters .lf-chip { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); color: #e6e8ee; }
+html .lf-catalogue-filters .lf-chip:hover { border-color: #ffd600; color: #ffffff; background: rgba(255, 214, 0, 0.08); }
+html .lf-catalogue-filters :is(.lf-chip[aria-pressed='true'], .lf-chip.is-active) {
+  background: linear-gradient(180deg, #faf9f6, #ebe9e3);
+  border-color: transparent;
+  color: #1f2228;
+  box-shadow: 0 0 18px -4px rgba(244, 243, 239, 0.6);
+}
+html .lf-catalogue-filters .lf-chip :is(span, small, .lf-chip__count) { color: inherit; opacity: 0.7; }
+
+/* Partner tiles: the Linkfields leaf shape */
+html .lf-partner.lf-partner { border-radius: 26px 6px 26px 6px; overflow: hidden; }
+
+/* Button pairs inside graphite cards: the light fill follows the cursor */
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn {
+  background-color: #ffffff;
+  background-image: none;
+  transition: background-color 0.45s var(--ease-out), color 0.35s var(--ease-out), box-shadow 0.45s var(--ease-out), transform 0.3s var(--ease-out);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn--secondary { background-color: rgba(255, 255, 255, 0.04); }
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) .lf-btn:is(:hover, :focus-visible) {
+  background-color: #ffffff;
+  color: #0b1220;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 12px 28px -10px rgba(255, 255, 255, 0.35);
+}
+html :is(.lf-card, .lf-capindex__card, .lf-insight, .lf-solution, .lf-aisol, .lf-vm__card, .lf-value, .lf-enquiry, .lf-service__group, .mh-final__card, .lf-globe__card) :has(> .lf-btn:is(:hover, :focus-visible)) > .lf-btn:not(:hover, :focus-visible) {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}

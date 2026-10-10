@@ -18,6 +18,7 @@
   --glow-violet: 124, 108, 255;
   --glow-teal: 20, 184, 166;
   --glow-sky: 56, 152, 255;
+  --glow-gold: 245, 179, 1; /* hover light, in place of blue */
   --glow-rose: 236, 72, 153;
 
   /* Kept names (components reference them) */
@@ -32,7 +33,7 @@
 
   --lf-yellow: #f5b301;
   --lf-orange: #f07c00;
-  --lf-blue: var(--th-lavender);
+  --lf-blue: #a8741a; /* hover/highlight accent: rusted gold (was violet) */
   --lf-mist: #e2dfd8;
   --lf-charcoal: #0b1220;
   --lf-blue-700: var(--th-violet);
@@ -59,8 +60,9 @@
   --text-3: #5f6b7d;
   --text-on-ink: #0b1220;
   --text-on-ink-2: #3d4757;
-  --link: #5a4ae3;
-  --link-hover: #3f30c4;
+  /* Links: rusted gold, brightening on hover */
+  --link: #8f6110;
+  --link-hover: #b07a1a;
 
   /* Status tones (on white) */
   --tone-blue-bg: rgba(109, 93, 245, 0.1);    --tone-blue-fg: #4c3fd1;

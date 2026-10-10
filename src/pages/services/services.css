@@ -1,21 +1,65 @@
-.lf-services-layout__inner { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; }
-.lf-services-index { position: sticky; top: calc(var(--header-h) + 24px); }
-.lf-services-index ul { display: grid; gap: 2px; border-left: 2px solid var(--border); }
-.lf-services-index a {
-  display: block;
-  margin-left: -2px;
-  padding: 7px 0 7px 14px;
-  border-left: 2px solid transparent;
-  color: var(--text-2);
-  font: 600 0.9375rem/1.3 var(--font-sans);
-  text-decoration: none;
-  transition: color var(--dur-micro), border-color var(--dur-ui);
+.lf-services-layout { --stage-top: calc(var(--header-h) + 12px); position: relative; }
+/* The pinned stage: the index on the left, the current service on the right.
+   The section's height (one step per service) is set by the page script. */
+.lf-services-stage { position: sticky; top: var(--stage-top); height: calc(100vh - var(--stage-top) - 16px); overflow: hidden; }
+.lf-services-layout__inner { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: stretch; height: 100%; }
+.lf-services-rail { position: relative; }
+.lf-services-rail::before { content: ''; position: absolute; left: 0; top: 2.6rem; bottom: 24px; width: 2px; background: var(--border-strong); border-radius: 2px; }
+.lf-services-index { padding-top: 6px; }
+.lf-services-index__list { position: relative; }
+.lf-services-index ul { position: relative; display: grid; gap: 2px; }
+/* The rust marker slides to the current service */
+.lf-services-index__marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: #b7410e;
+  box-shadow: 0 0 10px rgba(183, 65, 14, 0.45);
+  transition: transform 0.5s var(--ease-cinematic), height 0.5s var(--ease-cinematic);
+  pointer-events: none;
 }
-.lf-services-index a:hover { color: var(--text); }
-.lf-services-index a[aria-current='true'] { color: var(--lf-blue); border-left-color: var(--lf-blue); }
+.lf-services-index button {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 8px 0 8px 18px;
+  color: var(--text-2);
+  font: 700 1rem/1.3 var(--font-sans);
+  text-decoration: none;
+  transition: color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.lf-services-index button:hover { color: #b7410e; transform: translateX(3px); }
+.lf-services-index button[aria-current='true'] { color: #b7410e; }
+.lf-services-index button:focus-visible { outline: 2px solid #b7410e; outline-offset: 2px; border-radius: 4px; }
+/* All services stacked in place; only the current one shows, cross-fading */
+.lf-services-layout .lf-services-list { position: relative; display: block; height: 100%; overflow: hidden; }
+.lf-services-panel {
+  position: absolute;
+  inset: 0 0 auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s var(--ease-out), visibility 0s linear 0.5s;
+  will-change: transform, opacity;
+}
+.lf-services-panel.is-active { opacity: 1; visibility: visible; transition: opacity 0.5s var(--ease-out), visibility 0s; }
+.lf-services-panel .lf-service { border-top: 2px solid var(--text); padding-top: clamp(1.5rem, 1rem + 2vw, 3rem); }
+.lf-services-panel .lf-service__head { position: static; }
 @media (max-width: 960px) {
-  .lf-services-layout__inner { grid-template-columns: 1fr; }
-  .lf-services-index { display: none; }
+  .lf-services-layout { padding-block: var(--section-y); }
+  .lf-services-stage { position: static; height: auto; overflow: visible; }
+  .lf-services-layout__inner { grid-template-columns: 1fr; height: auto; }
+  .lf-services-rail::before { display: none; }
+  .lf-services-index ul { grid-auto-flow: column; overflow-x: auto; gap: 6px; padding-bottom: 6px; }
+  .lf-services-index__marker { display: none; }
+  .lf-services-index button { width: auto; padding: 8px 12px; white-space: nowrap; border-radius: 14px 4px 14px 4px; box-shadow: inset 0 0 0 1px var(--border-strong); }
+  .lf-services-index button[aria-current='true'] { box-shadow: inset 0 0 0 1.5px #b7410e; }
+  .lf-services-layout .lf-services-list { height: auto; overflow: visible; }
+  .lf-services-panel { position: static; opacity: 1; visibility: visible; }
 }
 
 .lf-services-list { display: grid; }

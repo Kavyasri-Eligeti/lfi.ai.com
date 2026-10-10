@@ -43,3 +43,51 @@
   .lf-industry--flip .lf-industry__media { order: 0; }
   .lf-industry__media { aspect-ratio: 16 / 10; }
 }
+
+/* ---------- Industry jump buttons: graphite, lit white on hover ----------
+   The site's graphite with the Linkfields leaf shape; hovering lifts the
+   button with white text and a soft off-white glow (no black fill). */
+html .lf-industries-jump a,
+html .lf-page-hero .lf-industries-jump a {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 14px 4px 14px 4px;
+  background-color: #363940;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 60%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 16px -10px rgba(20, 22, 28, 0.6);
+  color: rgba(240, 239, 235, 0.86);
+  font-weight: 700;
+  transition: background-color 0.35s var(--ease-out), color 0.25s var(--ease-out), box-shadow 0.35s var(--ease-out), transform 0.3s var(--ease-out);
+}
+html .lf-page-hero .lf-industries-jump a::before { color: #ffd600; }
+html .lf-industries-jump a:is(:hover, :focus-visible),
+html .lf-page-hero .lf-industries-jump a:is(:hover, :focus-visible) {
+  background-color: #4a4d55;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 0 18px -4px rgba(244, 243, 239, 0.5), 0 10px 22px -10px rgba(20, 22, 28, 0.7);
+}
+
+/* Related-demo chips: lit in rusted gold on hover */
+html .lf-industry__demos a { transition: color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), background-color 0.3s var(--ease-out); }
+html .lf-industry__demos a:is(:hover, :focus-visible) {
+  color: #8f6110;
+  background-color: rgba(214, 158, 22, 0.08);
+  box-shadow: inset 0 0 0 1.5px #b07a1a, 0 0 16px -6px rgba(214, 158, 22, 0.6);
+}
+
+/* Industry buttons: the nav bar's transition. Graphite at rest; on hover the
+   button lights up as the off-white pill with dark text and a soft glow. */
+html .lf-industries-jump a:is(:hover, :focus-visible),
+html .lf-page-hero .lf-industries-jump a:is(:hover, :focus-visible) {
+  background-color: #f4f3ef;
+  background-image: linear-gradient(180deg, #faf9f6, #ebe9e3);
+  color: #1f2228;
+  transform: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 0 18px -2px rgba(244, 243, 239, 0.55);
+  text-shadow: none;
+}
+html .lf-page-hero .lf-industries-jump a:is(:hover, :focus-visible)::before { color: #b07a1a; }
