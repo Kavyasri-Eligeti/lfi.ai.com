@@ -31,13 +31,13 @@ import {
   SpotLight,
   SRGBColorSpace,
   TextureLoader,
-  TorusGeometry,
   Vector3,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import { buildCoffeeCup, buildGlassVase, buildTulips, VASE_MOUTH } from './deskDetails';
 
 export const OFFICE_BASE = `${process.env.PUBLIC_URL || ''}/media/office`;
 export const DESK_TOP = 0.75;
@@ -134,28 +134,22 @@ function buildDesk(walnut) {
 /** Small things on the desk, modelled: a mug, a notebook and pen. */
 function deskProps() {
   const g = new Group();
-  const ceramic = new MeshPhysicalMaterial({ color: 0xf2f0ec, roughness: 0.28, clearcoat: 0.6 });
-  const mug = new Mesh(new CylinderGeometry(0.04, 0.037, 0.095, 40, 1, true), ceramic);
-  mug.position.set(0.66, DESK_TOP + 0.0475, 0.2);
-  const base = new Mesh(new CylinderGeometry(0.037, 0.037, 0.006, 40), ceramic);
-  base.position.set(0.66, DESK_TOP + 0.003, 0.2);
-  const coffee = new Mesh(new CylinderGeometry(0.037, 0.037, 0.002, 40), new MeshStandardMaterial({ color: 0x2a160b, roughness: 0.15 }));
-  coffee.position.set(0.66, DESK_TOP + 0.085, 0.2);
-  const handle = new Mesh(new TorusGeometry(0.024, 0.006, 12, 32, Math.PI), ceramic);
-  handle.rotation.z = -Math.PI / 2;
-  handle.position.set(0.7, DESK_TOP + 0.05, 0.2);
-  g.add(mug, base, coffee, handle);
+  // Coffee: a glazed cup on its saucer, front right, handle towards the chair
+  const cup = buildCoffeeCup();
+  cup.position.set(0.74, DESK_TOP, 0.17);
+  cup.rotation.y = -0.55;
+  g.add(cup);
   const leather = new MeshStandardMaterial({ color: 0x23262d, roughness: 0.6 });
   const book = new Mesh(new RoundedBoxGeometry(0.21, 0.014, 0.15, 2, 0.003), leather);
-  book.position.set(-0.52, DESK_TOP + 0.007, 0.16);
-  book.rotation.y = 0.22;
+  book.position.set(-0.55, DESK_TOP + 0.007, 0.15);
+  book.rotation.y = 0.06;
   const paper = new Mesh(new BoxGeometry(0.2, 0.01, 0.14), new MeshStandardMaterial({ color: 0xf4f1ea, roughness: 0.9 }));
-  paper.position.set(-0.52, DESK_TOP + 0.006, 0.16);
-  paper.rotation.y = 0.22;
+  paper.position.set(-0.55, DESK_TOP + 0.006, 0.15);
+  paper.rotation.y = 0.06;
   const pen = new Mesh(new CylinderGeometry(0.0045, 0.0045, 0.14, 16), new MeshPhysicalMaterial({ color: 0x0f1012, metalness: 0.7, roughness: 0.25 }));
   pen.rotation.z = Math.PI / 2;
-  pen.rotation.y = 0.5;
-  pen.position.set(-0.36, DESK_TOP + 0.005, 0.24);
+  pen.rotation.y = 0.06;
+  pen.position.set(-0.55, DESK_TOP + 0.0185, 0.15);
   g.add(book, paper, pen);
 
   // A stitched leather desk pad under the laptop
@@ -420,6 +414,13 @@ export function buildOffice({ scene, set, renderer }) {
   const walnut = material('natural_walnut_veneer', 1, 1, { color: new Color(0.6, 0.4, 0.27), clearcoat: 0.2, clearcoatRoughness: 0.3, envMapIntensity: 0.55 });
   set.add(buildDesk(walnut));
   set.add(deskProps());
+  // A clear glass carafe with water, and three pink tulips in it
+  const vase = buildGlassVase();
+  vase.position.set(0.6, DESK_TOP, -0.29);
+  set.add(vase);
+  const tulips = buildTulips();
+  tulips.position.set(0.6, DESK_TOP + VASE_MOUTH, -0.29);
+  set.add(tulips);
   const lamp = deskLamp();
   lamp.group.position.set(-0.86, DESK_TOP, -0.3);
   lamp.group.rotation.y = -0.35;
@@ -445,10 +446,9 @@ export function buildOffice({ scene, set, renderer }) {
       }, undefined, () => res());
     });
   pending.push(
-    model('ceramic_vase_01', (r) => { fitHeight(r, 0.26); r.position.set(0.52, DESK_TOP, -0.3); }),
     model('potted_plant_04', (r) => { fitHeight(r, 0.14); r.position.set(-0.5, DESK_TOP + 0.092, -0.22); }),
     model('modern_ceiling_lamp_01', (r) => { const b = new Box3().setFromObject(r); r.position.set(3.0, ROOM.h - b.max.y, -1.6); }),
-    model('standing_picture_frame_01', (r) => { fitHeight(r, 0.17); r.position.set(0.74, DESK_TOP, -0.26); r.rotation.y = -0.45; }),
+    model('standing_picture_frame_01', (r) => { fitHeight(r, 0.17); r.position.set(0.84, DESK_TOP, -0.25); r.rotation.y = -0.6; }),
     model('dining_chair_02', (r) => { r.position.set(-1.2, 0, 0.78); r.rotation.y = 0.95; }),
     model('modern_arm_chair_01', (r) => { r.position.set(2.45, 0, -2.25); r.rotation.y = -0.55; }),
     model('modern_arm_chair_01', (r) => { r.position.set(3.75, 0, -0.75); r.rotation.y = -1.6; }),

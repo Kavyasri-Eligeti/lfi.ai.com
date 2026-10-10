@@ -2,7 +2,6 @@ All assets CC0 from Poly Haven (https://polyhaven.com):
   - modern_arm_chair_01
   - modern_coffee_table_01
   - potted_plant_02
-  - ceramic_vase_01
   - dining_chair_02
   - standing_picture_frame_01
   - hanging_picture_frame_01
