@@ -24,12 +24,25 @@ export default function Header() {
 
   useEffect(() => setOpen(false), [location.pathname]);
 
+  // Scrolling down tucks the bars away; scrolling up (or reaching the top)
+  // brings them back. A small threshold keeps it from flickering.
+  const [hidden, setHidden] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (y < 120) setHidden(false);
+      else if (y > lastY + 6) setHidden(true);
+      else if (y < lastY - 6) setHidden(false);
+      if (Math.abs(y - lastY) > 6 || y < 120) lastY = y;
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+  // A new page always shows the bars.
+  useEffect(() => setHidden(false), [location.pathname]);
 
   // Menu: Escape closes it, focus moves into it, the page behind does not scroll.
   useEffect(() => {
@@ -54,10 +67,10 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className={`lf-header${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
+    <header className={`lf-header${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}${hidden && !open ? ' is-hidden' : ''}`}>
       <div className="lf-header__inner">
         <Link to="/" className="lf-header__capsule" aria-label="Linkfields AI home">
-          <LinkfieldsLogo height={26} />
+          <LinkfieldsLogo height={26} light />
           <span className="lf-header__divider" aria-hidden="true" />
           <AILogo size={34} />
         </Link>

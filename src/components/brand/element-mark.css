@@ -10,7 +10,7 @@
   border-radius: calc(var(--s) * 0.22);
   background:
     radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 60%),
-    linear-gradient(150deg, #ffffff, var(--surface-2));
+    linear-gradient(150deg, #50535b, #33363d);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 0 0 1px rgba(15, 23, 42, 0.056),
@@ -35,7 +35,7 @@
   border-radius: calc(var(--s) * 0.22 - 1.5px);
   background:
     radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    linear-gradient(150deg, var(--surface-2), var(--surface-2));
+    linear-gradient(150deg, #4a4d55, #2f3238);
   z-index: -1;
 }
 .lf-element__num {

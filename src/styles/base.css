@@ -166,3 +166,16 @@ html.lenis, html.lenis body { height: auto; }
   line-height: 1.2;
 }
 .legacy-app p { max-width: none; }
+
+/* ---------- Scrollbar: graphite track, white thumb (the site's pairing) ---------- */
+html { scrollbar-color: #f4f3ef #171a24; scrollbar-width: auto; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: #171a24; }
+::-webkit-scrollbar-thumb {
+  background: #f4f3ef;
+  border: 3px solid #171a24;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: #c9bfff; }
+::-webkit-scrollbar-corner { background: #171a24; }
+::-webkit-scrollbar-button { display: none; }

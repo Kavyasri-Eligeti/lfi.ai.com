@@ -1,13 +1,13 @@
-// The official Linkfields logo, used unmodified.
-// public/brand/linkfields-logo-dark.svg is a byte-identical copy of
-// https://www.linkfields.com/images/linkfields_logo%201.svg (light-on-dark variant,
-// intrinsic 181×46). Only its display size changes. Proportions are preserved.
-export default function LinkfieldsLogo({ height = 32, className }) {
+// The official Linkfields logo, used unmodified. Two published variants,
+// intrinsic 181×46; only the display size changes:
+//  - linkfields-logo-dark.svg: dark wordmark, for light backgrounds (default)
+//  - linkfields-logo.svg: light wordmark, for dark backgrounds (`light`)
+export default function LinkfieldsLogo({ height = 32, light = false, className }) {
   const width = Math.round((181 / 46) * height);
   return (
     <img
       className={className}
-      src={`${process.env.PUBLIC_URL}/brand/linkfields-logo-dark.svg`}
+      src={`${process.env.PUBLIC_URL}/brand/${light ? 'linkfields-logo.svg' : 'linkfields-logo-dark.svg'}`}
       width={width}
       height={height}
       alt="Linkfields"

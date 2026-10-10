@@ -34,7 +34,7 @@
 .lf-solution:first-child { grid-column: span 2; background: var(--surface-ink); color: var(--text-on-ink); box-shadow: none; border-radius: var(--radius-leaf-lg); }
 .lf-solution:first-child .lf-solution__headline { color: var(--text-strong); font-size: clamp(1.375rem, 1.1rem + 1vw, 2rem); }
 .lf-solution:first-child .lf-solution__intro { color: var(--text-on-ink-2); }
-.lf-solution:first-child .lf-solution__offerings li { background: rgba(255, 255, 255, 0.9); color: var(--text-on-ink); box-shadow: inset 0 0 0 1px var(--border); }
+.lf-solution:first-child .lf-solution__offerings li { background: rgba(255, 255, 255, 0.1); color: #f3f4f7; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
 .lf-solution:first-child .lf-link { color: var(--text-strong); }
 .lf-solution:first-child .lf-link:hover { color: var(--link); }
 .lf-solution:first-child .lf-solution__group { color: var(--text-on-ink-2); }

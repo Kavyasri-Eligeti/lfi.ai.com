@@ -1,6 +1,6 @@
 /*
  * Linkfields AI design tokens: "Theatre", light edition.
- * White paper, ink type, violet and teal light.
+ * Off-white paper, ink type, violet and teal light.
  * Display and UI type: Share Tech Mono (SIL OFL, self-hosted via @fontsource).
  * Long-form reading: Open Sans (SIL OFL, self-hosted).
  * The Linkfields logo is never recoloured; on white it uses its dark wordmark.
@@ -21,9 +21,9 @@
   --glow-rose: 236, 72, 153;
 
   /* Kept names (components reference them) */
-  --aws-squid-ink: #f4f6fb;
-  --aws-squid-ink-2: #eef1f8;
-  --aws-space: #ffffff;
+  --aws-squid-ink: #e2dfd8;
+  --aws-squid-ink-2: #dedbd3;
+  --aws-space: #ebe9e3;
   --aws-orange: var(--th-amber);
   --aws-orange-hover: #b45309;
   --aws-blue: var(--th-lavender);
@@ -33,7 +33,7 @@
   --lf-yellow: #f5b301;
   --lf-orange: #f07c00;
   --lf-blue: var(--th-lavender);
-  --lf-mist: #f4f6fb;
+  --lf-mist: #e2dfd8;
   --lf-charcoal: #0b1220;
   --lf-blue-700: var(--th-violet);
   --lf-blue-50: rgba(109, 93, 245, 0.06);
@@ -44,11 +44,13 @@
   --lf-yellow-300: #fcd34d;
 
   /* Surfaces */
-  --surface: #ffffff;
-  --surface-2: #f7f8fc;
-  --surface-3: #eef1f8;
-  --surface-ink: #f5f6fb;
-  --surface-ink-2: #eceff7;
+  /* Off-white paper, not pure white: softer on the eye, warmer with the
+     graphite cards. White is kept for raised layers (glass, pills, logos). */
+  --surface: #ebe9e3;
+  --surface-2: #e2dfd8;
+  --surface-3: #d9d6ce;
+  --surface-ink: #e6e4dd;
+  --surface-ink-2: #dedbd3;
   --border: rgba(15, 23, 42, 0.09);
   --border-strong: rgba(15, 23, 42, 0.18);
   --text: #0b1220;

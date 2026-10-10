@@ -134,8 +134,8 @@ async function screenTexture(maxAniso) {
   c.height = H;
   const g = c.getContext('2d');
   const bg = g.createRadialGradient(W / 2, H * 0.45, 0, W / 2, H * 0.45, W * 0.62);
-  bg.addColorStop(0, '#ffffff');
-  bg.addColorStop(1, '#eef0f7');
+  bg.addColorStop(0, '#f3f2ed');
+  bg.addColorStop(1, '#ebe9e3');
   g.fillStyle = bg;
   g.fillRect(0, 0, W, H);
   const k = W / 1440; // the design was 1440 wide

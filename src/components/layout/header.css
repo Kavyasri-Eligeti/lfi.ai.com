@@ -167,7 +167,7 @@
   background:
     radial-gradient(80vw 60vh at 0% 100%, rgba(var(--glow-violet), 0.14), transparent 70%),
     radial-gradient(80vw 60vh at 100% 0%, rgba(var(--glow-teal), 0.12), transparent 70%),
-    #ffffff;
+    var(--surface);
 }
 .lf-sheet__label {
   margin: 0 0 var(--sp-5);
@@ -203,3 +203,62 @@ html.lf-menu-open { overflow: hidden; }
   .lf-nav a, .lf-pill__contact, .lf-pill__menu { padding: 0 9px; }
 }
 [data-motion='reduced'] .lf-pill__glow { animation: none; }
+
+/* ---------- Graphite bar: the site's own combination ----------
+   A true graphite (mid-dark neutral grey, not black) with a fine lit edge;
+   each tab lights up in the page's off-white when hovered. */
+.lf-header__capsule,
+.lf-header.is-scrolled .lf-header__capsule,
+.lf-pill {
+  background: linear-gradient(180deg, #3d4048 0%, #33363d 55%, #2b2e34 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 10px 28px -14px rgba(20, 22, 28, 0.6);
+}
+.lf-header__divider { background: rgba(255, 255, 255, 0.2); }
+.lf-header .lf-ailogo__mark { background-image: linear-gradient(115deg, #ffffff 30%, #d8d0ff 45%, #ffffff 60%); }
+
+.lf-nav a,
+.lf-pill__contact,
+.lf-pill__menu { color: rgba(240, 239, 235, 0.82); }
+/* Hover: the tab lights up in the page's off-white, softly glowing */
+.lf-nav a:hover,
+.lf-pill__contact:hover,
+.lf-pill__menu:hover,
+.lf-nav a.is-active:hover {
+  color: #1f2228;
+  background: linear-gradient(180deg, #faf9f6, #ebe9e3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 0 18px -2px rgba(244, 243, 239, 0.55);
+  text-shadow: none;
+}
+.lf-nav a::before,
+.lf-pill__contact::before { display: none; }
+/* The current page reads like the other tabs; a small off-white dot marks it */
+.lf-nav a.is-active { color: rgba(240, 239, 235, 0.82); }
+.lf-nav a.is-active::after { background: #f4f3ef; box-shadow: 0 0 6px rgba(244, 243, 239, 0.6); }
+.lf-nav a.is-active:hover::after { background: #1f2228; box-shadow: none; }
+.lf-pill__line { background: rgba(255, 255, 255, 0.22); }
+.lf-pill::before { background: linear-gradient(90deg, transparent, rgba(244, 243, 239, 0.7), transparent); }
+/* The light beneath the bar: a soft off-white bloom with fine scanlines */
+.lf-pill__glow {
+  background:
+    repeating-linear-gradient(90deg, rgba(120, 124, 134, 0.35) 0 1px, transparent 1px 7px),
+    radial-gradient(50% 100% at 50% 0%, rgba(90, 94, 104, 0.35), transparent 100%);
+}
+.lf-header :focus-visible { box-shadow: 0 0 0 2px #2b2e34, 0 0 0 4px #f4f3ef; }
+
+/* Scrolling down: the logo capsule and the nav pill slowly fade and lift away;
+   they glide back when scrolling up. Keyboard focus always brings them back. */
+.lf-header__capsule,
+.lf-pill { transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out), background-color var(--dur-ui), box-shadow var(--dur-ui); }
+.lf-header.is-hidden:not(:focus-within) :is(.lf-header__capsule, .lf-pill) {
+  opacity: 0;
+  transform: translateY(-24px);
+  pointer-events: none;
+}
+[data-motion='reduced'] :is(.lf-header__capsule, .lf-pill) { transition: opacity 0.2s linear; }
+[data-motion='reduced'] .lf-header.is-hidden:not(:focus-within) :is(.lf-header__capsule, .lf-pill) { transform: none; }

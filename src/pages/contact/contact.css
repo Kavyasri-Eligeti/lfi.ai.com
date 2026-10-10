@@ -51,3 +51,43 @@
 }
 .lf-contact__social-link .lf-meta { justify-self: end; font-weight: 400; }
 .lf-contact__social-link:hover { box-shadow: inset 0 0 0 1.5px var(--text); color: var(--text); }
+
+/* ---------- Contact: lit in gold ----------
+   Bright gold on the graphite enquiry card; a deeper gold on the off-white
+   page, so labels stay readable. */
+html body .lf-enquiry.lf-enquiry.lf-enquiry { --acc: #fbbf24; }
+html body .lf-enquiry.lf-enquiry :is(.lf-link, a:not(.lf-btn)) { color: #fcd34d; }
+html body .lf-enquiry.lf-enquiry .lf-link:hover { color: #fde68a; }
+html .lf-enquiry .lf-field label,
+html .lf-enquiry .lf-label { color: #fde7a6; }
+html .lf-enquiry :is(.lf-input, .lf-select, .lf-textarea):focus {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.28), 0 0 22px -6px rgba(251, 191, 36, 0.6);
+  outline: none;
+}
+html .lf-enquiry .lf-btn:hover { box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.6), 0 12px 30px -10px rgba(251, 191, 36, 0.85); }
+html body .lf-enquiry:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(251, 191, 36, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 26px 60px -26px rgba(251, 191, 36, 0.55),
+    0 20px 44px -24px rgba(15, 23, 42, 0.55);
+}
+
+/* Right column on the page */
+html .lf-channels { border-top-color: #b07a00; }
+html .lf-channel .lf-eyebrow,
+html .lf-contact__social .lf-eyebrow { color: #8a5a00; }
+html .lf-channel__email svg { color: #b07a00; }
+html .lf-channel__email:hover { color: #8a5a00; }
+html body .lf-channel:is(:hover, :focus-within) { transform: none; box-shadow: none; }
+html body .lf-contact__social-link:is(:hover, :focus-within) {
+  color: var(--text);
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.16), rgba(251, 191, 36, 0.04));
+  box-shadow:
+    inset 0 0 0 1px rgba(214, 158, 22, 0.7),
+    0 0 0 1px rgba(251, 191, 36, 0.25),
+    0 10px 26px -12px rgba(214, 158, 22, 0.75);
+}
+html .lf-contact__social-link:is(:hover, :focus-within) svg { color: #b07a00; }
+html :is(.lf-channel, .lf-contact__social) .lf-eyebrow::before { color: #b07a00; }
