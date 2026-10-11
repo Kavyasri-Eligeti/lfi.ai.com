@@ -3,6 +3,8 @@
 let changing = false;
 const waiting = new Set();
 
+export const isPageChanging = () => changing;
+
 export function setPageChanging(value) {
   changing = value;
   if (changing) return;

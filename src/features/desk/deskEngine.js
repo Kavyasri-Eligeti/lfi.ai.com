@@ -504,8 +504,10 @@ export function createDeskScene(host, { screenEl, onReady } = {}) {
 
   const clock = new Clock();
   let raf = 0;
+  let disposed = false;
   let ready = false;
   const frame = () => {
+    if (disposed) return;
     raf = requestAnimationFrame(frame);
     if (!visible) return;
     const t = clock.getElapsedTime();
@@ -525,11 +527,14 @@ export function createDeskScene(host, { screenEl, onReady } = {}) {
     dirty = false;
   };
 
-  Promise.all(pending).then(() => {
+  const startup = Promise.all(pending).then(() => {
+    if (disposed) return;
     computeEnd();
-    renderer.compileAsync(scene, camera).catch(() => {}).finally(() => {
+    return renderer.compileAsync(scene, camera).catch(() => {}).finally(() => {
+      if (disposed) return;
       raf = requestAnimationFrame(frame);
       requestAnimationFrame(() => {
+        if (disposed) return;
         ready = true;
         onReady?.();
       });
@@ -547,27 +552,33 @@ export function createDeskScene(host, { screenEl, onReady } = {}) {
       return ready;
     },
     dispose() {
+      if (disposed) return;
+      disposed = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
       window.removeEventListener('pointermove', onMove);
-      scene.traverse((o) => {
-        o.geometry?.dispose();
-        const mats = Array.isArray(o.material) ? o.material : [o.material];
-        mats.forEach((m) => {
-          if (!m) return;
-          Object.values(m).forEach((v) => v?.isTexture && v.dispose());
-          m.dispose();
-        });
-      });
-      textures.forEach((t) => t.dispose());
-      office.dispose();
-      gtao.dispose?.();
-      composer.dispose?.();
-      bloom.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
       canvas.remove();
+      // Let pending shader compilation finish before destroying its programs.
+      // A fast page handoff can otherwise interrupt Three's readiness polling.
+      startup.finally(() => {
+        scene.traverse((o) => {
+          o.geometry?.dispose();
+          const mats = Array.isArray(o.material) ? o.material : [o.material];
+          mats.forEach((m) => {
+            if (!m) return;
+            Object.values(m).forEach((v) => v?.isTexture && v.dispose());
+            m.dispose();
+          });
+        });
+        textures.forEach((t) => t.dispose());
+        office.dispose();
+        gtao.dispose?.();
+        composer.dispose?.();
+        bloom.dispose();
+        renderer.dispose();
+        renderer.forceContextLoss();
+      }).catch(() => {});
     },
   };
 }

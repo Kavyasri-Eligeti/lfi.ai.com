@@ -31,3 +31,7 @@
 .lf-next__static { text-align: center; }
 .lf-next__title--link { display: inline-flex; align-items: center; gap: var(--sp-3); font-size: clamp(2rem, 1rem + 4vw, 4rem); text-decoration: none; }
 .lf-next__title--link:hover { color: var(--th-teal); }
+
+.lf-previous .lf-next__ring { transform: rotate(-90deg) scaleX(-1); }
+.lf-previous .lf-next__title--link svg,
+.lf-previous .lf-btn svg { transform: rotate(180deg); }

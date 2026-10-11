@@ -215,12 +215,12 @@
   color: var(--text-strong);
   letter-spacing: -0.015em;
 }
-.lf-recipe__title { color: var(--text-strong); margin-bottom: var(--sp-5); }
+.lf-recipe__title { color: var(--text-strong); font-weight: 700; margin-bottom: var(--sp-5); }
 .lf-recipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-5); counter-reset: none; }
 .lf-recipe li { border-top: 2px solid rgba(15, 23, 42, 0.135); padding-top: var(--sp-4); }
 .lf-recipe li:first-child { border-top-color: var(--lf-yellow); }
-.lf-recipe__step { display: block; margin-bottom: var(--sp-3); font: 400 0.8125rem/1 var(--font-mono); color: var(--lf-yellow); }
-.lf-recipe p { color: var(--text-on-ink-2); font-size: 0.9375rem; margin: 0; }
+.lf-recipe__step { display: block; margin-bottom: var(--sp-3); font: 700 0.8125rem/1 var(--font-mono); color: var(--lf-blue); }
+.lf-recipe p { color: var(--text-on-ink-2); font-size: 0.9375rem; font-weight: 700; margin: 0; }
 .lf-recipe__more { margin-top: var(--sp-7); }
 @media (max-width: 1024px) { .lf-principles, .lf-recipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .lf-principles, .lf-recipe { grid-template-columns: 1fr; } }

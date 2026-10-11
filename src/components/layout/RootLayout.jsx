@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation, useNavigationType, useOutlet } from 'react-router-dom';
 import { AnimatePresence, m } from 'framer-motion';
 import Header from './Header';
@@ -120,7 +120,7 @@ function Curtain({ pathname, phase, dir = 1, onGone }) {
 }
 
 export default function RootLayout() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, state } = useLocation();
   const navType = useNavigationType();
   const { reduced } = useMotion();
   // Where the visitor was on each page, so going back returns them there.
@@ -133,13 +133,19 @@ export default function RootLayout() {
     const from = chapterIndex(nav.current.path);
     const to = chapterIndex(pathname);
     const back = from >= 0 && to >= 0 ? to < from : navType === 'POP';
-    nav.current = { path: pathname, dir: back ? -1 : 1, restore: back ? scrollMemory.current.get(pathname) || 0 : 0 };
+    nav.current = { path: pathname, dir: back ? -1 : 1, restore: back ? scrollMemory.current.get(pathname) || 0 : 0, handoff: navType === 'PUSH' ? state?.chapterScroll : null };
   }
   const { dir } = nav.current;
   useEffect(() => {
     if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
   }, []);
   const firstRender = useRef(true);
+  useLayoutEffect(() => {
+    if (firstRender.current && !hash && !reduced) {
+      const content = document.querySelector('.lf-chapter-content');
+      if (content) jumpTo(content.offsetTop);
+    }
+  }, [hash, reduced]);
   useEffect(() => {
     firstRender.current = false;
     // Fetch the homepage's 3D ring in the background, whatever page the visit
@@ -181,7 +187,30 @@ export default function RootLayout() {
     return () => window.clearTimeout(t);
   }, [curtain]);
 
-  const onExitComplete = () => {
+  // Always release the curtain and scrolling if an animation is interrupted.
+  const activeCurtainPath = curtain?.path;
+  const activeCurtainPhase = curtain?.phase;
+  useEffect(() => {
+    if (!activeCurtainPhase) return undefined;
+    const path = activeCurtainPath;
+    const phase = activeCurtainPhase;
+    const timer = window.setTimeout(() => {
+      setCurtain((current) => {
+        if (current?.path !== path || current.phase !== phase) return current;
+        return phase === 'in' ? { ...current, phase: 'out' } : null;
+      });
+      if (phase === 'out') getLenis()?.start();
+    }, phase === 'in' ? 1800 : 1000);
+    return () => window.clearTimeout(timer);
+  }, [activeCurtainPath, activeCurtainPhase]);
+
+  const completedTransition = useRef(null);
+  const onExitComplete = useCallback(() => {
+    // Several animated descendants can finish together. Position each route
+    // once, so duplicate completion events cannot restart the handoff.
+    if (completedTransition.current === nav.current) return;
+    completedTransition.current = nav.current;
+    const path = nav.current.path;
     if (!window.location.hash) jumpTo(0);
     window.clearTimeout(resumeTimer.current);
     // The new page mounts after this; wait for it to paint (two frames), and
@@ -190,21 +219,23 @@ export default function RootLayout() {
       requestAnimationFrame(() => {
         // Going back: return to where the visitor left this page (short of
         // the next-page hand-off at its foot, which would carry them on).
-        if (!window.location.hash && nav.current.restore > 0) {
-          let y = nav.current.restore;
-          const next = document.querySelector('.lf-page .lf-next:not(.lf-next--static)');
-          if (next) y = Math.min(y, next.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.6);
+        if (!window.location.hash) {
+          const content = document.querySelector('.lf-chapter-content');
+          const start = content?.offsetTop || 0;
+          const end = start + (content?.offsetHeight || 0);
+          let y = start;
+          if (nav.current.handoff === 'backward') y = Math.max(start, end - window.innerHeight);
+          else if (nav.current.restore > 0 && nav.current.handoff !== 'forward') y = Math.max(start, Math.min(nav.current.restore, end - window.innerHeight));
           jumpTo(Math.max(0, y));
         }
         const wait = Math.max(0, coveredAt.current - performance.now()) + 60;
-        window.setTimeout(() => setCurtain((c) => (c ? { ...c, phase: 'out' } : c)), wait);
+        window.setTimeout(() => setCurtain((c) => (c?.path === path && c.phase === 'in' ? { ...c, phase: 'out' } : c)), wait);
         resumeTimer.current = window.setTimeout(() => getLenis()?.start(), wait + 300);
       })
     );
     // Safety net: never leave the curtain up (for this page change only).
-    const path = curtainPath.current;
     window.setTimeout(() => setCurtain((c) => (c && c.phase === 'in' && c.path === path ? { ...c, phase: 'out' } : c)), 1800);
-  };
+  }, []);
 
   return (
     <>
@@ -228,7 +259,8 @@ export default function RootLayout() {
             onUpdate={keepOnMainThread}
             className="lf-page"
           >
-            <FrozenOutlet />
+            <NextChapter pathname={pathname} previous />
+            <div className="lf-chapter-content"><FrozenOutlet /></div>
             {/* Pages in the flow end with the handoff to the next page; the
                 footer comes once, at the end of the flow (and on pages
                 outside it), instead of repeating on every page. */}

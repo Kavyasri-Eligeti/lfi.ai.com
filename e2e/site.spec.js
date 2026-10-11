@@ -5,7 +5,7 @@ const { test, expect } = require('@playwright/test');
 const ROUTES = [
   ['/', /intelligence that moves business forward/i],
   ['/solutions', /enterprise solutions and ai products/i],
-  ['/services', /seven practices/i],
+  ['/services', /seven proven practices/i],
   ['/industries', /eight industries/i],
   ['/company', /driving innovation and transformation/i],
   ['/careers', /world-leading innovative team/i],

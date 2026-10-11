@@ -41,3 +41,8 @@ export const nextChapterFor = (pathname) => {
   if (i < 0 || i === CHAPTER_SEQUENCE.length - 1) return null;
   return CHAPTER_SEQUENCE[i + 1];
 };
+
+export const previousChapterFor = (pathname) => {
+  const i = CHAPTER_SEQUENCE.findIndex((c) => c.path === pathname);
+  return i > 0 ? CHAPTER_SEQUENCE[i - 1] : null;
+};
