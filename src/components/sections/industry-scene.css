@@ -15,3 +15,8 @@
     radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(4, 7, 11, 0.28) 100%),
     linear-gradient(180deg, transparent 70%, rgba(4, 7, 11, 0.3));
 }
+/* The insurance panel renders a live 3D scene in place of a clip; it fades in
+   over the poster the same way the footage does. */
+.lf-footage__stage { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s ease; }
+.lf-footage__stage canvas { display: block; width: 100%; height: 100%; }
+.lf-footage.is-playing .lf-footage__stage { opacity: 1; }

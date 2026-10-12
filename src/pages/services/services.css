@@ -1,8 +1,37 @@
 /* Layout only: surfaces, cards, colors and typography use the shared site styles. */
 .sp-page { font-family: var(--font-display); }
 .sp-page :is(.lf-link, .lf-badge, .lf-card p) { font-family: inherit; }
-.sp-jump ul { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
-.sp-jump .lf-chip { height: auto; line-height: 1.4; padding-block: var(--sp-2); white-space: normal; }
+/* Practice jump buttons: the same graphite leaf buttons as the industries
+   hero (see industries.css), repeated here because that sheet is page-scoped. */
+.sp-jump ul { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.sp-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 14px 4px 14px 4px;
+  background-color: #363940;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 60%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 16px -10px rgba(20, 22, 28, 0.6);
+  color: rgba(240, 239, 235, 0.86);
+  font: 700 0.75rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.35s var(--ease-out), color 0.25s var(--ease-out), box-shadow 0.35s var(--ease-out);
+}
+.sp-jump a::before { content: '->'; margin-right: 6px; color: #ffd600; }
+.sp-jump a:is(:hover, :focus-visible) {
+  background-color: #f4f3ef;
+  background-image: linear-gradient(180deg, #faf9f6, #ebe9e3);
+  color: #1f2228;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 0 18px -2px rgba(244, 243, 239, 0.55);
+}
+.sp-jump a:is(:hover, :focus-visible)::before { color: #b07a1a; }
+@media (max-width: 860px) { .sp-jump ul { justify-content: flex-start; } }
 .sp-portfolio { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--sp-7); padding-block: var(--sp-7) var(--section-y); align-items: start; }
 .sp-rail { position: sticky; top: calc(var(--header-h) + 24px); }
 .sp-index { height: min(680px, calc(100dvh - var(--header-h) - 48px)); min-height: 450px; display: flex; flex-direction: column; }
@@ -10,7 +39,7 @@
 .sp-index__list { display: flex; flex-direction: column; justify-content: space-between; flex: 1; border-left: 2px solid var(--border-strong); }
 .sp-index__list a { position: relative; display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) 0 var(--sp-3) var(--sp-4); color: var(--text-2); text-decoration: none; font-size: var(--fs-small); font-weight: 700; line-height: 1.4; }
 .sp-index__list a > span:first-child { font-size: var(--fs-meta); color: var(--text-3); }
-.sp-index__list a > span:nth-child(2) { flex: 1; }
+.sp-index__list a > span:nth-child(2) { flex: 1; text-transform: uppercase; }
 .sp-index__list .lf-arrow { width: 14px; flex-shrink: 0; opacity: 0; }
 .sp-index__list a[aria-current], .sp-index__list a:hover { color: var(--lf-blue); }
 .sp-index__list a[aria-current]::before { content: ''; position: absolute; left: -2px; top: 0; bottom: 0; width: 3px; background: var(--lf-blue); border-radius: var(--radius-xs); }
@@ -43,6 +72,7 @@
 .sp-offering__body { border-top: 1px solid var(--border); margin-top: var(--sp-4); padding-top: var(--sp-4); display: grid; gap: var(--sp-4); }
 .sp-group + .sp-group { margin-top: var(--sp-6); }
 .sp-group__items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
+.sp-group__items h4 { text-transform: uppercase; }
 @media (max-width: 1100px) {
   .sp-portfolio { grid-template-columns: 190px minmax(0, 1fr); gap: var(--sp-6); }
   .sp-practice__feature { grid-template-columns: 1fr; }

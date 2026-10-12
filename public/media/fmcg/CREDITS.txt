@@ -1,0 +1,9 @@
+Assets for the FMCG industry scene. All CC0 from Poly Haven
+(https://polyhaven.com), at 1k for the web; nothing else changed.
+
+  warehouse_1k.hdr       empty_warehouse_01, 1k HDR (lighting and reflections)
+  tex/hangar_concrete_*  hangar_concrete_floor, 1k JPG (diffuse, OpenGL normal, roughness)
+
+The conveyor, scanner arch, racking and every product are modelled in
+src/features/fmcg/conveyorEngine.js; the product labels and carton print are
+drawn there and carry no real brands.

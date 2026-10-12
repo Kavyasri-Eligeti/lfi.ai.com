@@ -9,9 +9,19 @@ import { usePageMeta } from '../../hooks/usePageMeta';
 import './industries.css';
 import Reveal from '../../features/motion/Reveal';
 import IndustryScene, { hasScene } from '../../components/sections/IndustryScene';
+import LiveScene from '../../components/sections/LiveScene';
 
-// Each industry shows real footage; the published photo is the fallback.
+// Some industries are drawn live in 3D; the rest show real footage, with the
+// published photo as the fallback. Each scene is its own lazy chunk.
+const SCENES_3D = {
+  insurance: () =>
+    import(/* webpackChunkName: "claims-desk" */ '../../features/insurance/claimsDeskEngine').then((mod) => mod.createClaimsDeskScene),
+  fmcg: () => import(/* webpackChunkName: "fmcg-line" */ '../../features/fmcg/conveyorEngine').then((mod) => mod.createConveyorScene),
+};
+
 function IndustryArt({ industry }) {
+  const load = SCENES_3D[industry.id];
+  if (load) return <LiveScene industry={industry} load={load} />;
   if (hasScene(industry)) return <IndustryScene industry={industry} />;
   if (industry.image) {
     return <img src={industry.image} alt="" width="480" height="800" loading="lazy" decoding="async" />;

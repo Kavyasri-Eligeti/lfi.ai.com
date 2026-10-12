@@ -109,7 +109,7 @@ export default function ServicesPage() {
         title="Seven proven practices, and a new AI practice"
         actions={<a href="#ai-services" onClick={(e) => jumpToService(e, 'ai-services')} className="lf-btn">Explore AI services <Arrow /></a>}
         aside={<nav className="sp-jump" aria-label="Explore our practices"><ul className="lf-list-plain">{allServices.map((service) => (
-          <li key={service.id}><a className="lf-chip" href={`#${service.id}`} onClick={(e) => jumpToService(e, service.id)}>{service.name}</a></li>
+          <li key={service.id}><a href={`#${service.id}`} onClick={(e) => jumpToService(e, service.id)}>{service.name}</a></li>
         ))}</ul></nav>}
       >
         <p className="lf-lead">From consulting and engineering to cloud, automation and data, the services Linkfields Innovations is known for, now joined by end-to-end AI services: strategy, generative AI, agents, RAG, MLOps and responsible AI.</p>
