@@ -12,7 +12,7 @@ import { useMotion } from '../../features/motion/MotionProvider';
 import { getLenis, jumpTo } from '../../features/motion/SmoothScroll';
 import { warmTheatre } from '../../features/theatre/TheatreStage';
 
-// Scrolls to #hash targets after navigation (e.g. /solutions#sap), gliding
+// Scrolls to #hash targets after navigation (e.g. /services#ai-services), gliding
 // with the smooth scroller when it is running.
 function HashScroller() {
   const { hash, pathname } = useLocation();

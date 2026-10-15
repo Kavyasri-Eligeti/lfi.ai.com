@@ -57,9 +57,8 @@ function IndustryPanel({ industry, index }) {
           </div>
         )}
         <div className="lf-actions">
-          <SmartLink href={industry.href} className="lf-link">{industry.name} on linkfields.com <Arrow /></SmartLink>
           {related.length > 0 && (
-            <Link to={`/solutions?industry=${industry.id}#products`} className="lf-link">Filter the catalogue <Arrow /></Link>
+            <Link to="/catalogue" className="lf-link">Browse the demo catalogue <Arrow /></Link>
           )}
         </div>
       </div>

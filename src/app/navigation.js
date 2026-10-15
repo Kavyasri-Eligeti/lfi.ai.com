@@ -1,5 +1,4 @@
 export const primaryNav = [
-  { label: 'AI Solutions', to: '/solutions' },
   { label: 'Services', to: '/services' },
   { label: 'Industries', to: '/industries' },
   { label: 'Company', to: '/company' },
@@ -28,7 +27,6 @@ export const isLegacyPath = (href) => LEGACY_PATHS.some((p) => href === p || hre
 // visitor into the next (see components/layout/NextChapter).
 export const CHAPTER_SEQUENCE = [
   { path: '/', label: 'Home' },
-  { path: '/solutions', label: 'AI Solutions', color: '#ff9900' },
   { path: '/services', label: 'Services', color: '#539fe5' },
   { path: '/industries', label: 'Industries', color: '#37c871' },
   { path: '/company', label: 'Company', color: '#9b6bff' },

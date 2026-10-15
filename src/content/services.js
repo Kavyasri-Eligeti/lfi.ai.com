@@ -172,10 +172,9 @@ const ai = (name, tagline, summary) => ({ name, href: '/contact', linkLabel: `Di
 export const aiServicePractice = {
   id: 'ai-services',
   name: 'AI Services',
-  isNew: true,
   headline: 'From AI strategy to AI in production',
   overview: {
-    title: 'End-to-end AI engineering, built on our seven practices',
+    title: 'End-to-end AI engineering for the enterprise',
     text: 'We help enterprises choose the right AI opportunities, build them on secure foundations and run them reliably in production, combining our engineering, cloud, data and automation experience with today’s leading AI models and platforms.',
   },
   subServices: [

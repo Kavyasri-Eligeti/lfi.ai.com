@@ -85,8 +85,8 @@ export default function CapabilityIndex() {
                 </li>
               ))}
             </ul>
-            <Link className="lf-link" to={`/solutions?capability=${cap.id}#products`}>
-              {demos.length > 6 ? `All ${demos.length} ${cap.name} demos` : `Browse ${cap.name} in the catalogue`}
+            <Link className="lf-link" to="/catalogue">
+              Browse the demo catalogue
               <Arrow />
             </Link>
           </m.div>

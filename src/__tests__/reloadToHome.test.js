@@ -27,7 +27,7 @@ describe('a refresh returns to the homepage', () => {
   });
 
   test('opening a link or a shared URL is left alone', () => {
-    const win = fakeWindow('navigate', '/solutions');
+    const win = fakeWindow('navigate', '/services');
     expect(reloadToHome(win)).toBe(false);
     expect(win.history.replaceState).not.toHaveBeenCalled();
     expect(win.scrollTo).not.toHaveBeenCalled();

@@ -23,7 +23,7 @@ export default function ContactBand({ title = 'Talk to Linkfields about your nex
         </Reveal>
         <div className="lf-actions lf-contact-band__actions">
           <Link to="/contact" className="lf-btn lf-btn--yellow">Contact us <Arrow /></Link>
-          <Link to="/solutions" className="lf-btn lf-btn--secondary">Explore AI solutions</Link>
+          <a href="/catalogue" className="lf-btn lf-btn--secondary">Browse live demos</a>
         </div>
         <div className="lf-contact-band__modules" aria-hidden="true"><i /><i /><i /></div>
       </div>

@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
 import PageHero from '../../components/ui/PageHero';
 import SmartLink from '../../components/ui/SmartLink';
 import Icon, { Arrow } from '../../components/ui/Icon';
-import { allServices } from '../../content/services';
+import { aiServicePractice } from '../../content/services';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import './services.css';
 import Reveal from '../../features/motion/Reveal';
@@ -72,69 +71,28 @@ function ServiceRow({ service }) {
   );
 }
 
-// Highlights the service currently in view in the side index.
-function useActiveSection(ids) {
-  const [active, setActive] = useState(ids[0]);
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const line = window.innerHeight * 0.4;
-      let current = ids[0];
-      ids.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= line) current = id;
-      });
-      setActive(current);
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, [ids]);
-  return active;
-}
-
-const SERVICE_IDS = allServices.map((s) => s.id);
-
 export default function ServicesPage() {
   usePageMeta(
-    'Services',
-    'Linkfields Innovations services: Engineering, Consulting, Cloud, Automation, Technology, Teams, IT Infrastructure and Solutions, and AI Services.'
+    'AI Services',
+    'Linkfields AI services: AI strategy, generative AI and LLM engineering, AI agents, RAG, custom models, data engineering, MLOps, responsible AI and AI integration.'
   );
-  const active = useActiveSection(SERVICE_IDS);
 
   return (
     <>
       <PageHero
-        eyebrow="Services"
-        title="Seven proven practices, and a new AI practice"
-        actions={<a href="#ai-services" className="lf-btn">Explore AI services <Arrow /></a>}
+        eyebrow="AI Services"
+        title="AI services, from strategy to production"
+        actions={<a href="#ai-services" className="lf-btn">Explore our AI services <Arrow /></a>}
       >
         <p className="lf-lead">
-          From consulting and engineering to cloud, automation and data, the services Linkfields Innovations is known for, now joined
-          by end-to-end AI services: strategy, generative AI, agents, RAG, MLOps and responsible AI.
+          End-to-end AI services from Linkfields Innovations: AI strategy, generative AI and LLM engineering, AI agents, RAG,
+          custom models, data engineering, MLOps and responsible AI, built and run on secure foundations.
         </p>
       </PageHero>
 
-      <section className="lf-section lf-services-layout" aria-label="Linkfields services">
-        <div className="lf-container lf-services-layout__inner">
-          <nav className="lf-services-index" aria-label="Services on this page">
-            <p className="lf-eyebrow">On this page</p>
-            <ul className="lf-list-plain">
-              {allServices.map((s) => (
-                <li key={s.id}>
-                  <a href={`#${s.id}`} aria-current={active === s.id ? 'true' : undefined}>{s.name}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className="lf-services-list">
-            {allServices.map((s) => <ServiceRow key={s.id} service={s} />)}
-          </div>
+      <section className="lf-section" aria-label="Linkfields AI services">
+        <div className="lf-container">
+          <ServiceRow service={aiServicePractice} />
         </div>
       </section>
     </>

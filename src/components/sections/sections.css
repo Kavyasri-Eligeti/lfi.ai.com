@@ -52,15 +52,16 @@
 .lf-bento__cell { min-width: 0; }
 .lf-bento__cell--0 { grid-column: span 2; grid-row: span 2; }
 .lf-bento__cell--0 .lf-demo-card { justify-content: space-between; }
-.lf-bento__cell--3, .lf-bento__cell--6 { grid-column: span 2; }
+.lf-bento__cell--3 { grid-column: span 2; }
 @media (max-width: 1024px) {
   .lf-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lf-bento__cell--0 { grid-column: span 2; grid-row: auto; }
-  .lf-bento__cell--3, .lf-bento__cell--6 { grid-column: auto; }
+  .lf-bento__cell--3 { grid-column: auto; }
+  .lf-bento__cell--7 { grid-column: span 2; }
 }
 @media (max-width: 600px) {
   .lf-bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-  .lf-bento__cell--0 { grid-column: auto; }
+  .lf-bento__cell--0, .lf-bento__cell--7 { grid-column: auto; }
 }
 
 /* ---------- Capability index ---------- */

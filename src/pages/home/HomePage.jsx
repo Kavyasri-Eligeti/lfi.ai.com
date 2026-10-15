@@ -63,7 +63,7 @@ export default function HomePage() {
                 Our AI solutions, AI services and live demos deliver results for banking, telecom, insurance and more.
               </p>
               <div className="lf-actions">
-                <Link to="/solutions" className="lf-btn">Explore AI solutions <Arrow /></Link>
+                <a href="/catalogue" className="lf-btn">Browse live demos <Arrow /></a>
                 <Link to="/contact" className="lf-btn lf-btn--secondary">Talk to our team</Link>
               </div>
             </div>
@@ -80,7 +80,7 @@ export default function HomePage() {
             eyebrow="Featured solutions"
             title="Flagship AI products"
             aside={
-              <Link to="/solutions#products" className="lf-link lf-home__aside-link">
+              <Link to="/catalogue" className="lf-link lf-home__aside-link">
                 See all {demos.length} demos <Arrow />
               </Link>
             }

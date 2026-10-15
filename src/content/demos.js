@@ -181,3 +181,15 @@ export const demos = [
 
 export const demoById = Object.fromEntries(demos.map((demo) => [demo.id, demo]));
 export const getDemos = (ids = []) => ids.map((id) => demoById[id]).filter(Boolean);
+
+// Products featured on the home page that are not LFI AI catalogue demos.
+// Testorium Z is a Linkfields solution with its own live site (see solutions.js).
+export const featuredProducts = [
+  d('testorium-z', 'Testorium Z', 'https://testoriumz.com/', 'operations', {
+    description: 'Test automation platform from Linkfields. Accelerate quality, automate smart, deliver faster.',
+    image: '/logos/testoriumz.png',
+    imageTile: 'dark',
+  }),
+];
+const featuredById = { ...demoById, ...Object.fromEntries(featuredProducts.map((p) => [p.id, p])) };
+export const getFeatured = (ids = []) => ids.map((id) => featuredById[id]).filter(Boolean);

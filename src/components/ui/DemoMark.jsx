@@ -8,7 +8,7 @@ import './demo-mark.css';
 export default function DemoMark({ demo, size = 40, className = '' }) {
   if (demo.image) {
     return (
-      <span className={`lf-demo-logo ${className}`} style={{ '--s': `${size}px` }} aria-hidden="true">
+      <span className={`lf-demo-logo${demo.imageTile === 'dark' ? ' lf-demo-logo--dark' : ''} ${className}`} style={{ '--s': `${size}px` }} aria-hidden="true">
         <img className="lf-demo-card__logo" src={demo.image} alt="" width="96" height="32" loading="lazy" decoding="async" />
       </span>
     );

@@ -5,7 +5,6 @@ import RootLayout from '../components/layout/RootLayout';
 // renders without a second request (no LCP waterfall). The heavy parts stay
 // lazy: the WebGL hero tier and the legacy app.
 import HomePage from '../pages/home/HomePage';
-import SolutionsPage from '../pages/solutions/SolutionsPage';
 import ServicesPage from '../pages/services/ServicesPage';
 import IndustriesPage from '../pages/industries/IndustriesPage';
 import CompanyPage from '../pages/company/CompanyPage';
@@ -36,9 +35,10 @@ export const routes = [
     element: <RootLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'solutions', element: <SolutionsPage /> },
-      // The demo catalogue now lives on the solutions page.
-      { path: 'demos', element: <Navigate to="/solutions#products" replace /> },
+      // The AI Solutions page was removed; old links land on the home page.
+      { path: 'solutions', element: <Navigate to="/" replace /> },
+      // The demo catalogue lives at /catalogue.
+      { path: 'demos', element: <Navigate to="/catalogue" replace /> },
       { path: 'services', element: <ServicesPage /> },
       { path: 'industries', element: <IndustriesPage /> },
       { path: 'company', element: <CompanyPage /> },

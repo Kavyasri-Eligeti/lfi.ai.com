@@ -63,4 +63,4 @@ export const capabilityById = Object.fromEntries(capabilities.map((c) => [c.id, 
 export const capabilitiesForDemo = (demoId) => capabilities.filter((c) => c.demos.includes(demoId));
 
 // Flagship demos featured on the home page and at the top of the solutions page.
-export const featuredDemoIds = ['rag-chatbot', 'textiq', 'vajrax', 'finsight', 'credit-risk', 'insurance-claims-fraud', 'demand-forecasting'];
+export const featuredDemoIds = ['rag-chatbot', 'textiq', 'vajrax', 'finsight', 'edupilot', 'testorium-z', 'engage360', 'internal-portal'];

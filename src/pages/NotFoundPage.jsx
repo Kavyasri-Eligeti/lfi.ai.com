@@ -12,7 +12,7 @@ export default function NotFoundPage() {
       actions={
         <>
           <Link to="/" className="lf-btn">Back to the home page <Arrow /></Link>
-          <Link to="/solutions#products" className="lf-btn lf-btn--secondary">Browse AI demos</Link>
+          <Link to="/catalogue" className="lf-btn lf-btn--secondary">Browse AI demos</Link>
         </>
       }
     >

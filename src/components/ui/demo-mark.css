@@ -48,6 +48,7 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 8px 18px -10px rgba(0, 0, 0, 0.6);
   transition: transform var(--dur-ui) var(--ease-out);
 }
+.lf-demo-logo--dark { background: #0b0f16; border: 1px solid rgba(255, 255, 255, 0.14); }
 .lf-demo-logo .lf-demo-card__logo { height: calc(var(--s) * 0.6); max-width: calc(var(--s) * 2.6); width: auto; }
 .lf-card--interactive:hover .lf-demo-logo,
 .lf-card--interactive:focus-within .lf-demo-logo { transform: translateY(-2px); }

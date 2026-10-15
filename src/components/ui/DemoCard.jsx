@@ -11,7 +11,7 @@ const linkIcon = (href) => (href.startsWith('/') ? 'arrow' : 'external');
  * title link; sub-demos stay individually reachable above that layer.
  * `variant="feature"` is the large charcoal card used in the bento.
  */
-export default function DemoCard({ demo, headingLevel = 3, variant = 'default', showCapabilities = true }) {
+export default function DemoCard({ demo, headingLevel = 3, variant = 'default', showCapabilities = true, showHost = false }) {
   const Heading = `h${headingLevel}`;
   const caps = showCapabilities ? capabilitiesForDemo(demo.id) : [];
   const feature = variant === 'feature';
@@ -27,7 +27,7 @@ export default function DemoCard({ demo, headingLevel = 3, variant = 'default', 
         </SmartLink>
       </Heading>
       {demo.description && <p>{demo.description}</p>}
-      {feature && !demo.href.startsWith('/') && <p className="lf-demo-card__host">{new URL(demo.href).host}</p>}
+      {(feature || showHost) && !demo.href.startsWith('/') && <p className="lf-demo-card__host">{new URL(demo.href).host}</p>}
       {feature && <span className="lf-demo-card__modules" aria-hidden="true"><i /><i /><i /></span>}
       {demo.note && <p className="lf-meta">{demo.note}</p>}
       {demo.subDemos && (

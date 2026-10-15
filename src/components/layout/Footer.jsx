@@ -3,7 +3,6 @@ import LinkfieldsLogo from '../brand/LinkfieldsLogo';
 import SmartLink from '../ui/SmartLink';
 import SocialIcon from '../ui/SocialIcon';
 import { company, emails, socials } from '../../content/company';
-import { aiSolutions } from '../../content/aiSolutions';
 import { useMotion } from '../../features/motion/MotionProvider';
 
 export default function Footer() {
@@ -25,22 +24,17 @@ export default function Footer() {
           </ul>
         </div>
 
-        <nav aria-label="AI solutions" className="lf-footer__col">
-          <h2 className="lf-footer__title">AI Solutions</h2>
+        <nav aria-label="AI products" className="lf-footer__col">
+          <h2 className="lf-footer__title">AI Products</h2>
           <ul className="lf-list-plain">
-            {aiSolutions.slice(0, 5).map((s) => (
-              <li key={s.id}><Link to={`/solutions#${s.id}`}>{s.name}</Link></li>
-            ))}
-            <li><Link to="/solutions#products">AI products and demos</Link></li>
-            <li><a href="/catalogue">Classic catalogue view</a></li>
+            <li><a href="/catalogue">AI products and demos</a></li>
           </ul>
         </nav>
 
         <nav aria-label="Company" className="lf-footer__col">
           <h2 className="lf-footer__title">Company</h2>
           <ul className="lf-list-plain">
-            <li><Link to="/services">Services</Link></li>
-            <li><Link to="/services#ai-services">AI Services</Link></li>
+            <li><Link to="/services">AI Services</Link></li>
             <li><Link to="/industries">Industries</Link></li>
             <li><Link to="/company">About Linkfields</Link></li>
             <li><Link to="/company#offices">Global presence</Link></li>

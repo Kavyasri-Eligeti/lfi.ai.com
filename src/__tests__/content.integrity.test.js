@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { demos, demoById } from '../content/demos';
+import { demos, demoById, getFeatured } from '../content/demos';
 import { capabilities, featuredDemoIds } from '../content/capabilities';
 import { partners, offices, company } from '../content/company';
 import { insights } from '../content/insights';
@@ -108,7 +108,7 @@ describe('every browsable item leads somewhere real', () => {
       expect(c.demos.length).toBeGreaterThan(0);
       c.demos.forEach((id) => expect(demoById[id]).toBeDefined());
     });
-    featuredDemoIds.forEach((id) => expect(demoById[id]).toBeDefined());
+    featuredDemoIds.forEach((id) => expect(getFeatured([id])).toHaveLength(1));
   });
 
   test('bundled images exist in public/', () => {

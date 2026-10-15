@@ -95,10 +95,10 @@ export default function IndustryTabs({ headingLevel = 3 }) {
                   </ul>
                 </>
               ) : (
-                <p className="lf-meta">No catalogue demo is filed under {industry.name} yet. See the corporate page for this industry’s solutions.</p>
+                <p className="lf-meta">No catalogue demo is filed under {industry.name} yet.</p>
               )}
-              <SmartLink href={industry.href} className="lf-link">
-                {industry.name} on linkfields.com <Arrow />
+              <SmartLink href={`/industries#${industry.id}`} className="lf-link">
+                More about {industry.name} <Arrow />
               </SmartLink>
             </div>
           </m.div>
