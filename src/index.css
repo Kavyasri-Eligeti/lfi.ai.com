@@ -1,18 +1,98 @@
+/* Baseline shared by the marketing site and the legacy demo pages.
+   Anything that belongs to the redesign lives in styles/ and is namespaced
+   `lfi-`; this file stays small on purpose. */
+
+/* The border-box reset.
+
+   This used to live only in App.css, which is imported by a single lazy
+   legacy page (ReportGenerator) - so the marketing site ran on the browser
+   default, content-box. Every `width: 100%` box that also carried padding was
+   therefore its own padding too wide: `.lfi-container` overflowed by two
+   gutters, and every form control by two paddings. `.lfi-site`'s
+   `overflow-x: clip` then swallowed the result, which is why content looked
+   cut off at the right edge instead of producing a scrollbar.
+
+   It belongs here, in the baseline both the marketing site and the legacy
+   pages load. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Anchor targets must clear the sticky header.
+
+     This is the SINGLE source of truth for that offset. Lenis reads
+     scroll-padding-top when it resolves a scroll target, and so does the
+     browser's own anchor handling, so nothing in JavaScript needs to know the
+     header's height - and nothing may add the offset a second time. (It did
+     once: an explicit `anchors: { offset }` on top of this landed every
+     anchor 88px too low.) */
+  scroll-padding-top: calc(var(--lfi-header-h, 76px) + 12px);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* --- Lenis base rules ------------------------------------------------------
+   The three declarations Lenis needs, inlined rather than pulled in as
+   another stylesheet import.
+
+   `scroll-behavior: auto` is the important one: native smooth scrolling and
+   Lenis both animating the same scroll position fight each other, and the
+   result is a page that drifts after it should have stopped. The class is
+   only present while Lenis is actually running, so the rule above still
+   governs everywhere Lenis is off - including under reduced motion, where
+   the media query below turns it off anyway.
+   -------------------------------------------------------------------------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* What makes lenis.stop() actually hold the page - used while the mobile
+   navigation drawer is open. */
+html.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* An element that must keep its own native scrolling inside a Lenis page. */
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(
+    --lfi-font,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif
+  );
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: var(--lfi-font-mono, Menlo, Consolas, monospace);
 }
 
-/* Custom Animations */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+/* Kept from the original stylesheet - the legacy pages rely on it. */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -28,35 +108,45 @@ code {
   animation: fadeIn 0.5s ease-in-out forwards;
 }
 
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
+/* --- route-level loading fallback ---------------------------------------- */
+.lfi-route-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  background: var(--lfi-bg, #08090c);
 }
 
-/* Focus visible styles for accessibility */
-*:focus-visible {
-  outline: 2px solid #06b6d4;
-  outline-offset: 2px;
-  border-radius: 4px;
+.lfi-route-fallback__spinner {
+  width: 26px;
+  height: 26px;
+  border: 2px solid rgba(230, 236, 237, 0.16);
+  border-top-color: var(--lfi-yellow, #ffd600);
+  border-radius: 50%;
+  animation: lfi-spin 720ms linear infinite;
 }
 
-/* Custom scrollbar for webkit browsers */
+/* --- scrollbar ------------------------------------------------------------ */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
-  border-radius: 5px;
+  background: #0c0e13;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: #2b2f38;
   border-radius: 5px;
-  transition: background 0.3s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: #3b414d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

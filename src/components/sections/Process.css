@@ -1,0 +1,284 @@
+/* ==========================================================================
+   How we work.
+
+   Previously the one LIGHT section on the site - a #f3f4f6 block that made
+   the page look half-themed. It is now the same dark system as everything
+   else, and the rhythm break is carried by a raised charcoal surface, the
+   brand edge rules on `.lfi-section--invert`, and the timeline itself.
+   ========================================================================== */
+
+.lfi-process {
+  color: var(--lfi-text);
+}
+
+/* The timeline is the point of this section, so give it a little more room
+   above than the standard head gap and none of the slack below. */
+.lfi-process .lfi-section-head {
+  margin-bottom: clamp(2.25rem, 4vw, 3.5rem);
+}
+
+/* --- principles ------------------------------------------------------------ */
+.lfi-process__principles-label {
+  margin: 0 0 0.9rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-process__principles ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.lfi-process__principles li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--lfi-text);
+}
+
+.lfi-process__principles li::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  background: var(--lfi-orange);
+  flex: none;
+}
+
+/* The official heading for the stage sequence, set as a quiet rule above the
+   timeline so the four cards read as one named sequence rather than as four
+   loose steps. */
+.lfi-process__exploration {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin: clamp(2rem, 4vw, 3rem) 0 clamp(1.4rem, 2.5vw, 2rem);
+}
+
+.lfi-process__exploration::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--lfi-invert-border);
+}
+
+.lfi-process__exploration-title {
+  margin: 0;
+  font-size: var(--lfi-display-3);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+/* --- stages ---------------------------------------------------------------- */
+.lfi-process__stages {
+  /* 0..1, written by the scroll handler in Process.js. */
+  --lfi-progress: 0;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1.4rem, 2.6vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lfi-process__stage {
+  position: relative;
+  min-width: 0;
+  padding: 2.9rem clamp(1.1rem, 1.8vw, 1.5rem) clamp(1.2rem, 2vw, 1.6rem);
+  border: 1px solid var(--lfi-invert-border);
+  border-radius: var(--lfi-radius);
+  background: var(--lfi-invert-surface);
+  transition: background var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease);
+
+  /* 0 before the scroll fill reaches this stage, 1 after. Everything below
+     keys off it, so the rail, the dot and the card can never disagree. */
+  --lfi-reached: clamp(
+    0,
+    calc((var(--lfi-progress) * var(--lfi-steps) - var(--lfi-step)) * 1000),
+    1
+  );
+}
+
+/* A stage that the progress line has reached lifts out of the panel. */
+.lfi-process__stage {
+  border-color: color-mix(
+    in srgb,
+    rgba(255, 214, 0, 0.34) calc(var(--lfi-reached) * 100%),
+    var(--lfi-invert-border)
+  );
+  background: color-mix(
+    in srgb,
+    var(--lfi-invert-surface-2) calc(var(--lfi-reached) * 100%),
+    var(--lfi-invert-surface)
+  );
+}
+
+/* The connecting rail. Drawn per stage so it reflows with the grid instead of
+   being one absolutely-positioned line that breaks when the columns wrap. */
+.lfi-process__marker {
+  position: absolute;
+  top: 1.35rem;
+  left: clamp(1.1rem, 1.8vw, 1.5rem);
+  right: clamp(1.1rem, 1.8vw, 1.5rem);
+  height: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* The unfilled rail. */
+.lfi-process__marker::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(230, 236, 237, 0.12);
+}
+
+/* The filled rail. Each stage owns one segment of the overall progress, so
+   the fill runs continuously across the row as the section scrolls. The
+   scaleX is clamped per-segment: ((progress * steps) - step), 0..1. */
+.lfi-process__marker::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--lfi-yellow) 0%,
+    var(--lfi-orange) 100%
+  );
+  transform-origin: left center;
+  transform: scaleX(
+    clamp(0, calc(var(--lfi-progress) * var(--lfi-steps) - var(--lfi-step)), 1)
+  );
+  transition: transform 120ms linear;
+}
+
+.lfi-process__dot {
+  position: relative;
+  z-index: 1;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  flex: none;
+  border: 3px solid
+    color-mix(
+      in srgb,
+      var(--lfi-orange) calc(var(--lfi-reached) * 100%),
+      rgba(230, 236, 237, 0.22)
+    );
+  background: color-mix(
+    in srgb,
+    var(--lfi-yellow) calc(var(--lfi-reached) * 100%),
+    var(--lfi-invert-bg)
+  );
+  transform: scale(calc(1 + var(--lfi-reached) * 0.26));
+  transition: border-color 260ms var(--lfi-ease),
+    background 260ms var(--lfi-ease), transform 320ms var(--lfi-ease-entrance);
+}
+
+/* Halo on the active stage. */
+.lfi-process__dot::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: rgba(255, 214, 0, 0.18);
+  opacity: var(--lfi-reached);
+  transition: opacity 260ms var(--lfi-ease);
+}
+
+.lfi-process__n {
+  margin: 0 0 0.5rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(
+    in srgb,
+    var(--lfi-yellow) calc(var(--lfi-reached) * 100%),
+    var(--lfi-text-subtle)
+  );
+  transition: color 260ms var(--lfi-ease);
+}
+
+.lfi-process__stage h4 {
+  margin: 0 0 0.55rem;
+  font-size: 1.14rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.lfi-process__body {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.62;
+  color: var(--lfi-text-muted);
+  text-wrap: pretty;
+}
+
+/* --- foot ------------------------------------------------------------------ */
+.lfi-process__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lfi-gap);
+  margin-top: clamp(1.8rem, 3.2vw, 2.6rem);
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-process__foot p {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 0.95rem;
+  color: var(--lfi-text-muted);
+}
+
+@media (max-width: 640px) {
+  .lfi-process__principles ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+  }
+}
+
+/* Fallbacks: without color-mix support the first dot simply stays lit and the
+   cards keep their resting surface - the sequence is readable either way. */
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .lfi-process__stage {
+    border-color: var(--lfi-invert-border);
+    background: var(--lfi-invert-surface);
+  }
+  .lfi-process__n {
+    color: var(--lfi-text-subtle);
+  }
+  .lfi-process__dot {
+    border-color: rgba(230, 236, 237, 0.22);
+    background: var(--lfi-invert-bg);
+  }
+  .lfi-process__stage:first-child .lfi-process__dot {
+    border-color: var(--lfi-orange);
+    background: var(--lfi-yellow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-process__marker::after {
+    transform: scaleX(1);
+  }
+  .lfi-process__dot {
+    transform: none;
+  }
+}

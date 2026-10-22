@@ -1,0 +1,21 @@
+.lfi-404 {
+  display: flex;
+  align-items: center;
+  min-height: 70svh;
+  padding-top: calc(var(--lfi-header-h) + 4rem);
+  padding-bottom: 5rem;
+  background: var(--lfi-bg);
+}
+
+.lfi-404 h1 {
+  margin: 0;
+  font-size: var(--lfi-display-2);
+  letter-spacing: -0.035em;
+}
+
+.lfi-404__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}

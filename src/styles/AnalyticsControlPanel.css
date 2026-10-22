@@ -42,7 +42,8 @@ html {
 }
 
 .analytics-logo {
-  height: 100px;
+  /* The brand lockup is ~4.8:1 - 100px tall made it ~480px wide. */
+  height: 72px;
   width: auto;
 }
 

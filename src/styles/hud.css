@@ -1,0 +1,257 @@
+/* ==========================================================================
+   LFI AI - AI command-centre layer.
+
+   A small set of reusable decorations that give the dark system its
+   instrument-panel character: a blueprint grid behind a section, bracket
+   corners on a panel, and a light sweep across a card on hover.
+
+   Three rules this layer follows, so the site stays a business site rather
+   than a science-fiction prop:
+
+   1. Decoration only. Nothing here renders a number, a status or a reading.
+      Every panel on this site shows real content or is visibly abstract, so
+      there is nothing for a visitor to mistake for live telemetry.
+   2. Invisible to assistive technology. These are inert elements carrying
+      aria-hidden, never text.
+   3. Composited. Grids and brackets are static paint; only opacity and
+      transform animate, and all of it stops under reduced motion.
+
+   Everything is drawn on dedicated child elements rather than ::before /
+   ::after, because the card surfaces already spend both pseudos (the
+   sweeping border on `.lfi-surface::after`, the wash on
+   `.lfi-solution::before`).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Blueprint grid - sits behind a section's content.
+   -------------------------------------------------------------------------- */
+.lfi-hud-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+      rgba(230, 236, 237, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(230, 236, 237, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  /* Fades out before it reaches the content, so text never sits on a line. */
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 62% at 50% 0%,
+    #000 10%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 62% at 50% 0%,
+    #000 10%,
+    transparent 72%
+  );
+}
+
+/* A variant anchored to the right edge, for sections whose content sits left. */
+.lfi-hud-grid--right {
+  -webkit-mask-image: radial-gradient(
+    ellipse 58% 70% at 100% 40%,
+    #000 8%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(
+    ellipse 58% 70% at 100% 40%,
+    #000 8%,
+    transparent 70%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   2. Bracket corners - framing for a panel.
+   Two corners, not four: it reads as deliberate framing instead of a box.
+   -------------------------------------------------------------------------- */
+.lfi-hud-corners {
+  position: absolute;
+  inset: 10px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-hud-corners::before,
+.lfi-hud-corners::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--lfi-yellow);
+}
+
+.lfi-hud-corners::before {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.lfi-hud-corners::after {
+  right: 0;
+  bottom: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+@media (hover: hover) {
+  .lfi-surface:hover > .lfi-hud-corners,
+  .lfi-surface:focus-visible > .lfi-hud-corners,
+  .lfi-surface:focus-within > .lfi-hud-corners {
+    opacity: 0.75;
+  }
+}
+
+/* Touch devices get them permanently, faintly - there is no hover to reveal
+   them and an element that never appears is just dead markup. */
+@media (hover: none) {
+  .lfi-hud-corners {
+    opacity: 0.3;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Hover sweep - a single pass of light across a panel.
+   -------------------------------------------------------------------------- */
+/* z-index -1, not 1. A positioned element paints above non-positioned inline
+   content whatever its z-index, so at 1 this gradient washed over the card's
+   own text. `.lfi-surface` sets `isolation: isolate`, so -1 keeps it inside
+   the card - above its background, below its copy. */
+.lfi-hud-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.lfi-hud-sweep::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 42%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 214, 0, 0.09) 46%,
+    rgba(45, 88, 192, 0.07) 60%,
+    transparent
+  );
+  transform: translateX(-160%) skewX(-14deg);
+  transition: transform 0ms;
+}
+
+@media (hover: hover) {
+  .lfi-surface:hover > .lfi-hud-sweep::before {
+    transform: translateX(300%) skewX(-14deg);
+    transition: transform 900ms var(--lfi-ease-sweep);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Connection node - a small pulsing marker used as a section accent.
+   -------------------------------------------------------------------------- */
+.lfi-hud-node {
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lfi-yellow);
+  flex: none;
+}
+
+.lfi-hud-node::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--lfi-yellow);
+  opacity: 0;
+  animation: lfi-hud-ping 2.8s var(--lfi-ease-out) infinite;
+}
+
+@keyframes lfi-hud-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Scanning rule - a hairline that travels once across a wide panel when it
+   enters the viewport. Driven by the existing `data-reveal` attribute, so it
+   needs no extra observer.
+   -------------------------------------------------------------------------- */
+.lfi-hud-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--lfi-yellow) 42%,
+    var(--lfi-orange) 58%,
+    transparent
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.55;
+}
+
+.lfi-js [data-reveal="in"] > .lfi-hud-rule {
+  animation: lfi-hud-rule 1500ms var(--lfi-ease-sweep) 240ms both;
+}
+
+@keyframes lfi-hud-rule {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  56% {
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+}
+
+/* ==========================================================================
+   Reduced motion: the decorations stay, the movement goes.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .lfi-hud-node::after,
+  .lfi-js [data-reveal="in"] > .lfi-hud-rule {
+    animation: none !important;
+  }
+  .lfi-hud-rule {
+    transform: scaleX(1);
+    opacity: 0.3;
+  }
+  .lfi-hud-sweep {
+    display: none;
+  }
+}

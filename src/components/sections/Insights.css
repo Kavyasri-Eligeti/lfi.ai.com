@@ -1,0 +1,184 @@
+/* ==========================================================================
+   Insights - an editorial index.
+
+   A list of rules with type set on them, not a grid of cards. Each row is a
+   single grid so the kind, the title, the source and the arrow stay in the
+   same columns down the list, which is what makes it read as an index rather
+   than as three stacked links.
+   ========================================================================== */
+
+.lfi-insights__index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* The rule above the first row. Every row then draws its own bottom edge,
+     so the list is closed at both ends without a special case. */
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-insight {
+  border-bottom: 1px solid var(--lfi-border);
+}
+
+.lfi-insight__row {
+  position: relative;
+  display: grid;
+  /* index | kind | title | source | arrow.
+     The title takes every spare pixel; everything else is sized to content,
+     so the columns line up down the list regardless of title length. */
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2.25rem);
+  padding: clamp(1.35rem, 2.6vw, 2.1rem) clamp(0.5rem, 1.4vw, 1.25rem);
+  color: inherit;
+  transition: background var(--lfi-dur) var(--lfi-ease),
+    padding-inline var(--lfi-dur) var(--lfi-ease);
+}
+
+/* The warm edge that draws down the left of a row on hover. Scaled from the
+   centre out rather than faded in, so it reads as a marker being set against
+   the row. */
+.lfi-insight__row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--lfi-yellow),
+    var(--lfi-orange)
+  );
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-insight__n {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--lfi-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.lfi-insight__kind {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lfi-text-muted);
+  border: 1px solid var(--lfi-border);
+  border-radius: 999px;
+  padding: 0.26rem 0.62rem;
+  white-space: nowrap;
+  transition: border-color var(--lfi-dur) var(--lfi-ease),
+    color var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-insight__title {
+  font-size: clamp(1.1rem, 1.9vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.lfi-insight__source {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.72rem;
+  color: var(--lfi-text-subtle);
+  white-space: nowrap;
+}
+
+.lfi-insight__go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--lfi-border);
+  color: var(--lfi-text-muted);
+  transition: transform var(--lfi-dur) var(--lfi-ease-entrance),
+    border-color var(--lfi-dur) var(--lfi-ease),
+    background var(--lfi-dur) var(--lfi-ease),
+    color var(--lfi-dur) var(--lfi-ease);
+}
+
+/* --- interaction -----------------------------------------------------------
+   Focus-visible is given the same treatment as hover rather than only the
+   global focus ring: this is a large row, and a 2px outline around something
+   this wide is much harder to locate than the row itself lighting up.
+   -------------------------------------------------------------------------- */
+@media (hover: hover) {
+  .lfi-insight__row:hover {
+    background: rgba(230, 236, 237, 0.028);
+  }
+}
+
+.lfi-insight__row:hover::before,
+.lfi-insight__row:focus-visible::before {
+  transform: scaleY(1);
+}
+
+.lfi-insight__row:focus-visible {
+  background: rgba(230, 236, 237, 0.028);
+}
+
+.lfi-insight__row:is(:hover, :focus-visible) .lfi-insight__kind {
+  border-color: var(--lfi-border-strong);
+  color: var(--lfi-text);
+}
+
+.lfi-insight__row:is(:hover, :focus-visible) .lfi-insight__go {
+  background: var(--lfi-yellow);
+  border-color: var(--lfi-yellow);
+  color: #000;
+  transform: translateX(3px) rotate(45deg);
+}
+
+/* --- responsive ------------------------------------------------------------
+   Below the desktop layout the five columns cannot hold. The row becomes two
+   lines: metadata above, title below, with the arrow parked on the metadata
+   line - which keeps the touch target away from the title's own line boxes.
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .lfi-insight__row {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    gap: 0.75rem 0.9rem;
+    padding-inline: 0.25rem;
+  }
+  .lfi-insight__title {
+    grid-column: 1 / -1;
+    order: 2;
+  }
+  .lfi-insight__source {
+    order: 1;
+    /* Pushed hard right so it sits opposite the kind, against the arrow. */
+    margin-left: auto;
+  }
+  .lfi-insight__go {
+    order: 1;
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 420px) {
+  .lfi-insight__n {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-insight__row::before {
+    transition: none;
+  }
+  .lfi-insight__row:is(:hover, :focus-visible) .lfi-insight__go {
+    transform: none;
+  }
+}

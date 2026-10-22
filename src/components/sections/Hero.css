@@ -1,0 +1,397 @@
+.lfi-hero {
+  /* Pointer parallax writes these; 0 until the pointer moves. */
+  --lfi-px: 0;
+  --lfi-py: 0;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* The hero is centred in this box, so any height beyond what the copy
+     needs is split as empty space above AND below it. At 920px that was
+     ~115px of void at each end on a desktop viewport, which is what made the
+     fold look unfinished and pushed the stats row away from the headline.
+     Sized to the copy now; the network field still fills the full bleed. */
+  min-height: min(90svh, 820px);
+  padding-top: calc(var(--lfi-header-h) + clamp(2rem, 5.5vh, 3.75rem));
+  padding-bottom: clamp(3rem, 7vh, 4.75rem);
+  overflow: hidden;
+  /* Transparent: the fixed lighting layer behind the page (styles/
+     atmosphere.css) is what lights this section now. */
+  background: transparent;
+  border-bottom: 1px solid var(--lfi-border);
+}
+
+/* A hairline of brand colour at the bottom edge - the three logo blocks read
+   as one rule. */
+.lfi-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--lfi-yellow) 0%,
+    var(--lfi-orange) 42%,
+    var(--lfi-blue) 100%
+  );
+  opacity: 0.55;
+  z-index: 3;
+}
+
+/* Scrim over the ambient light, under the copy. Deliberately lighter than a
+   flat wash: it keeps the text column legible while letting the right-hand
+   side of the composition stay open for the sphere. Measured, not guessed -
+   the body copy holds >7:1 against the darkest point of the gradient. */
+.lfi-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    rgba(8, 9, 12, 0.94) 10%,
+    rgba(8, 9, 12, 0.78) 34%,
+    rgba(8, 9, 12, 0.3) 62%,
+    rgba(8, 9, 12, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+/* No longer a two-column grid. The figure is a sibling of this element now
+   (see Hero.js), so the container's only job is to place the copy. */
+.lfi-hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--lfi-container);
+  width: 100%;
+}
+
+/* The copy drifts a few pixels against the field - enough to feel alive, far
+   too little to disturb reading. */
+.lfi-hero__copy {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  /* The copy measure. Wide enough that the headline sets as two lines at
+     desktop with the accent phrase intact, narrow enough that the lede never
+     runs past a comfortable reading length. */
+  max-width: min(100%, 58rem);
+  transform: translate3d(
+    calc(var(--lfi-px) * -7px),
+    calc(var(--lfi-py) * -5px),
+    0
+  );
+  transition: transform 500ms var(--lfi-ease-out);
+}
+
+/* --- the AI figure --------------------------------------------------------
+   Anchored to the hero and bled off the right edge, vertically centred. It is
+   behind the copy's scrim, so the two overlap as one composition instead of
+   sitting in separate columns.
+   -------------------------------------------------------------------------- */
+.lfi-hero__figure {
+  position: absolute;
+  /* BELOW the scrim (`.lfi-hero::before`, z-index 1), not level with it.
+     When the figure was moved out of the container it also moved later in
+     the DOM, so at an equal z-index it began painting over the scrim - and
+     the scrim is the only thing keeping the mesh off the headline. The
+     gradient is directional, so this costs nothing on the right-hand side
+     where the sphere is meant to be seen. */
+  z-index: 0;
+  top: 50%;
+  /* Negative, so the sphere runs past the viewport edge rather than stopping
+     politely inside it - the thing that makes it read as a scene instead of
+     an illustration. */
+  right: clamp(-9rem, -5vw, -2.5rem);
+  width: min(62vw, 880px);
+  display: flex;
+  justify-content: center;
+  /* Two inputs on one transform: pointer counter-drift (so the figure and
+     the copy sit on separate planes) and the scroll-linked exit, which lifts
+     and dims the figure as the hero hands over to the next section.
+     `--lfi-exit` is written by styles/scrub.css off `--lfi-scrub`.
+
+     The -50% Y is part of this transform rather than a separate rule,
+     because an element can only have one `transform` - declaring the
+     centring anywhere else would silently replace the parallax. */
+  transform: translate3d(
+    calc(var(--lfi-px) * 10px),
+    calc(-50% + var(--lfi-py) * 8px - var(--lfi-exit, 0) * 42px),
+    0
+  );
+  opacity: calc(1 - var(--lfi-exit, 0) * 0.45);
+  transition: transform 700ms var(--lfi-ease-out);
+  will-change: transform, opacity;
+}
+
+.lfi-hero__figure .lfi-sphere {
+  /* Full width of the bled figure. The cap that used to live here (520px)
+     was what kept the sphere reading as a small companion graphic. */
+  max-width: 100%;
+}
+
+/* The hero's two local ambient glows used to live here. They were removed
+   when the fixed lighting layer (styles/atmosphere.css) took over: both were
+   painting a blue pool into the same top-right corner, and stacking them put
+   a visible second edge around the sphere's bloom. The sphere's own
+   `.lfi-sphere__bloom` is the only local light left in this section. */
+
+/* --- eyebrow -------------------------------------------------------------- */
+.lfi-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.5rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--lfi-text-muted);
+  border: 1px solid var(--lfi-border);
+  background: rgba(17, 19, 24, 0.6);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+}
+
+.lfi-hero__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lfi-yellow);
+  flex: none;
+  animation: lfi-pulse 2.6s var(--lfi-ease) infinite;
+}
+
+/* --- the entrance ----------------------------------------------------------
+   GSAP owns the hero's arrival (see Hero.js) so the pieces move as one
+   sequence rather than on six independent CSS delays.
+
+   These are only the RESTING states, and every one of them is gated on
+   `.lfi-js` - a class index.js sets on <html> before first paint. If the
+   bundle never executes, the hero renders complete and readable; it is only
+   hidden when something is guaranteed to be there to reveal it. The
+   `[data-intro=""]` scope is cleared by the timeline's onStart, which is the
+   same frame GSAP writes its own inline values, so there is no flash in
+   either direction.
+   -------------------------------------------------------------------------- */
+.lfi-js .lfi-hero[data-intro=""] .lfi-hero__title,
+.lfi-js .lfi-hero[data-intro=""] [data-intro-item] {
+  opacity: 0;
+}
+
+/* --- headline -------------------------------------------------------------
+   Split into its rendered LINES at runtime, each masked, rising in sequence.
+   This is the entrance the page is remembered for, so it is the one place
+   that gets a long, deliberate movement.
+   -------------------------------------------------------------------------- */
+.lfi-hero__title {
+  margin: 0;
+  font-size: var(--lfi-display-1);
+  font-weight: 800;
+  letter-spacing: -0.038em;
+  line-height: 0.98;
+  /* The explicit phrases below decide where the lines break, so the
+     balancer inherited from the global heading rule has nothing useful left
+     to do here - and left on, it re-ragged the phrases internally. */
+  text-wrap: normal;
+}
+
+/* `width: fit-content` matters: as a full-width block the accent phrase
+   would map its gradient across the whole column rather than across the
+   glyphs, so the warm end of the ramp fell outside the visible text. */
+.lfi-hero__phrase {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* SplitText's generated line boxes. The mask wrapper it adds around each one
+   handles the clipping; this only has to make sure a line is a block and that
+   descenders are not cropped by a mask sized to the line box. */
+.lfi-hero__line {
+  display: block;
+  padding-bottom: 0.08em;
+}
+
+/* --- lede ----------------------------------------------------------------- */
+.lfi-hero__lede {
+  max-width: 54ch;
+  margin: 1.6rem 0 0;
+  font-size: var(--lfi-body-lg);
+  line-height: 1.6;
+  color: var(--lfi-text-muted);
+}
+
+/* --- actions -------------------------------------------------------------- */
+.lfi-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2.1rem;
+}
+
+/* --- facts ---------------------------------------------------------------- */
+.lfi-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 4vw, 3.2rem);
+  margin: 2.5rem 0 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--lfi-border);
+  max-width: 640px;
+}
+
+.lfi-hero__fact {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.2rem;
+}
+
+.lfi-hero__fact dd {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1;
+  /* Digits must not reflow the row while counting. */
+  font-variant-numeric: tabular-nums;
+}
+
+.lfi-hero__fact dt {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-hero__note {
+  margin: 0.9rem 0 0;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--lfi-text-subtle);
+}
+
+/* --- scroll cue ----------------------------------------------------------- */
+.lfi-hero__cue {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 1.4rem;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--lfi-text-muted);
+  transition: color var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-hero__cue svg {
+  animation: lfi-scroll-cue 2.4s var(--lfi-ease) infinite;
+}
+
+.lfi-hero__cue-line {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(180deg, transparent, var(--lfi-border-strong));
+}
+
+@media (hover: hover) {
+  .lfi-hero__cue:hover {
+    color: var(--lfi-yellow);
+  }
+}
+
+/* --- responsive ----------------------------------------------------------- */
+
+/* The two intermediate overrides that used to sit here both tuned a
+   two-column grid and a `ch`-based headline cap. Neither exists any more:
+   the figure is positioned against the hero rather than tracked in a grid,
+   and the headline's line breaks are set by its explicit phrases, so a
+   `ch` cap can only work against them - at 14ch it wrapped the accent
+   phrase, which is the exact thing the phrases were introduced to prevent. */
+
+@media (max-width: 900px) {
+  .lfi-hero {
+    min-height: 0;
+    padding-bottom: clamp(3rem, 7vh, 4.5rem);
+  }
+
+  /* One column, and the sphere moves BEHIND the copy rather than below it.
+     Stacking it would have added ~350px of hero on a phone, which is exactly
+     the empty-hero problem the desktop layout was just sized out of.
+
+     The figure this replaced was a photograph, bright enough that it had to
+     be dropped to 0.12 before the lede cleared AA over it. The sphere is the
+     opposite kind of image - fine light lines and a low-alpha blue core on
+     transparency - so it can sit much closer to full strength and actually
+     be seen. At 0.45 the densest thing it puts behind a glyph is the core
+     glow, which lifts the background from #08090c to about #0e131e; the
+     muted lede text still measures over 9:1 there. */
+  /* Centred behind the copy rather than bled off the right edge: at this
+     width there is no right-hand side to bleed into. `right: auto` undoes
+     the desktop anchor, or the two would fight and the sphere would sit
+     off-screen. */
+  .lfi-hero__figure {
+    right: auto;
+    top: 50%;
+    left: 50%;
+    width: min(94vw, 460px);
+    opacity: 0.45;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+  }
+  .lfi-hero__copy {
+    position: relative;
+    z-index: 2;
+  }
+  /* On a phone the field reads as texture behind the copy rather than as a
+     composition beside it, so flatten the directional fade. */
+  .lfi-hero::before {
+    background: linear-gradient(
+      180deg,
+      rgba(8, 9, 12, 0.68) 0%,
+      rgba(8, 9, 12, 0.84) 56%,
+      var(--lfi-bg) 100%
+    );
+  }
+  .lfi-hero__cue {
+    display: none;
+  }
+  /* No pointer parallax on touch - nothing drives it. */
+  .lfi-hero__copy {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .lfi-hero__facts {
+    gap: 1.2rem 2rem;
+    margin-top: 2.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-hero__copy {
+    transform: none !important;
+  }
+  /* The figure keeps its stacking position, just not the drift. The
+     translate is NOT cleared here: it carries the -50% that centres the
+     figure, so `transform: none` would drop it half a viewport low. */
+  .lfi-hero__figure {
+    transition: none !important;
+  }
+  /* GSAP never runs the entrance under reduced motion, but the resting rule
+     is a stylesheet rule and has to be lifted here too, or the hero would
+     stay at opacity 0 for exactly the visitors least able to tolerate it. */
+  .lfi-js .lfi-hero[data-intro=""] .lfi-hero__title,
+  .lfi-js .lfi-hero[data-intro=""] [data-intro-item] {
+    opacity: 1;
+  }
+}

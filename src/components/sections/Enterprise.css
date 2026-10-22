@@ -1,0 +1,369 @@
+/* ==========================================================================
+   The wider enterprise ecosystem - horizontal storytelling.
+
+   Above 1024px the section pins and the track travels sideways under the
+   scroll. Below it, the identical markup is a native scroll-snap carousel.
+   Nothing about the content changes between the two; only who moves it.
+   ========================================================================== */
+
+.lfi-ent {
+  position: relative;
+  /* The pinned track is wider than the page. Without this the horizontal
+     overflow escapes and the whole document gains a scrollbar - the classic
+     failure of this effect. */
+  overflow: hidden;
+}
+
+/* The pinned section is exactly one screen.
+
+   ScrollTrigger reserves a viewport-sized spacer for a pinned element, so a
+   section taller than the viewport has its lower part - here, the progress
+   indicator - permanently off-screen while it is pinned. Sizing the section
+   to the screen and centring its contents is what makes the pin a composed
+   frame rather than a crop. */
+@media (min-width: 1025px) {
+  .lfi-ent {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: calc(var(--lfi-header-h) + 0.75rem);
+    padding-bottom: clamp(0.75rem, 2vh, 1.4rem);
+  }
+
+  .lfi-ent__head {
+    margin-bottom: clamp(1.1rem, 3vh, 2.2rem);
+  }
+
+  /* A ceiling in viewport units, so a short laptop screen shrinks the cards
+     rather than pushing the indicator out of frame. */
+  .lfi-ent__link {
+    max-height: 44vh;
+  }
+
+  .lfi-ent__foot {
+    margin-top: clamp(0.9rem, 2vh, 1.6rem);
+  }
+}
+
+/* --- heading ---------------------------------------------------------------- */
+.lfi-ent__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: end;
+  margin-bottom: var(--lfi-head-gap);
+}
+
+.lfi-ent__headAside p {
+  margin: 0 0 1.2rem;
+  font-size: var(--lfi-small);
+  line-height: 1.65;
+  color: var(--lfi-text-muted);
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--lfi-orange);
+}
+
+/* --- the track ---------------------------------------------------------------- */
+.lfi-ent__viewport {
+  position: relative;
+  width: 100%;
+}
+
+.lfi-ent__track {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--lfi-gutter);
+  display: flex;
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  /* GSAP drives `x` on this element on desktop. */
+  will-change: transform;
+}
+
+.lfi-ent__panel {
+  flex: 0 0 auto;
+  width: clamp(290px, 26vw, 380px);
+  display: flex;
+}
+
+.lfi-ent__link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: clamp(1.5rem, 2.2vw, 2rem);
+  /* `.lfi-surface` contributes the hover ring and the shared transition, not
+     a fill - every card on this site states its own background and border. */
+  border: 1px solid var(--lfi-border);
+  background: var(--lfi-surface);
+  border-radius: var(--lfi-radius);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease),
+    background-color var(--lfi-dur) var(--lfi-ease);
+}
+
+/* A top edge that lights on the active panel. The indicator below and this
+   rule are the two things that tell you where you are in the sequence. */
+.lfi-ent__link::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--lfi-yellow),
+    var(--lfi-orange) 55%,
+    var(--lfi-blue)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 520ms var(--lfi-ease-out);
+}
+
+.lfi-ent__panel.is-active .lfi-ent__link::before,
+.lfi-ent__link:hover::before,
+.lfi-ent__link:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.lfi-ent__link:hover,
+.lfi-ent__link:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--lfi-border-strong);
+}
+
+.lfi-ent__n {
+  position: absolute;
+  top: clamp(1.2rem, 2vw, 1.6rem);
+  right: clamp(1.2rem, 2vw, 1.6rem);
+  font-family: var(--lfi-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-ent__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  margin-bottom: 1.1rem;
+  color: var(--lfi-text);
+  background: rgba(230, 236, 237, 0.05);
+  border: 1px solid var(--lfi-border);
+  transition: color var(--lfi-dur) var(--lfi-ease),
+    background-color var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-ent__panel.is-active .lfi-ent__icon,
+.lfi-ent__link:hover .lfi-ent__icon {
+  color: var(--lfi-yellow);
+  background: rgba(255, 214, 0, 0.08);
+}
+
+.lfi-ent__kicker {
+  margin: 0 0 0.4rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-ent__name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.85rem;
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.lfi-ent__ext {
+  flex: none;
+  opacity: 0;
+  transform: translate(-3px, 3px);
+  transition: opacity var(--lfi-dur) var(--lfi-ease),
+    transform var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-ent__link:hover .lfi-ent__ext,
+.lfi-ent__link:focus-visible .lfi-ent__ext {
+  opacity: 0.75;
+  transform: none;
+}
+
+/* The published description. */
+.lfi-ent__official {
+  margin: 0 0 1.2rem;
+  font-size: var(--lfi-small);
+  line-height: 1.62;
+  color: var(--lfi-text);
+}
+
+/* This site's own line. Visually separated from the quoted text above it so
+   the two are never mistaken for one statement. */
+.lfi-ent__bridge {
+  margin: auto 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--lfi-border);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-ent__bridge span {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lfi-blue-soft);
+}
+
+/* --- progress indicator --------------------------------------------------------- */
+.lfi-ent__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-top: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.lfi-ent__dots {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.lfi-ent__dot {
+  appearance: none;
+  border: 1px solid var(--lfi-border);
+  background: transparent;
+  color: var(--lfi-text-subtle);
+  font-family: var(--lfi-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+  /* Comfortably past the 24px minimum target size with the padding above. */
+  min-height: 32px;
+  transition: color var(--lfi-dur-fast) var(--lfi-ease),
+    border-color var(--lfi-dur-fast) var(--lfi-ease),
+    background-color var(--lfi-dur-fast) var(--lfi-ease);
+}
+
+.lfi-ent__dot:hover,
+.lfi-ent__dot:focus-visible {
+  color: var(--lfi-text);
+  border-color: var(--lfi-border-strong);
+}
+
+.lfi-ent__dot.is-active {
+  color: var(--lfi-black);
+  background: var(--lfi-yellow);
+  border-color: var(--lfi-yellow);
+}
+
+.lfi-ent__source {
+  margin: 0;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-ent__source a {
+  color: var(--lfi-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lfi-ent__source a:hover,
+.lfi-ent__source a:focus-visible {
+  color: var(--lfi-yellow);
+}
+
+/* --- native carousel (<=1024px and reduced motion) --------------------------------
+   The same panels, moved by the visitor instead of by the scrollbar. Snap
+   points make it feel deliberate, and the trailing padding lets the last
+   panel reach the left edge rather than stopping short.
+   ----------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .lfi-ent__head {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .lfi-ent__viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    /* Momentum scrolling without a visible bar eating into the panels. */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lfi-ent__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lfi-ent__track {
+    transform: none !important;
+    padding-right: calc(var(--lfi-gutter) + 2rem);
+  }
+
+  .lfi-ent__panel {
+    scroll-snap-align: start;
+    width: min(78vw, 340px);
+  }
+}
+
+@media (max-width: 560px) {
+  .lfi-ent__panel {
+    width: min(86vw, 320px);
+  }
+  .lfi-ent__foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No pin, no travel, no snap momentum - a plain wrapped grid. */
+  .lfi-ent__viewport {
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .lfi-ent__track {
+    flex-wrap: wrap;
+    transform: none !important;
+    padding-inline: var(--lfi-gutter);
+  }
+  .lfi-ent__panel {
+    width: min(100%, 340px);
+    flex: 1 1 280px;
+  }
+  .lfi-ent__link,
+  .lfi-ent__link::before,
+  .lfi-ent__ext,
+  .lfi-ent__icon {
+    transition: none;
+  }
+  .lfi-ent__link::before {
+    transform: scaleX(1);
+  }
+}

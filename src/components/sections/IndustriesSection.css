@@ -1,0 +1,318 @@
+.lfi-industries__head {
+  max-width: 720px;
+  margin-bottom: var(--lfi-gap-lg);
+}
+
+/* Stacked: the selector is a row above the panel, not a rail beside it. */
+.lfi-industries__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.1rem, 2.4vw, 1.75rem);
+  align-items: start;
+}
+
+/* Grid items default to `min-width: auto`, so a child wider than its track
+   pushes the track open instead of shrinking. The tab strip below becomes a
+   horizontal scroller whose min-content width is the sum of all eight tabs -
+   without this it dragged the whole panel (and the case-study card beside it)
+   out past the right edge of the page on narrow viewports. */
+.lfi-industries__panel > * {
+  min-width: 0;
+}
+
+/* --- tabs -----------------------------------------------------------------
+   A wrapping row of chips. Eight industries fit on two rows at desktop and
+   scroll horizontally on a phone.
+   -------------------------------------------------------------------------- */
+.lfi-industries__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lfi-industries__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.6rem 1.05rem;
+  background: transparent;
+  border: 1px solid var(--lfi-border);
+  border-radius: 999px;
+  color: var(--lfi-text-muted);
+  font-family: inherit;
+  font-size: 0.93rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--lfi-dur) var(--lfi-ease),
+    color var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease);
+}
+
+@media (hover: hover) {
+  .lfi-industries__tab:hover {
+    color: #fff;
+    background: rgba(230, 236, 237, 0.04);
+  }
+}
+
+.lfi-industries__tab.is-active,
+.lfi-industries__tab:hover::after {
+  opacity: 1;
+  animation: lfi-border-sweep 2.4s linear infinite;
+}
+
+.lfi-industries__tab {
+  position: relative;
+  isolation: isolate;
+} {
+  color: #000;
+  background: var(--lfi-yellow);
+  border-color: var(--lfi-yellow);
+}
+
+/* --- panel ----------------------------------------------------------------
+   Two columns at desktop: the argument on the left, the things you can open
+   on the right. As one column the panel ran to a single 62ch measure and
+   left most of its own width empty.
+   -------------------------------------------------------------------------- */
+.lfi-industries__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.6rem, 3vw, 2.75rem);
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius-lg);
+  background: var(--lfi-surface);
+  /* The per-selection entrance is a GSAP stagger over this panel's children
+     (see IndustriesSection.js). It used to be a CSS animation on the panel
+     itself as well, which meant the whole box faded in while its contents
+     were separately staggering inside it - two entrances fighting for the
+     same moment. */
+}
+
+@media (min-width: 900px) {
+  .lfi-industries__content {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+  }
+  /* A hairline between the two halves rather than a second bordered box -
+     the panel is already a bordered surface and nesting another inside it is
+     how a layout starts looking like a form. */
+  .lfi-industries__side {
+    padding-left: clamp(1.6rem, 3vw, 2.75rem);
+    border-left: 1px solid var(--lfi-border);
+  }
+}
+
+.lfi-industries__main,
+.lfi-industries__side {
+  min-width: 0;
+}
+
+/* The side column holds its two blocks apart and pins the official link to
+   the bottom, so the panel squares off however many demos an industry has. */
+.lfi-industries__side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* The published description of Linkfields' work in this industry. Set as a
+   quotation so it reads as the company's own claim, clearly apart from the
+   illustrative use cases below it. */
+.lfi-industries__published {
+  display: block;
+  margin: 0 0 1.6rem;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--lfi-blue-soft);
+}
+
+.lfi-industries__published p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1.01rem;
+  line-height: 1.62;
+  color: var(--lfi-text);
+}
+
+.lfi-industries__published cite {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.63rem;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-industries__flag {
+  display: inline-block;
+  margin: 0 0 0.9rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+  border: 1px dashed var(--lfi-border-strong);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+.lfi-industries__content h3 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  letter-spacing: -0.032em;
+}
+
+.lfi-industries__case {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1.01rem;
+  line-height: 1.65;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-industries__sub {
+  margin: 1.9rem 0 0.8rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-industries__demos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lfi-industries__demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 40px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--lfi-border-strong);
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--lfi-text);
+  transition: background var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-industries__demo svg {
+  color: var(--lfi-text-subtle);
+  flex: none;
+}
+
+@media (hover: hover) {
+  .lfi-industries__demo:hover {
+    background: rgba(255, 214, 0, 0.1);
+    border-color: rgba(255, 214, 0, 0.45);
+  }
+}
+
+.lfi-industries__official {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  gap: 0.45rem;
+  margin-top: 1.9rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--lfi-yellow);
+}
+
+@media (hover: hover) {
+  .lfi-industries__official:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+/* --- responsive ----------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* The chips stop wrapping and become a single horizontally scrollable
+     strip: two or three wrapped rows of chips on a phone is most of the
+     viewport spent on navigation. The container needs a negative gutter so
+     the first and last chips sit flush with the screen edge. */
+  .lfi-industries__tabs {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.5rem;
+    margin-inline: calc(var(--lfi-gutter) * -1);
+    padding-inline: var(--lfi-gutter);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Fade the trailing edge so the strip reads as scrollable rather than as
+       a tab that happens to be cut off by the viewport. */
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(100% - 2.5rem),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(100% - 2.5rem),
+      transparent 100%
+    );
+  }
+  .lfi-industries__tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .lfi-industries__tab {
+    flex: none;
+    scroll-snap-align: start;
+  }
+}
+
+/* --- published expertise quote ---------------------------------------------
+   Sits under the section lede. Set as a quotation and attributed, because it
+   is the parent company's claim about itself rather than this page's.
+   -------------------------------------------------------------------------- */
+.lfi-industries__expertise {
+  display: block;
+  margin: 1.6rem 0 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--lfi-orange);
+  max-width: 72ch;
+}
+
+.lfi-industries__expertise p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-industries__expertise cite {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.64rem;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-industries__expertise cite a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--lfi-dur-fast) var(--lfi-ease);
+}
+
+.lfi-industries__expertise cite a:hover,
+.lfi-industries__expertise cite a:focus-visible {
+  color: var(--lfi-yellow);
+}

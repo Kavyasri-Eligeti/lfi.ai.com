@@ -1,5 +1,6 @@
 // src/Pages/Industries.js
 import React, { useState, useEffect } from "react";
+import "../styles/legacy-bootstrap.css";
 // import { useNavigate } from "react-router-dom";
 import {
   FaIndustry,
@@ -34,7 +35,6 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 import { FaMagnifyingGlassChart } from "react-icons/fa6";
-import { FaChromecast } from "react-icons/fa";
 // import { FaBuildingFlag } from "react-icons/fa6";
 import { RiBankLine } from 'react-icons/ri';
 import { MdCellTower } from "react-icons/md";
@@ -224,7 +224,7 @@ export default function Industries() {
     InternalPortal: {
       name: "Internal Portal",
       icon: <img 
-        src="/logo_n.png" 
+        src="/assets/brand/lfi-mark-flat.svg" 
         alt="Internal Portal" 
         style={{ 
           width: '18px', 
@@ -680,12 +680,14 @@ export default function Industries() {
       <div className="container px-3 px-md-4">
         <div className="text-center mb-3 mb-md-4">
           <img
-            src="/logo_new.png"
-            alt="Linkfields Logo"
+            src="/assets/brand/lfi-logo-light.svg"
+            alt="Linkfields AI"
             className="img-fluid"
             style={{
-              height: "auto",
-              maxHeight: "120px",
+              // Sized by height: the brand lockup is ~4.8:1, so capping the
+              // height is what keeps it proportionate. The old asset was
+              // nearly square and needed a much larger box.
+              height: "clamp(30px, 5vw, 46px)",
               width: "auto",
               maxWidth: "100%",
               display: "block",
@@ -697,7 +699,10 @@ export default function Industries() {
           <h2
             className="h3 h2-md"
             style={{
-              marginTop: '-30px',
+              // The previous -30px pulled the title up into the old logo's
+              // built-in whitespace; the lockup is cropped tight, so that
+              // offset now collides with it.
+              marginTop: 0,
               fontSize: 'clamp(1.25rem, 4vw, 1.75rem)'
             }}
           >

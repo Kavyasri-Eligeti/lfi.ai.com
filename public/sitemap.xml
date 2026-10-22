@@ -1,45 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Public, indexable routes only. The internal-network demos
+       (/resume-summarizer, /jd-cv-comparison, /golf-analyzer), the internal
+       tooling routes (/users, /generate-report) and the legacy explorer are
+       deliberately omitted: they are reachable but are not pages a search
+       result should land a visitor on. -->
   <url>
     <loc>https://lfiai.com/</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://lfiai.com/demos</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://lfiai.com/BankingAnalytics</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lfiai.com/TelecomAnalytics</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lfiai.com/BankingTelecomAnalytics</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://lfiai.com/resume-summarizer</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://lfiai.com/jd-cv-comparison</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://lfiai.com/golf-analyzer</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
 </urlset>

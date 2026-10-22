@@ -1,0 +1,125 @@
+/* ==========================================================================
+   Capability schematics - one visual language for all six.
+
+   Every illustration is drawn on the same 320x220 grid with the same stroke
+   weight, so switching between them changes the diagram and nothing else.
+   Colour is used sparingly and always to mean something: yellow marks the
+   selected or highest-weighted element, blue marks a system or an output,
+   and everything else is a neutral structural line.
+   ========================================================================== */
+
+.lfi-cv {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+  overflow: visible;
+}
+
+.lfi-cv [stroke],
+.lfi-cv path,
+.lfi-cv rect,
+.lfi-cv circle {
+  vector-effect: non-scaling-stroke;
+}
+
+/* --- structural ------------------------------------------------------------ */
+.cv-line {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.4);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cv-dim {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.2);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+/* --- connectors ------------------------------------------------------------- */
+.cv-flow {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.26);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+
+/* The connector that carries the main argument of the diagram. */
+.cv-flow--lead {
+  stroke: var(--lfi-yellow);
+  stroke-width: 1.7;
+}
+
+.cv-accent-line {
+  fill: none;
+  stroke: rgba(255, 214, 0, 0.42);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 6;
+  stroke-linecap: round;
+}
+
+/* --- filled elements --------------------------------------------------------- */
+.cv-fill-blue {
+  fill: rgba(45, 88, 192, 0.2);
+  stroke: var(--lfi-blue-soft);
+  stroke-width: 1.3;
+}
+
+.cv-fill-yellow {
+  fill: rgba(255, 214, 0, 0.16);
+  stroke: var(--lfi-yellow);
+  stroke-width: 1.3;
+}
+
+.cv-fill-orange {
+  fill: rgba(255, 120, 0, 0.16);
+  stroke: var(--lfi-orange);
+  stroke-width: 1.3;
+}
+
+.cv-fill-dim {
+  fill: rgba(230, 236, 237, 0.07);
+  stroke: rgba(230, 236, 237, 0.3);
+  stroke-width: 1.2;
+}
+
+.cv-tick {
+  fill: none;
+  stroke: var(--lfi-yellow);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* A single slow pulse marking the live element. One per diagram - more than
+   that and the schematic starts to flicker. */
+.cv-pulse {
+  fill: none;
+  stroke: var(--lfi-yellow);
+  stroke-width: 1.2;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: lfi-cv-pulse 3.4s var(--lfi-ease) infinite;
+}
+
+@keyframes lfi-cv-pulse {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.72);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-pulse {
+    animation: none;
+    opacity: 0.5;
+  }
+}

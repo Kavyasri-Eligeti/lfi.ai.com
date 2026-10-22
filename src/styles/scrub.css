@@ -1,0 +1,82 @@
+/* ==========================================================================
+   Scroll-linked motion.
+
+   `--lfi-scrub` runs 0 -> 1 on an element as it crosses the viewport, written
+   by useScrollScrub. These rules turn that into movement that tracks the
+   scrollbar rather than firing once, which is the difference between a page
+   that animates and one that feels connected to the hand.
+
+   Everything here is transform / opacity only, and every rule resolves to its
+   neutral state at --lfi-scrub: 0.5 - which is what the hook parks the value
+   at under reduced motion and when IntersectionObserver is missing.
+   ========================================================================== */
+
+/* Centred -1..1 ramp: -1 entering, 0 centred, +1 leaving. */
+.lfi-scrub {
+  --lfi-ramp: calc((var(--lfi-scrub, 0.5) - 0.5) * 2);
+}
+
+/* --- layered parallax ------------------------------------------------------
+   Decorative layers only. Nothing carrying text moves on scroll: text that
+   drifts while you read it is a readability cost, not a flourish.
+   -------------------------------------------------------------------------- */
+.lfi-parallax-slow {
+  transform: translate3d(0, calc(var(--lfi-ramp, 0) * -26px), 0);
+  will-change: transform;
+}
+
+.lfi-parallax {
+  transform: translate3d(0, calc(var(--lfi-ramp, 0) * -52px), 0);
+  will-change: transform;
+}
+
+.lfi-parallax-fast {
+  transform: translate3d(0, calc(var(--lfi-ramp, 0) * -88px), 0);
+  will-change: transform;
+}
+
+/* A drifting grid reads as depth behind the content. */
+.lfi-parallax-grid {
+  transform: translate3d(0, calc(var(--lfi-ramp, 0) * -70px), 0)
+    scale(1.12);
+  will-change: transform;
+}
+
+/* --- hero figure -----------------------------------------------------------
+   The sphere lifts and dims as the hero leaves, so the section hands over to
+   the next one rather than simply scrolling away.
+   -------------------------------------------------------------------------- */
+/* Only the value lives here. The figure's transform belongs in Hero.css
+   alongside its pointer parallax - component CSS is injected after these
+   shared sheets, so a transform declared here would simply lose the cascade
+   to the one there. Custom properties inherit, so the value crosses freely.
+   Starts at 0.70, not 0.50: the figure already sits ~45% through its window
+   at scroll 0, and a half-point threshold began dimming it while the hero was
+   still the whole screen. */
+.lfi-hero__figure {
+  --lfi-exit: clamp(0, calc((var(--lfi-scrub, 0) - 0.7) * 3), 1);
+}
+
+/* --- scrubbed section edge ------------------------------------------------
+   The brand hairline under the hero draws itself as the hero passes.
+   -------------------------------------------------------------------------- */
+.lfi-scrub-rule {
+  transform: scaleX(clamp(0, calc(var(--lfi-scrub, 0) * 1.6), 1));
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-parallax-slow,
+  .lfi-parallax,
+  .lfi-parallax-fast,
+  .lfi-parallax-grid {
+    transform: none !important;
+    will-change: auto;
+  }
+  .lfi-hero__figure {
+    --lfi-exit: 0;
+  }
+  .lfi-scrub-rule {
+    transform: scaleX(1);
+  }
+}

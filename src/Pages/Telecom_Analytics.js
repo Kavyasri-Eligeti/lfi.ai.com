@@ -1,11 +1,9 @@
 // src/Pages/AnalyticsControlPanel.js
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import "../styles/legacy-bootstrap.css";
 import "../styles/AnalyticsControlPanel.css";
 
 export default function TelecomAnalytics() {
-  const navigate = useNavigate();
-
   const handleOpenChurnAnalytics = () => {
     // Navigate to churn analytics or external link
     window.open("https://telecomchurn.lfidemo.com", "_blank", "noopener,noreferrer");
@@ -23,8 +21,8 @@ export default function TelecomAnalytics() {
       {/* Header with Logo */}
       <div className="analytics-header">
         <img
-          src="/logo_new.png"
-          alt="Linkfields Logo"
+          src="/assets/brand/lfi-logo-dark.svg"
+          alt="Linkfields AI"
           className="analytics-logo"
         />
       </div>

@@ -1,0 +1,24 @@
+.lfi-logo {
+  display: inline-flex;
+  align-items: center;
+  /* Clear space from the brand sheet: the height of the orange block, which
+     is ~0.26 of the lockup height. Expressed against the rendered height. */
+  padding: 0.1em 0;
+  flex: none;
+}
+
+.lfi-logo__img {
+  display: block;
+  width: auto;
+  /* The lockup must never be squeezed by a flex parent. */
+  max-width: none;
+  height: auto;
+}
+
+/* The sheet sets a 120px minimum lockup width - below that the tagline stops
+   being legible, so small viewports step the lockup down rather than past it. */
+@media (max-width: 480px) {
+  .lfi-logo__img {
+    height: 30px !important;
+  }
+}

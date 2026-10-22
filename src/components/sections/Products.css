@@ -1,0 +1,336 @@
+.lfi-products__layout {
+  display: grid;
+  gap: var(--lfi-gap);
+}
+
+/* --- lead product --------------------------------------------------------- */
+.lfi-product--lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.8rem, 3.6vw, 3.2rem);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius-lg);
+  background: radial-gradient(
+      120% 140% at 88% 12%,
+      rgba(45, 88, 192, 0.3) 0%,
+      transparent 58%
+    ),
+    var(--lfi-surface);
+  overflow: hidden;
+}
+
+.lfi-product--lead h3 {
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  margin: 0 0 0.8rem;
+  letter-spacing: -0.035em;
+}
+
+.lfi-product--lead .lfi-product__blurb {
+  max-width: 46ch;
+  font-size: 1.02rem;
+}
+
+.lfi-product--lead .lfi-btn {
+  margin-top: 1.6rem;
+}
+
+.lfi-product__art {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.lfi-product__art::before {
+  content: "";
+  position: absolute;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 214, 0, 0.12) 0%,
+    transparent 66%
+  );
+}
+
+/* ==========================================================================
+   The product window.
+
+   `aspect-ratio` is what makes this work: the mockup's viewBox is 360x240,
+   the box is locked to the same ratio, and the wordmark is then positioned
+   in PERCENTAGES of that box. So the logo stays registered to the drawn
+   title bar at every width, with no magic pixel offsets to re-tune when the
+   grid changes.
+   ========================================================================== */
+.lfi-product__screen {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 360 / 240;
+  border-radius: 14px;
+  /* The glass: the panel is lit from its top-left corner, which is where the
+     wordmark sits, so the brand is the brightest thing in the frame. */
+  background: radial-gradient(
+      120% 120% at 6% 0%,
+      rgba(255, 214, 0, 0.07) 0%,
+      transparent 52%
+    ),
+    linear-gradient(
+      160deg,
+      rgba(45, 88, 192, 0.14) 0%,
+      transparent 46%
+    );
+  box-shadow: var(--lfi-shadow);
+}
+
+.lfi-product__screen .lfi-pm {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Title-bar coordinates, straight out of the viewBox. The bar is 34 units of
+   240 tall; the mark is 22 of those, centred in it, starting at x 16 of 360.
+   The supplied artwork carries its own internal padding, so a mark sized to
+   the bar's full height still reads as comfortably inset. */
+.lfi-product__wordmark {
+  position: absolute;
+  left: 4.44%;
+  top: 2.5%;
+  height: 9.17%;
+  width: auto;
+  max-width: 42%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* No mockup for this product - the wordmark alone, as before. */
+/* A product with no drawn interface.
+
+   This used to drop the frame entirely (`aspect-ratio: auto; background:
+   none`) and show the wordmark at up to 220px, which next to four drawn
+   interface windows read as a giant logo pasted into the grid rather than as
+   a member of the same family.
+
+   It keeps the window now - same ratio, same glass, same radius - and simply
+   holds the wordmark in the middle of it. That is the honest treatment for a
+   product whose interface this site has no basis to draw: a frame with the
+   brand in it, not an invented UI. */
+.lfi-product__screen--bare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  border: 1px solid var(--lfi-border);
+}
+
+.lfi-product__screen--bare img {
+  width: 100%;
+  /* Comfortably inside the frame, so it reads as content rather than as a
+     logo that has outgrown its box. */
+  max-width: 62%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Last-resort plate: a product with neither a drawn interface nor a wordmark
+   asset. Sets its name rather than leaving an empty frame - and, critically,
+   rather than emitting an <img> with no src, which paints a broken-image
+   glyph in the middle of the product card. */
+.lfi-product__plate {
+  display: block;
+  padding: 0.4em 0.1em;
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--lfi-text-muted);
+}
+
+/* The enquiry affordance on a product with no public build. It replaces the
+   "opens in a new tab" note, so the card always ends by saying where it
+   goes. */
+.lfi-product__enquire {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lfi-yellow);
+  transition: gap var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-product__enquire::after {
+  content: "→";
+}
+
+@media (hover: hover) {
+  .lfi-product__link:hover .lfi-product__enquire {
+    gap: 0.7rem;
+  }
+}
+
+.lfi-product__screen--lead {
+  max-width: 420px;
+}
+
+.lfi-product__caption {
+  margin: 0;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--lfi-text-subtle);
+  text-align: center;
+}
+
+/* --- kicker --------------------------------------------------------------- */
+.lfi-product__kicker {
+  margin: 0 0 0.5rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lfi-yellow);
+}
+
+.lfi-product__blurb {
+  margin: 0;
+  color: var(--lfi-text-muted);
+  font-size: 0.945rem;
+  line-height: 1.62;
+}
+
+.lfi-product__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.1rem;
+}
+
+.lfi-product__tech li {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+  border: 1px solid var(--lfi-border);
+  border-radius: 999px;
+  padding: 0.24rem 0.6rem;
+}
+
+/* --- tiles ---------------------------------------------------------------- */
+.lfi-products__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+  gap: var(--lfi-gap);
+}
+
+/* Six secondary products resolve as 3 x 2. On the auto-fit track above a
+   1240px container fits four across, which left the last two stranded in a
+   half-empty row - the layout equivalent of trailing off mid-sentence.
+   Pinned to three so both rows are full. */
+@media (min-width: 1080px) {
+  .lfi-products__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.lfi-product--tile {
+  display: flex;
+}
+
+.lfi-product__link {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: clamp(1.4rem, 2.4vw, 1.8rem);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius);
+  background: var(--lfi-surface);
+  transition: border-color var(--lfi-dur) var(--lfi-ease),
+    background var(--lfi-dur) var(--lfi-ease),
+    transform var(--lfi-dur) var(--lfi-ease);
+}
+
+/* In a tile the window is the first thing in the card, so the product is
+   recognised as software before it is read. */
+.lfi-product__link .lfi-product__screen {
+  margin-bottom: 1.15rem;
+}
+
+.lfi-product--tile h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.lfi-product__ext {
+  color: var(--lfi-text-subtle);
+  flex: none;
+  transition: color var(--lfi-dur) var(--lfi-ease),
+    transform var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-product--tile .lfi-product__tech {
+  margin-top: auto;
+  padding-top: 1.1rem;
+}
+
+@media (hover: hover) {
+  .lfi-product__link:hover {
+    border-color: var(--lfi-border-strong);
+    background: var(--lfi-surface-2);
+    transform: translateY(-3px);
+  }
+  .lfi-product__link:hover .lfi-product__ext {
+    color: var(--lfi-yellow);
+    transform: translate(2px, -2px);
+  }
+  /* The window lifts out of the card slightly ahead of the card itself -
+     which is what makes the hover read as depth rather than as a nudge. */
+  .lfi-product__link .lfi-product__screen {
+    transition: transform var(--lfi-dur) var(--lfi-ease),
+      box-shadow var(--lfi-dur) var(--lfi-ease);
+  }
+  .lfi-product__link:hover .lfi-product__screen {
+    transform: translateY(-2px) scale(1.012);
+    box-shadow: var(--lfi-shadow-lg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-product__link .lfi-product__screen {
+    transition: none;
+  }
+}
+
+/* --- responsive ----------------------------------------------------------- */
+@media (max-width: 820px) {
+  .lfi-product--lead {
+    grid-template-columns: 1fr;
+  }
+  /* Put the artwork above the copy on a narrow screen so the product is
+     recognised before it is read. */
+  .lfi-product__art {
+    order: -1;
+  }
+  /* Scoped to the fallback only - the wordmark inside a window is sized
+     against the frame, not against the column. */
+  .lfi-product__screen--bare img {
+    max-width: 210px;
+  }
+}

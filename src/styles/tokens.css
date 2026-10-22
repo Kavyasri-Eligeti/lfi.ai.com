@@ -1,0 +1,124 @@
+/* ==========================================================================
+   LFI AI - design tokens
+   Palette is taken from the official linkfields-innovation-ai logo sheet:
+   #FFD600 yellow / #FF7800 orange / #2D58C0 blue / #000000 / text #E6ECED
+   ========================================================================== */
+
+:root {
+  /* --- brand ------------------------------------------------------------ */
+  --lfi-yellow: #ffd600;
+  --lfi-yellow-soft: #ffe14a;
+  --lfi-orange: #ff7800;
+  --lfi-orange-soft: #ff8f1f;
+  --lfi-blue: #2d58c0;
+  --lfi-blue-soft: #3a69d6;
+  --lfi-black: #000000;
+
+  /* --- surfaces (dark-first) -------------------------------------------- */
+  --lfi-bg: #08090c;
+  --lfi-bg-alt: #0c0e13;
+  --lfi-surface: #111318;
+  --lfi-surface-2: #161920;
+  --lfi-surface-3: #1c2029;
+
+  /* --- the rhythm-break section ------------------------------------------
+     "How we work" used to be an inverted LIGHT block (#f3f4f6 on an
+     otherwise black page), which read as an unfinished section rather than as
+     art direction. It still breaks the rhythm, but now as a raised charcoal
+     panel with a cool cast, so the whole site is one dark system.
+     ----------------------------------------------------------------------- */
+  --lfi-invert-bg: #0e1016;
+  --lfi-invert-surface: #15181f;
+  --lfi-invert-surface-2: #1b1f28;
+  --lfi-invert-border: rgba(230, 236, 237, 0.13);
+
+  /* --- text -------------------------------------------------------------- */
+  --lfi-text: #e6eced;
+  --lfi-text-muted: #a4aab4;
+  /* The brand sheet's grey is #737677. At the sizes this site uses it for -
+     mono eyebrows, tags, captions, all 10-13px - it measures 4.06:1 against
+     the surfaces behind it, under the 4.5:1 AA threshold for normal text.
+     This is the same hue stepped up until it clears AA (5.4:1 on surface);
+     the original stays below for any non-text use of the brand grey. */
+  --lfi-text-subtle: #8b9099;
+  --lfi-grey-brand: #737677;
+
+  /* --- lines & glass ----------------------------------------------------- */
+  --lfi-border: rgba(230, 236, 237, 0.1);
+  --lfi-border-strong: rgba(230, 236, 237, 0.18);
+  --lfi-glass: rgba(17, 19, 24, 0.72);
+
+  /* --- typography -------------------------------------------------------- */
+  --lfi-font: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --lfi-font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+
+  /* The 2.2rem floor is not cosmetic: at the previous 2.6rem the hero
+     headline's accent phrase ("business forward.") no longer fit the 320px
+     content width of a 360px phone and broke across two lines, which is the
+     one break the composition is built to prevent. */
+  --lfi-display-1: clamp(2.2rem, 6.4vw, 4.9rem);
+  --lfi-display-2: clamp(2rem, 4.6vw, 3.4rem);
+  --lfi-display-3: clamp(1.5rem, 2.6vw, 2.1rem);
+  --lfi-body-lg: clamp(1.02rem, 1.35vw, 1.2rem);
+  --lfi-body: 1rem;
+  --lfi-small: 0.875rem;
+  --lfi-label: 0.72rem;
+
+  /* --- spacing ----------------------------------------------------------- */
+  --lfi-gap-xs: 0.5rem;
+  --lfi-gap-sm: 0.875rem;
+  --lfi-gap: 1.25rem;
+  --lfi-gap-md: 2rem;
+  --lfi-gap-lg: 2.75rem;
+  /* One rhythm for the whole page. Two stacked sections contribute
+     2 x this value, so 8rem each put ~250px of empty black between every
+     block at desktop width - enough that sections read as disconnected.
+     This keeps the breathing room without the void. */
+  --lfi-section-y: clamp(3.25rem, 6vw, 5.75rem);
+  /* Gap between a section's heading block and its content. */
+  --lfi-head-gap: clamp(2rem, 3.6vw, 3.25rem);
+
+  /* --- layout ------------------------------------------------------------ */
+  --lfi-container: 1240px;
+  --lfi-container-narrow: 860px;
+  --lfi-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --lfi-radius-sm: 10px;
+  --lfi-radius: 16px;
+  --lfi-radius-lg: 24px;
+  --lfi-header-h: 76px;
+
+  /* --- motion -------------------------------------------------------------
+     Three tiers, used consistently:
+       fast   - pointer feedback (buttons, nav, inputs)
+       base   - state changes (cards, panels, menus)
+       slow   - content entrances
+       ambient- background and visualisation movement (seconds, not ms)
+     ------------------------------------------------------------------------ */
+  --lfi-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lfi-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* A little overshoot for entrances - reads as deliberate rather than linear. */
+  --lfi-ease-entrance: cubic-bezier(0.17, 0.84, 0.28, 1.04);
+  --lfi-ease-sweep: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --lfi-dur-fast: 180ms;
+  --lfi-dur: 320ms;
+  --lfi-dur-slow: 900ms;
+  --lfi-dur-reveal: 1100ms;
+
+  /* Distance a revealed element travels. Large enough to register as motion
+     at a glance - the previous 18px finished before the eye arrived. */
+  --lfi-reveal-shift: 38px;
+  --lfi-stagger: 90ms;
+
+  /* --- elevation --------------------------------------------------------- */
+  --lfi-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  --lfi-shadow-lg: 0 40px 90px -40px rgba(0, 0, 0, 0.95);
+}
+
+@media (max-width: 640px) {
+  :root {
+    --lfi-header-h: 64px;
+  }
+}

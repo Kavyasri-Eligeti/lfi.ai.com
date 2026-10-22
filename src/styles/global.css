@@ -1,0 +1,445 @@
+/* ==========================================================================
+   LFI AI - global layer for the marketing site.
+   Every class is prefixed `lfi-` so it cannot collide with Bootstrap or with
+   the legacy demo pages, which keep their own styling.
+   ========================================================================== */
+
+.lfi-site {
+  background: var(--lfi-bg);
+  color: var(--lfi-text);
+  font-family: var(--lfi-font);
+  font-size: var(--lfi-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+/* The legacy pages set their own page background, so scope ours to the site. */
+body:has(.lfi-site) {
+  background: var(--lfi-bg);
+}
+
+.lfi-site :is(h1, h2, h3, h4) {
+  font-weight: 800;
+  letter-spacing: -0.028em;
+  line-height: 1.08;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.lfi-site p {
+  text-wrap: pretty;
+}
+
+/* Wrapped in :where() so this is a zero-specificity default. A plain
+   `.lfi-site a` rule (0,1,1) outranks every component class (0,1,0), which
+   silently overrode the button variants - the primary CTA rendered white on
+   yellow instead of black. As a :where() default, any component rule wins. */
+/* Specificity here is deliberate and narrow: (0,0,1).
+   - Bootstrap's own `a { color: var(--bs-link-color) }` is also (0,0,1) and
+     loads first, so this wins the tie and links are not Bootstrap blue.
+   - Every component class is (0,1,0) and therefore still wins, which is what
+     the button variants need. Writing it as `.lfi-site a` (0,1,1) would
+     silently beat them - that is how the primary CTA ended up white on
+     yellow - and writing it as `:where(...) :where(a)` (0,0,0) would lose to
+     Bootstrap instead. */
+:where(.lfi-site) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.lfi-site ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- layout helpers ------------------------------------------------------ */
+.lfi-container {
+  width: 100%;
+  max-width: var(--lfi-container);
+  margin-inline: auto;
+  padding-inline: var(--lfi-gutter);
+}
+
+.lfi-section {
+  position: relative;
+  padding-block: var(--lfi-section-y);
+}
+
+/* A TINT, not a fill.
+
+   This was `background: var(--lfi-bg-alt)` - an opaque near-black. Opaque
+   section backgrounds paint over the fixed lighting layer (styles/
+   atmosphere.css), which flattened the page out again precisely in the
+   sections that most needed the help. A translucent white at this alpha
+   lands on the same colour over the base background, and lets the light
+   through. */
+.lfi-section--alt {
+  background: rgba(230, 236, 237, 0.018);
+}
+
+/* The rhythm break against the rest of the dark system.
+
+   This was `--light`: a #f3f4f6 block that turned one section white on an
+   otherwise black page. The break is still here, but it is now made of a
+   raised charcoal surface and a pair of edge rules rather than an inversion,
+   so nothing on the site renders light. */
+.lfi-section--invert {
+  background: rgba(230, 236, 237, 0.038);
+  border-block: 1px solid var(--lfi-border);
+}
+.lfi-section--invert::before,
+.lfi-section--invert::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 214, 0, 0.32) 28%,
+    rgba(255, 120, 0, 0.26) 58%,
+    transparent
+  );
+  pointer-events: none;
+}
+.lfi-section--invert::before {
+  top: -1px;
+}
+.lfi-section--invert::after {
+  bottom: -1px;
+  opacity: 0.45;
+}
+
+/* Hairline between stacked dark sections. */
+.lfi-rule {
+  border: 0;
+  height: 1px;
+  margin: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--lfi-border-strong) 18%,
+    var(--lfi-border-strong) 82%,
+    transparent
+  );
+}
+
+/* --- eyebrow / section heading ------------------------------------------ */
+.lfi-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+  margin: 0 0 1rem;
+}
+.lfi-eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--lfi-yellow);
+  flex: none;
+}
+.lfi-heading {
+  max-width: 24ch;
+  font-size: var(--lfi-display-2);
+  margin: 0;
+}
+.lfi-heading--wide {
+  max-width: 34ch;
+}
+
+.lfi-lede {
+  max-width: 62ch;
+  margin: 1.1rem 0 0;
+  font-size: var(--lfi-body-lg);
+  color: var(--lfi-text-muted);
+}
+.lfi-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--lfi-gap-md);
+  margin-bottom: var(--lfi-head-gap);
+}
+.lfi-section-head__text {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+/* --- accent text --------------------------------------------------------- */
+/* Yellow into orange only. The blue block of the mark is the right accent for
+   atmosphere and rules, but as the tail of a text gradient it desaturates
+   through a muddy brown against the near-black background. */
+.lfi-accent {
+  background: linear-gradient(
+    96deg,
+    var(--lfi-yellow) 0%,
+    var(--lfi-yellow-soft) 22%,
+    var(--lfi-orange-soft) 68%,
+    var(--lfi-orange) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --- focus --------------------------------------------------------------- */
+.lfi-site :is(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--lfi-yellow);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* --- skip link ----------------------------------------------------------- */
+.lfi-skip {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -140%);
+  z-index: 200;
+  background: var(--lfi-yellow);
+  color: #000;
+  font-weight: 700;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0 0 10px 10px;
+  transition: transform var(--lfi-dur) var(--lfi-ease);
+}
+.lfi-skip:focus-visible {
+  transform: translate(-50%, 0);
+}
+
+/* --- screen-reader only --------------------------------------------------- */
+.lfi-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- atmospheric glow ---------------------------------------------------- */
+.lfi-glow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.lfi-glow::after {
+  content: "";
+  position: absolute;
+  width: 72vw;
+  max-width: 900px;
+  aspect-ratio: 1;
+  top: -32%;
+  right: -16%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 88, 192, 0.3) 0%,
+    rgba(45, 88, 192, 0.08) 42%,
+    transparent 68%
+  );
+  filter: blur(12px);
+}
+
+/* --- grid utilities ------------------------------------------------------ */
+.lfi-grid {
+  display: grid;
+  gap: var(--lfi-gap);
+}
+.lfi-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.lfi-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
+}
+.lfi-grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+/* --- card ---------------------------------------------------------------- */
+.lfi-card {
+  position: relative;
+  background: var(--lfi-surface);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius);
+  padding: clamp(1.4rem, 2.4vw, 1.9rem);
+  transition: border-color var(--lfi-dur) var(--lfi-ease),
+    background var(--lfi-dur) var(--lfi-ease),
+    transform var(--lfi-dur) var(--lfi-ease);
+}
+.lfi-card h3 {
+  font-size: 1.12rem;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.55rem;
+}
+.lfi-card p {
+  margin: 0;
+  color: var(--lfi-text-muted);
+  font-size: 0.945rem;
+  line-height: 1.6;
+}
+
+@media (hover: hover) {
+  a.lfi-card:hover,
+  .lfi-card--hover:hover {
+    border-color: var(--lfi-border-strong);
+    background: var(--lfi-surface-2);
+    transform: translateY(-3px);
+  }
+}
+
+/* --- generic pill -------------------------------------------------------- */
+.lfi-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lfi-text-muted);
+  border: 1px solid var(--lfi-border);
+  border-radius: 999px;
+  padding: 0.3rem 0.68rem;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Interactive surface treatment.
+
+   One shared hover language for every card on the site: a lift, a touch of
+   scale, and a brand-coloured edge that sweeps around the border. The edge is
+   drawn with a masked gradient on ::after so it costs a composite rather than
+   a repaint, and it only exists on devices that can actually hover.
+   ========================================================================== */
+
+.lfi-surface {
+  position: relative;
+  isolation: isolate;
+  transition: transform var(--lfi-dur) var(--lfi-ease-entrance),
+    border-color var(--lfi-dur) var(--lfi-ease),
+    background var(--lfi-dur) var(--lfi-ease),
+    box-shadow var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    var(--lfi-yellow) 38%,
+    var(--lfi-orange) 50%,
+    var(--lfi-blue-soft) 62%,
+    transparent 80%
+  );
+  background-size: 220% 100%;
+  /* Draw only the 1px ring, not the fill. */
+  -webkit-mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--lfi-dur) var(--lfi-ease);
+  z-index: -1;
+}
+
+@media (hover: hover) {
+  .lfi-surface:hover,
+  .lfi-surface:focus-visible,
+  .lfi-surface:focus-within {
+    transform: translateY(-6px);
+    box-shadow: var(--lfi-shadow-lg);
+  }
+
+  .lfi-surface:hover::after,
+  .lfi-surface:focus-visible::after,
+  .lfi-surface:focus-within::after {
+    opacity: 1;
+    animation: lfi-border-sweep 2.4s linear infinite;
+  }
+}
+
+/* Touch devices get the press feedback instead of a hover state. */
+.lfi-surface:active {
+  transform: translateY(-2px) scale(0.995);
+}
+
+/* Icons inside an interactive surface lean in with it.
+
+   The product cards used to be in this rule too, back when each one was a
+   wordmark on a plate. They are interface windows now and own their hover in
+   Products.css - a window that tilts and grows 7% stops reading as software. */
+.lfi-surface .lfi-solution__icon {
+  transition: transform var(--lfi-dur) var(--lfi-ease-entrance),
+    color var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease);
+}
+
+@media (hover: hover) {
+  .lfi-surface:hover .lfi-solution__icon {
+    transform: translateY(-3px) rotate(-5deg) scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-surface,
+  .lfi-surface:hover {
+    transform: none !important;
+  }
+  .lfi-surface::after {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   Scroll progress bar - a thin brand rule that tracks reading position.
+   ========================================================================== */
+.lfi-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 130;
+  transform-origin: left center;
+  transform: scaleX(var(--lfi-scroll, 0));
+  background: linear-gradient(
+    90deg,
+    var(--lfi-yellow),
+    var(--lfi-orange) 55%,
+    var(--lfi-blue-soft)
+  );
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Cards that sit flush in a seamed grid: they take the sweeping edge but not
+   the lift, which would tear the shared 1px dividers apart. */
+@media (hover: hover) {
+  .lfi-surface--flush:hover,
+  .lfi-surface--flush:focus-within {
+    transform: none;
+    box-shadow: none;
+  }
+}

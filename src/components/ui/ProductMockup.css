@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Product interface mockups - one visual language for all five.
+
+   Same grid, same stroke weight and the same meaning for colour as the
+   capability schematics next door: yellow marks the element the product's
+   argument rests on, orange its secondary, blue a system or a stored record,
+   and everything else is neutral structure.
+
+   Everything is `vector-effect: non-scaling-stroke`, so a mockup drawn at
+   360px wide and rendered at 180 keeps its hairlines instead of halving them.
+   ========================================================================== */
+
+.lfi-pm {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.lfi-pm path,
+.lfi-pm rect,
+.lfi-pm circle {
+  vector-effect: non-scaling-stroke;
+}
+
+/* --- the window ------------------------------------------------------------ */
+.pm-frame {
+  fill: rgba(10, 12, 17, 0.72);
+  stroke: rgba(230, 236, 237, 0.14);
+  stroke-width: 1;
+}
+
+.pm-divider {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.1);
+  stroke-width: 1;
+}
+
+.pm-chip {
+  fill: rgba(255, 214, 0, 0.14);
+  stroke: rgba(255, 214, 0, 0.5);
+  stroke-width: 1;
+}
+
+/* --- structure -------------------------------------------------------------- */
+.pm-line {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.34);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pm-dim {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.18);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+
+.pm-chip-sm {
+  fill: rgba(230, 236, 237, 0.13);
+  stroke: rgba(230, 236, 237, 0.26);
+  stroke-width: 1;
+}
+
+/* --- connectors -------------------------------------------------------------- */
+.pm-flow {
+  fill: none;
+  stroke: rgba(230, 236, 237, 0.24);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.pm-flow--lead {
+  fill: none;
+  stroke: var(--lfi-yellow);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* --- filled elements ----------------------------------------------------------- */
+.pm-fill-dim {
+  fill: rgba(230, 236, 237, 0.06);
+  stroke: rgba(230, 236, 237, 0.26);
+  stroke-width: 1.1;
+}
+
+.pm-fill-blue {
+  fill: rgba(45, 88, 192, 0.22);
+  stroke: var(--lfi-blue-soft);
+  stroke-width: 1.2;
+}
+
+.pm-fill-yellow {
+  fill: rgba(255, 214, 0, 0.16);
+  stroke: var(--lfi-yellow);
+  stroke-width: 1.2;
+}
+
+.pm-fill-orange {
+  fill: rgba(255, 120, 0, 0.16);
+  stroke: var(--lfi-orange);
+  stroke-width: 1.2;
+}
+
+.pm-dot {
+  fill: rgba(255, 214, 0, 0.2);
+  stroke: var(--lfi-yellow);
+  stroke-width: 1.3;
+}
+
+/* ==========================================================================
+   Ambient movement.
+
+   ONE looping element per mockup, and only the one that says what the
+   product does while you are not touching it. Everything else is a one-shot
+   entrance. Each loop is a transform on a single small node, so it stays on
+   the compositor and never triggers layout.
+   ========================================================================== */
+
+/* vajraX - a unit of work moving down the pipeline. */
+.pm-packet {
+  fill: var(--lfi-yellow);
+  stroke: none;
+  animation: lfi-pm-packet 4.2s var(--lfi-ease-sweep) infinite;
+}
+
+@keyframes lfi-pm-packet {
+  0%,
+  8% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(146px);
+    opacity: 1;
+  }
+  92%,
+  100% {
+    transform: translateX(146px);
+    opacity: 0;
+  }
+}
+
+/* TextIQ - the read head crossing the page. */
+.pm-scan {
+  fill: var(--lfi-yellow);
+  stroke: none;
+  opacity: 0.55;
+  animation: lfi-pm-scan 5s var(--lfi-ease) infinite;
+}
+
+@keyframes lfi-pm-scan {
+  0%,
+  6% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  70% {
+    transform: translateY(146px);
+    opacity: 0.55;
+  }
+  84%,
+  100% {
+    transform: translateY(146px);
+    opacity: 0;
+  }
+}
+
+/* EduPilot - still composing the answer. */
+.pm-typing circle {
+  fill: rgba(230, 236, 237, 0.5);
+  animation: lfi-pm-typing 1.5s var(--lfi-ease) infinite;
+}
+
+.pm-typing circle:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.pm-typing circle:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes lfi-pm-typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.28;
+  }
+  30% {
+    opacity: 0.95;
+  }
+}
+
+/* The resting state matters more than the motion: with the loops off, every
+   mockup is a complete, legible interface rather than a half-drawn one. */
+@media (prefers-reduced-motion: reduce) {
+  .pm-packet,
+  .pm-scan,
+  .pm-typing circle {
+    animation: none;
+  }
+  .pm-packet {
+    opacity: 1;
+  }
+  .pm-scan {
+    opacity: 0;
+  }
+  .pm-typing circle {
+    opacity: 0.4;
+  }
+}

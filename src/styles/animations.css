@@ -1,0 +1,258 @@
+/* ==========================================================================
+   LFI AI - motion layer.
+
+   Reveal animations are driven by a `data-reveal` attribute that a small
+   IntersectionObserver hook flips to `data-reveal="in"`. CSS owns the motion
+   so nothing depends on a JS animation loop, and the reduced-motion and no-JS
+   fallbacks are a single rule each.
+
+   The resting rules are gated on `.lfi-js`, which index.js sets on <html>
+   before first paint. If the bundle never executes, content renders visible
+   rather than stuck at opacity 0.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Scroll reveals
+   -------------------------------------------------------------------------- */
+
+.lfi-js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--lfi-reveal-shift), 0);
+  transition: opacity var(--lfi-dur-reveal) var(--lfi-ease-out),
+    transform var(--lfi-dur-reveal) var(--lfi-ease-entrance),
+    filter var(--lfi-dur-reveal) var(--lfi-ease-out);
+  transition-delay: var(--lfi-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.lfi-js [data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  will-change: auto;
+}
+
+/* Direction variants.
+   These match the RESTING state only - `[data-reveal=""]`, not
+   `[data-reveal]`. A bare attribute selector still matches once the value is
+   "in", and being one attribute more specific than the `[data-reveal="in"]`
+   rule it would win, leaving the element translated forever. */
+.lfi-js [data-reveal=""][data-reveal-from="left"] {
+  transform: translate3d(calc(var(--lfi-reveal-shift) * -1.1), 0, 0);
+}
+.lfi-js [data-reveal=""][data-reveal-from="right"] {
+  transform: translate3d(calc(var(--lfi-reveal-shift) * 1.1), 0, 0);
+}
+.lfi-js [data-reveal=""][data-reveal-from="scale"] {
+  transform: translate3d(0, 26px, 0) scale(0.965);
+}
+.lfi-js [data-reveal=""][data-reveal-from="none"] {
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. Masked LINE reveal - the signature typographic entrance.
+
+   GSAP's SplitText splits a heading into its rendered lines at runtime, wraps
+   each in a clipping mask and animates them out of it (see
+   motion/LineReveal.js). The motion is entirely GSAP's; all that is needed
+   here is the before-and-after state.
+
+   The hide is gated twice over - on `.lfi-js` AND on `[data-lines=""]`, which
+   LineReveal clears in a `finally` block. So the heading is only ever hidden
+   when the bundle is running AND the component has had its chance to set up.
+   A thrown error, a missing plugin or a bundle that never executes all leave
+   the text visible.
+   -------------------------------------------------------------------------- */
+.lfi-js [data-lines=""] {
+  opacity: 0;
+}
+
+/* SplitText's generated line boxes. Blocks, with room for descenders that a
+   mask sized to the line box would otherwise crop. */
+.lfi-line {
+  display: block;
+  padding-bottom: 0.08em;
+}
+
+/* --------------------------------------------------------------------------
+   3. Hero entrance sequence
+   -------------------------------------------------------------------------- */
+
+@keyframes lfi-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lfi-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lfi-fade-blur {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* The accent phrase draws itself in behind a moving edge. */
+@keyframes lfi-wipe {
+  from {
+    clip-path: inset(0 100% -0.25em 0);
+  }
+  to {
+    clip-path: inset(0 -0.05em -0.25em 0);
+  }
+}
+
+/* A light sweep that runs once across the headline after it lands. */
+@keyframes lfi-sheen {
+  0% {
+    transform: translateX(-130%) skewX(-18deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  60%,
+  100% {
+    transform: translateX(240%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes lfi-scroll-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(9px);
+    opacity: 1;
+  }
+}
+
+/* Slow ambient drift behind the hero. Transform/opacity only. */
+@keyframes lfi-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -3.5%, 0) scale(1.1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes lfi-drift-alt {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-4%, 2.5%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+}
+
+@keyframes lfi-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Breathing dot, used on the hero eyebrow and the live markers. */
+@keyframes lfi-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 214, 0, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(255, 214, 0, 0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Shared interaction keyframes
+   -------------------------------------------------------------------------- */
+
+/* Border highlight that travels around a card on hover. */
+@keyframes lfi-border-sweep {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes lfi-shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(3px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+
+/* ==========================================================================
+   Reduced motion: keep every piece of content visible, drop the movement.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .lfi-js [data-reveal],
+  .lfi-js [data-reveal="in"] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  /* LineReveal skips the split entirely under reduced motion and flips the
+     attribute immediately, but the resting rule is a stylesheet rule and has
+     to be lifted here too - otherwise a heading that never gets its effect
+     also never gets its opacity back. */
+  .lfi-js [data-lines=""],
+  .lfi-js [data-lines="in"] {
+    opacity: 1 !important;
+  }
+
+  .lfi-site *,
+  .lfi-site *::before,
+  .lfi-site *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

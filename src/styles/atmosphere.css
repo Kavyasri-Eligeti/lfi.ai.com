@@ -1,0 +1,191 @@
+/* ==========================================================================
+   Atmosphere - the site's lighting.
+
+   One fixed layer behind the whole page, carrying a small set of named
+   "key lights". As a section enters the viewport it declares which light it
+   wants (`data-light` in the markup, see layout/Ambient.js) and the layer
+   cross-fades to it.
+
+   This is the thing that makes a long dark page read as ONE lit space rather
+   than as nine black blocks stacked on top of each other. Scrolling from the
+   hero to the products moves the light from a cool blue to a warm amber, and
+   the change is slow enough that it is felt rather than noticed.
+
+   Why it is built this way:
+
+   - FIXED, not per-section. A wash that belongs to a section scrolls with it
+     and stops being lighting - it becomes a decoration inside a box. A fixed
+     layer means the light stays where it is while the content moves through
+     it, which is how light actually behaves.
+
+   - OPACITY ONLY. Every wash is painted once and parked; the only thing that
+     ever changes is which one is at opacity 1. That is a compositor property,
+     so the transition costs nothing per frame no matter how large the
+     gradients are.
+
+   - NO BLEND MODES. `plus-lighter` and `screen` on a full-viewport fixed
+     layer force the whole page onto its own compositing layer in several
+     browsers, which is an expensive way to buy an effect that low-alpha
+     gradients over black already give for free.
+
+   The section backgrounds that used to be opaque (`--alt`, `--invert`) are
+   now translucent tints instead, so this layer shows through them. Without
+   that they would paint over the lighting and the page would go flat again
+   exactly where the composition needs the most help.
+   ========================================================================== */
+
+.lfi-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* Promoted once, deliberately: the children only ever change opacity, and
+     keeping the whole layer on the compositor stops a repaint of the page
+     behind it when a wash crosses. */
+  contain: strict;
+}
+
+.lfi-ambient__wash {
+  position: absolute;
+  inset: -20%;
+  opacity: 0;
+  /* Long enough that the change registers as the room being re-lit rather
+     than as a fade between two states. */
+  transition: opacity 1600ms var(--lfi-ease-out);
+  will-change: opacity;
+}
+
+.lfi-ambient__wash[data-on="true"] {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   The key lights.
+
+   Each is two radial pools at different scales - a large, very low-alpha
+   volume that fills the screen, and a smaller, slightly stronger core that
+   gives the light a direction. Alphas are deliberately tiny: at these sizes
+   anything above ~0.1 stops being atmosphere and starts being a coloured
+   background, and brand colour as a BACKGROUND is what makes a dark site
+   look like a template.
+   -------------------------------------------------------------------------- */
+
+/* Hero and anything that wants the default cool. */
+.lfi-ambient__wash--deep {
+  background: radial-gradient(
+      68% 54% at 76% 22%,
+      rgba(45, 88, 192, 0.25) 0%,
+      rgba(45, 88, 192, 0.075) 46%,
+      transparent 72%
+    ),
+    radial-gradient(
+      52% 48% at 12% 86%,
+      rgba(255, 120, 0, 0.08) 0%,
+      transparent 68%
+    );
+}
+
+/* The company narrative - cooler and higher, so the page feels like it has
+   lifted away from the hero. */
+.lfi-ambient__wash--violet {
+  background: radial-gradient(
+      62% 58% at 24% 18%,
+      rgba(96, 72, 200, 0.22) 0%,
+      rgba(96, 72, 200, 0.06) 48%,
+      transparent 74%
+    ),
+    radial-gradient(
+      46% 44% at 88% 72%,
+      rgba(45, 88, 192, 0.125) 0%,
+      transparent 70%
+    );
+}
+
+/* Capabilities and the technical middle of the page. */
+.lfi-ambient__wash--azure {
+  background: radial-gradient(
+      64% 56% at 82% 34%,
+      rgba(42, 110, 210, 0.21) 0%,
+      rgba(42, 110, 210, 0.06) 46%,
+      transparent 72%
+    ),
+    radial-gradient(
+      50% 50% at 8% 24%,
+      rgba(96, 72, 200, 0.105) 0%,
+      transparent 70%
+    );
+}
+
+/* The products. The one genuinely warm room on the site, which is why the
+   portfolio reads as the destination rather than as another dark section. */
+.lfi-ambient__wash--amber {
+  background: radial-gradient(
+      60% 54% at 18% 26%,
+      rgba(255, 150, 0, 0.15) 0%,
+      rgba(255, 120, 0, 0.048) 46%,
+      transparent 72%
+    ),
+    radial-gradient(
+      56% 52% at 86% 78%,
+      rgba(255, 214, 0, 0.082) 0%,
+      transparent 70%
+    );
+}
+
+/* Credibility and the close - warm, but lower and heavier than the products. */
+.lfi-ambient__wash--ember {
+  background: radial-gradient(
+      58% 60% at 72% 76%,
+      rgba(255, 120, 0, 0.125) 0%,
+      rgba(255, 90, 0, 0.042) 46%,
+      transparent 72%
+    ),
+    radial-gradient(
+      48% 46% at 16% 14%,
+      rgba(45, 88, 192, 0.11) 0%,
+      transparent 70%
+    );
+}
+
+/* --------------------------------------------------------------------------
+   A very fine fixed grain over the lighting.
+
+   Large flat gradients on a dark screen band badly on 8-bit panels - visible
+   rings exactly where the composition is most open. A low-amplitude noise
+   tile breaks the bands up. It is a single inline SVG so it costs no request,
+   and it is parked at a low opacity: this should never be legible as texture.
+   -------------------------------------------------------------------------- */
+.lfi-ambient__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Stacking.
+
+   The ambient layer sits at z-index 0 inside `.lfi-site`; the content is
+   lifted above it. Without this the content and the footer would paint
+   underneath the lighting.
+
+   The header is deliberately NOT in this rule. It is already positioned and
+   stacked by Header.css, and re-declaring `position: relative` here would
+   take a sticky header off its sticky behaviour - a one-line way to break the
+   navigation while adjusting a background.
+   -------------------------------------------------------------------------- */
+.lfi-site > main,
+.lfi-site > footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* The washes are static once parked, and a visitor who has asked for less
+   motion has not asked for less colour - so the lighting stays, it just
+   stops transitioning. */
+@media (prefers-reduced-motion: reduce) {
+  .lfi-ambient__wash {
+    transition: none;
+  }
+}

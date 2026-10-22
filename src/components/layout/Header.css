@@ -1,0 +1,261 @@
+.lfi-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease),
+    backdrop-filter var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-header.is-scrolled,
+.lfi-header.is-open {
+  background: var(--lfi-glass);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom-color: var(--lfi-border);
+}
+
+.lfi-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--lfi-gap);
+  height: var(--lfi-header-h);
+}
+
+/* --- desktop nav ---------------------------------------------------------- */
+.lfi-nav {
+  --lfi-ind-x: 0px;
+  --lfi-ind-w: 0px;
+  --lfi-ind-o: 0;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+/* One underline that glides between items, rather than each link fading its
+   own in and out. Position is measured in Header.js. */
+.lfi-nav__indicator {
+  position: absolute;
+  bottom: 0.28rem;
+  left: 0;
+  height: 2px;
+  width: var(--lfi-ind-w);
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--lfi-yellow), var(--lfi-orange));
+  opacity: var(--lfi-ind-o);
+  transform: translateX(var(--lfi-ind-x));
+  transition: transform 420ms var(--lfi-ease-entrance),
+    width 420ms var(--lfi-ease-entrance), opacity var(--lfi-dur) var(--lfi-ease);
+  pointer-events: none;
+}
+
+.lfi-nav__link {
+  position: relative;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: var(--lfi-text-muted);
+  border-radius: 8px;
+  transition: color var(--lfi-dur) var(--lfi-ease);
+}
+
+/* Hover-only hairline; the active state is the sliding indicator above. */
+.lfi-nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0.8rem;
+  right: 0.8rem;
+  bottom: 0.28rem;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(230, 236, 237, 0.34);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--lfi-dur) var(--lfi-ease);
+}
+
+@media (hover: hover) {
+  .lfi-nav__link:hover {
+    color: #fff;
+  }
+  .lfi-nav__link:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.lfi-nav__link.is-active {
+  color: #fff;
+}
+.lfi-nav__link.is-active::after {
+  transform: scaleX(0);
+}
+
+/* Links lift very slightly on hover - enough to feel responsive. */
+@media (hover: hover) {
+  .lfi-nav__link {
+    transition: color var(--lfi-dur) var(--lfi-ease),
+      transform var(--lfi-dur-fast) var(--lfi-ease);
+  }
+  .lfi-nav__link:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Drawer links slide in one after another when the menu opens. */
+.lfi-drawer__link {
+  animation: lfi-rise 460ms var(--lfi-ease-out) both;
+  animation-delay: calc(var(--lfi-i, 0) * 45ms + 60ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-nav__indicator,
+  .lfi-drawer__link {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* --- actions -------------------------------------------------------------- */
+.lfi-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: 0.5rem;
+}
+
+/* The CTA is a fixed-size control; never let it stretch to full width here
+   the way a hero button does. */
+.lfi-header__cta {
+  width: auto !important;
+}
+
+/* --- burger --------------------------------------------------------------- */
+.lfi-burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--lfi-border-strong);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.lfi-burger__bar {
+  display: block;
+  width: 17px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--lfi-text);
+  transition: transform var(--lfi-dur) var(--lfi-ease),
+    opacity var(--lfi-dur-fast) var(--lfi-ease);
+}
+
+.lfi-header.is-open .lfi-burger__bar:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+.lfi-header.is-open .lfi-burger__bar:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* --- drawer ---------------------------------------------------------------
+   Portalled to <body>, so it sits outside `.lfi-site` and cannot inherit the
+   design system's link reset or focus ring. Both are restated here. */
+:where(.lfi-drawer) a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.lfi-drawer :is(a, button):focus-visible {
+  outline: 2px solid var(--lfi-yellow);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Portalled out of the header, so these carry their own stacking order -
+   above the header (z 100) and above any z-indexed page content. */
+.lfi-drawer__backdrop {
+  position: fixed;
+  z-index: 110;
+  inset: var(--lfi-header-h) 0 0;
+  background: rgba(4, 5, 7, 0.6);
+  backdrop-filter: blur(2px);
+  border: 0;
+}
+
+.lfi-drawer {
+  position: fixed;
+  z-index: 120;
+  top: var(--lfi-header-h);
+  left: 0;
+  right: 0;
+  max-height: calc(100dvh - var(--lfi-header-h));
+  overflow-y: auto;
+  padding: 1rem var(--lfi-gutter) 1.6rem;
+  background: var(--lfi-bg);
+  /* The portal sits outside `.lfi-site`, so the drawer establishes its own
+     text colour - `.lfi-drawer a { color: inherit }` resolves against this. */
+  color: var(--lfi-text);
+  font-family: var(--lfi-font);
+  border-bottom: 1px solid var(--lfi-border);
+  animation: lfi-rise var(--lfi-dur) var(--lfi-ease-out) both;
+}
+
+.lfi-drawer[hidden],
+.lfi-drawer__backdrop[hidden] {
+  display: none;
+}
+
+.lfi-drawer__nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.lfi-drawer__link {
+  display: block;
+  padding: 0.95rem 0.25rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--lfi-text);
+  border-bottom: 1px solid var(--lfi-border);
+}
+
+.lfi-drawer__link.is-active {
+  color: var(--lfi-yellow);
+}
+
+.lfi-drawer__foot {
+  margin-top: 1.3rem;
+}
+
+/* --- breakpoint ------------------------------------------------------------ */
+@media (max-width: 960px) {
+  .lfi-nav {
+    display: none;
+  }
+  .lfi-burger {
+    display: flex;
+  }
+  .lfi-header__actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Below this the CTA and the burger start to crowd the logo - the drawer
+     carries the CTA instead. */
+  .lfi-header__cta {
+    display: none;
+  }
+}

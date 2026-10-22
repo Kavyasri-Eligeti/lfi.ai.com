@@ -1,5 +1,6 @@
 // src/components/ResumeSummarizer.js
 import React, { useState } from 'react';
+import "../styles/legacy-bootstrap.css";
 import { FaUpload, FaSpinner, FaFilePdf } from 'react-icons/fa';
 
 const ResumeSummarizer = () => {

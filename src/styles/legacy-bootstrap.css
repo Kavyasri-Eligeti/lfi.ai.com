@@ -1,0 +1,14 @@
+/* Bootstrap, for the legacy demo pages only.
+ *
+ * It is pulled in through an @layer so that cascade order stops mattering:
+ * layered rules always lose to unlayered ones, whatever order the files land
+ * in. That matters because these pages are lazy-loaded, so their stylesheet
+ * is appended to <head> AFTER the main one - without the layer, Bootstrap's
+ * `a { color: var(--bs-link-color) }` would start winning on the marketing
+ * pages the moment a visitor had opened a legacy route in the same session.
+ *
+ * The marketing site does not use Bootstrap at all, so this keeps ~230 KB of
+ * CSS off the critical path for the pages most visitors actually land on.
+ */
+@layer bootstrap;
+@import "bootstrap/dist/css/bootstrap.min.css" layer(bootstrap);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaEnvelope, FaUserTie, FaSearch, FaSpinner } from 'react-icons/fa';
+import "../styles/legacy-bootstrap.css";
+import { FaUser, FaEnvelope, FaSearch, FaSpinner } from 'react-icons/fa';
 
 const UserList = ({ onSelectUser }) => {
   const [users, setUsers] = useState([]);

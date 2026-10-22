@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import "../styles/legacy-bootstrap.css";
 import {
   LineChart,
   Line,
@@ -610,7 +611,7 @@ const ReportGenerator = () => {
               KPI MONITORING & METRIC SURVEILLANCE
             </h1>
             <img
-              src="/logo_new.png"
+              src="/assets/brand/lfi-logo-dark.svg"
               alt="LFI Logo"
               style={{
                 height: '100px',

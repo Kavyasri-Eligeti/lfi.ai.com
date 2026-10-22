@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# browser-verification screenshots (npm run verify)
+.verify/

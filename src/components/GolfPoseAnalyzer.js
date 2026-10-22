@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import "../styles/legacy-bootstrap.css";
 function GolfPoseAnalyzer() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);

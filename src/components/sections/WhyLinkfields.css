@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Why Linkfields.
+
+   The one section on the page built around a FIXED point. The argument stays
+   put in the left column while the six reasons travel past it, which is what
+   stops the longest section on the site from reading as four stacked text
+   blocks.
+   ========================================================================== */
+
+.lfi-why {
+  /* Transparent: lit by the fixed atmosphere layer (styles/atmosphere.css)
+     rather than painting its own opaque background over it. */
+  background: transparent;
+}
+
+.lfi-why__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* Two columns only once there is room for a real measure in both. Below this
+   the aside is simply the section's opening block. */
+@media (min-width: 1000px) {
+  .lfi-why__layout {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+    gap: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  .lfi-why__aside {
+    position: sticky;
+    /* Clears the sticky header, plus a little air. */
+    top: calc(var(--lfi-header-h) + 2.5rem);
+    /* Essential, not cosmetic. A grid item defaults to `stretch`, which makes
+       this box exactly as tall as the row - and a sticky element that already
+       fills its containing block has nowhere to travel, so it never sticks.
+       `start` shrinks it to its content and gives it the rest of the row to
+       move through. */
+    align-self: start;
+  }
+}
+
+.lfi-why__title {
+  max-width: 20ch;
+}
+
+/* --- the six reasons -------------------------------------------------------
+   Rows with a hairline above each, not cards. The section already has a
+   bordered panel in the aside and a values band below; a third bordered form
+   here would flatten all three into one undifferentiated list.
+   -------------------------------------------------------------------------- */
+.lfi-why__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.lfi-why__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(0.9rem, 2vw, 1.5rem);
+  padding-top: clamp(1.1rem, 2vw, 1.5rem);
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-why__n {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  line-height: 1.6;
+  color: var(--lfi-orange);
+  font-variant-numeric: tabular-nums;
+}
+
+.lfi-why__itemText {
+  min-width: 0;
+}
+
+.lfi-site .lfi-why__item h3 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+}
+
+.lfi-why__item p {
+  margin: 0;
+  font-size: 0.945rem;
+  line-height: 1.62;
+  color: var(--lfi-text-muted);
+}
+
+/* --- recognition -----------------------------------------------------------
+   Lives in the aside now, so it travels with the argument rather than sitting
+   as a fifth block at the bottom of the section.
+   -------------------------------------------------------------------------- */
+.lfi-why__recognition {
+  margin-top: clamp(1.8rem, 3vw, 2.4rem);
+  padding: clamp(1.3rem, 2.4vw, 1.75rem);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius);
+  background: var(--lfi-surface);
+}
+
+.lfi-why__recognition-label {
+  margin: 0 0 1.1rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-why__recognition ul {
+  display: grid;
+  gap: 1rem;
+}
+
+.lfi-why__recognition li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--lfi-blue-soft);
+}
+
+.lfi-why__recognition strong {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.lfi-why__recognition span {
+  font-size: 0.86rem;
+  color: var(--lfi-text-muted);
+  line-height: 1.55;
+}
+
+.lfi-why__source {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  margin-top: 1.2rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--lfi-text-subtle);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .lfi-why__source:hover {
+    color: var(--lfi-yellow);
+  }
+}
+
+/* ==========================================================================
+   Official company values.
+
+   A typographic band, not six more cards. Each value reveals on a short
+   stagger (GSAP, see WhyLinkfields.js), so the band resolves left to right
+   as it arrives.
+   ========================================================================== */
+.lfi-why__values {
+  margin-top: clamp(3rem, 5.5vw, 4.5rem);
+  padding-top: 1.9rem;
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-why__values-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+/* The official heading that sits above the values on the About Us page. */
+.lfi-why__values-title {
+  margin: 0;
+  font-size: var(--lfi-display-3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.lfi-site .lfi-why__values-label {
+  margin: 0;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-why__values ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(1.3rem, 2.6vw, 2.1rem);
+}
+
+/* Six values: capped at three columns so the band resolves as 3 x 2 rather
+   than four across with two stranded underneath. */
+@media (min-width: 900px) {
+  .lfi-why__values ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.lfi-why__values li {
+  min-width: 0;
+  padding-left: 1rem;
+  border-left: 1px solid var(--lfi-border);
+  transition: border-color var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-why__value-name {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 1.04rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.lfi-why__value-body {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--lfi-text-muted);
+  text-wrap: pretty;
+}
+
+@media (hover: hover) {
+  .lfi-why__values li:hover {
+    border-left-color: var(--lfi-yellow);
+  }
+}
+
+/* --- corporate social responsibility ---------------------------------------
+   The published CSR statement, set as a two-column close: the label and
+   heading against the statement itself. It used to be a single left-aligned
+   block that left the right half of the section empty at exactly the point
+   where the page needs to feel finished.
+   -------------------------------------------------------------------------- */
+.lfi-why__csr {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.8rem, 2.5vw, 2.5rem);
+  margin-top: clamp(2.4rem, 4.5vw, 3.5rem);
+  padding-top: clamp(1.8rem, 3vw, 2.4rem);
+  border-top: 1px solid var(--lfi-border);
+}
+
+@media (min-width: 860px) {
+  .lfi-why__csr {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.lfi-why__csr-label {
+  margin: 0 0 0.8rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-site .lfi-why__csr h3 {
+  margin: 0;
+  font-size: var(--lfi-display-3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  max-width: 18ch;
+}
+
+.lfi-why__csr-body {
+  margin: 0;
+  font-size: var(--lfi-body-lg);
+  line-height: 1.65;
+  color: var(--lfi-text-muted);
+  max-width: 54ch;
+}

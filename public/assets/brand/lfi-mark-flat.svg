@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 10 100 100" width="100" height="100" role="img" aria-label="linkfields AI">
+  <title>linkfields AI</title>
+  
+      <path d="M26 10 H56 V94 A16 16 0 0 1 40 110 H10 V26 A16 16 0 0 1 26 10 Z" fill="#ffd600"/>
+      <path d="M62 10 H110 V41 A16 16 0 0 1 94 57 H62 Z" fill="#ff7800"/>
+      <path d="M62 63 H110 V94 A16 16 0 0 1 94 110 H62 Z" fill="#2d58c0"/>
+      <path d="M84 69 C85.8 80.5 88.5 83.2 100 85 C88.5 86.8 85.8 89.5 84 101 C82.2 89.5 79.5 86.8 68 85 C79.5 83.2 82.2 80.5 84 69 Z" fill="#fff"/>
+    
+</svg>

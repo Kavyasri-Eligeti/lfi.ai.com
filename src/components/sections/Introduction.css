@@ -1,0 +1,302 @@
+/* ==========================================================================
+   Linkfields, in the company's own words.
+
+   Two columns: a fixed aside carrying the positioning, and a track on which
+   three published statements advance. Above 900px the track is a stack of
+   absolutely-positioned cards that cross-fade under a pinned heading; below
+   it, the same cards are a plain ordered list and nothing is pinned.
+   ========================================================================== */
+
+.lfi-intro {
+  position: relative;
+  overflow: hidden;
+}
+
+/* A soft wash that drifts against the scroll, so the section has depth
+   behind it rather than sitting flat on the page background. */
+.lfi-intro__wash {
+  position: absolute;
+  left: 50%;
+  top: -14%;
+  width: min(1100px, 120vw);
+  height: 120%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(
+    60% 45% at 50% 30%,
+    rgba(45, 88, 192, 0.14) 0%,
+    rgba(45, 88, 192, 0.05) 42%,
+    transparent 70%
+  );
+}
+
+.lfi-intro__pin {
+  position: relative;
+  z-index: 1;
+}
+
+/* The pinned block fills the screen and centres its content.
+   Without this the pinned content was its natural height - about 440px - and
+   ScrollTrigger's spacer still reserved a full screen, so the section
+   unpinned into several hundred pixels of nothing. A pinned element should
+   BE the screen it is holding. */
+@media (min-width: 901px) {
+  .lfi-intro__pin {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - var(--lfi-header-h) - 80px);
+  }
+
+  .lfi-intro__grid {
+    width: 100%;
+    align-items: center;
+  }
+}
+
+.lfi-intro__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+
+/* --- aside ----------------------------------------------------------------- */
+.lfi-intro__title {
+  margin: 1.1rem 0 0;
+}
+
+.lfi-intro__meta {
+  margin-top: clamp(1.8rem, 3vw, 2.6rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-intro__meta dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem 2.6rem;
+  margin: 0 0 1.5rem;
+}
+
+.lfi-intro__meta dt {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+  margin-bottom: 0.35rem;
+}
+
+.lfi-intro__meta dd {
+  margin: 0;
+  font-size: var(--lfi-small);
+  color: var(--lfi-text);
+}
+
+/* --- the statement track ----------------------------------------------------- */
+.lfi-intro__track {
+  position: relative;
+  padding-left: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+/* The connecting rail. Its fill is scaled from 0 to 1 across the pinned
+   sequence, so the three statements read as one path rather than as three
+   separate blocks. */
+.lfi-intro__rail {
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  bottom: 3.2rem;
+  width: 2px;
+  background: var(--lfi-border);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.lfi-intro__rail-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: top center;
+  /* The default is the FINISHED state. If the timeline never runs - reduced
+     motion, or a failure in the motion layer - the rail reads as complete
+     rather than as an empty groove. */
+  transform: scaleY(1);
+  background: linear-gradient(
+    180deg,
+    var(--lfi-yellow) 0%,
+    var(--lfi-orange) 48%,
+    var(--lfi-blue) 100%
+  );
+}
+
+/* Position readout - which of the three statements is showing. */
+.lfi-intro__steps {
+  position: absolute;
+  /* Clear of the rail rather than on top of it - the rail is at left: 0 and
+     the numbers sat astride it. */
+  left: -1.75rem;
+  top: 0.1rem;
+  bottom: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+}
+
+.lfi-intro__step {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--lfi-text-subtle);
+  padding: 0.25rem 0;
+  opacity: 0.5;
+  transition: color var(--lfi-dur) var(--lfi-ease),
+    opacity var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-intro__step.is-active {
+  color: var(--lfi-yellow);
+  opacity: 1;
+}
+
+.lfi-intro__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lfi-intro__card {
+  position: relative;
+}
+
+.lfi-intro__label {
+  margin: 0 0 0.7rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--lfi-yellow);
+}
+
+.lfi-intro__heading {
+  margin: 0 0 1rem;
+  font-size: var(--lfi-display-3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #fff;
+}
+
+/* The published statement. Set larger than body copy and in a lighter weight
+   so it reads as a quotation rather than as another paragraph. */
+.lfi-intro__quote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.lfi-intro__quote p {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.6vw, 1.32rem);
+  line-height: 1.58;
+  color: var(--lfi-text);
+  font-weight: 350;
+}
+
+.lfi-intro__source {
+  margin: 2.2rem 0 0;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-intro__source a {
+  color: var(--lfi-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--lfi-dur-fast) var(--lfi-ease);
+}
+
+.lfi-intro__source a:hover,
+.lfi-intro__source a:focus-visible {
+  color: var(--lfi-yellow);
+}
+
+/* --- pinned layout (desktop/tablet landscape) -------------------------------
+   The cards occupy the same box and cross-fade. The box is tall enough for
+   the LONGEST statement, measured in ch rather than px so it tracks the font
+   size, which is what stops the section collapsing or leaving a hole when the
+   viewport changes.
+   ---------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  .lfi-intro__cards {
+    position: relative;
+    min-height: 19rem;
+  }
+
+  .lfi-intro__card {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Only the first is visible before the timeline takes over; the others are
+     set by GSAP. Gated on .lfi-js so a non-executing bundle shows all three
+     stacked and readable instead of one on top of another. */
+  .lfi-js .lfi-intro__card + .lfi-intro__card {
+    opacity: 0;
+  }
+}
+
+/* --- stacked layout (tablet portrait and phones) ------------------------------
+   Nothing is pinned and nothing cross-fades: the three statements are simply
+   a list, each revealing on its own as it arrives.
+   ------------------------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .lfi-intro__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.2rem, 7vw, 3rem);
+  }
+
+  /* Nothing is pinned here, so a position readout would be pointing at a
+     sequence that does not exist. */
+  .lfi-intro__steps {
+    display: none;
+  }
+
+  .lfi-intro__cards {
+    display: grid;
+    gap: clamp(2rem, 6vw, 2.8rem);
+  }
+
+  .lfi-intro__card {
+    position: relative;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-intro__pin {
+    display: block;
+    min-height: 0;
+  }
+  .lfi-intro__steps {
+    display: none;
+  }
+  /* No pin, no cross-fade: every statement is simply present. */
+  .lfi-intro__cards {
+    position: static;
+    min-height: 0;
+    display: grid;
+    gap: 2.4rem;
+  }
+  .lfi-intro__card,
+  .lfi-js .lfi-intro__card + .lfi-intro__card {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+  }
+}

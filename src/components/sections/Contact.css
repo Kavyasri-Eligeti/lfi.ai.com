@@ -1,0 +1,477 @@
+.lfi-contact {
+  position: relative;
+  background: var(--lfi-bg-alt);
+  overflow: hidden;
+}
+
+.lfi-contact__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+/* The form is a good deal taller than the column beside it, which left a
+   large empty block under the contact details. Pinning the aside keeps it
+   beside whichever field is being filled, so the space reads as deliberate
+   rather than as a gap. Two-column widths only. */
+@media (min-width: 981px) {
+  .lfi-contact__aside {
+    position: sticky;
+    top: calc(var(--lfi-header-h) + 2rem);
+  }
+}
+
+/* --- aside ----------------------------------------------------------------- */
+.lfi-contact__direct {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.lfi-contact__direct li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-contact__direct li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+}
+
+.lfi-contact__direct svg {
+  color: var(--lfi-yellow);
+  flex: none;
+}
+
+.lfi-contact__direct a {
+  font-weight: 600;
+  color: var(--lfi-text);
+  text-decoration: underline;
+  text-decoration-color: var(--lfi-border-strong);
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--lfi-dur) var(--lfi-ease);
+}
+
+@media (hover: hover) {
+  .lfi-contact__direct a:hover {
+    text-decoration-color: var(--lfi-yellow);
+  }
+}
+
+/* --- offices disclosure ----------------------------------------------------- */
+.lfi-contact__offices {
+  margin-top: 2rem;
+  border-top: 1px solid var(--lfi-border);
+  padding-top: 1.4rem;
+}
+
+.lfi-contact__offices summary {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lfi-text-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.lfi-contact__offices summary::-webkit-details-marker {
+  display: none;
+}
+
+.lfi-contact__offices summary svg {
+  color: var(--lfi-orange);
+  flex: none;
+}
+
+.lfi-contact__offices summary::after {
+  content: "+";
+  margin-left: auto;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.lfi-contact__offices[open] summary::after {
+  content: "\2212";
+}
+
+.lfi-contact__offices > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.3rem;
+  margin-top: 1.2rem;
+  animation: lfi-rise 320ms var(--lfi-ease-out) both;
+}
+
+.lfi-contact__offices h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+}
+
+.lfi-contact__offices p {
+  margin: 0 0 0.45rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-contact__offices li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--lfi-text-muted);
+}
+
+@media (hover: hover) {
+  .lfi-contact__offices li a:hover {
+    color: var(--lfi-yellow);
+  }
+}
+
+/* --- form ------------------------------------------------------------------- */
+.lfi-contact__formwrap {
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius-lg);
+  background: var(--lfi-surface);
+  box-shadow: var(--lfi-shadow);
+}
+
+/* How the message is delivered - a fact about the form, not an alert.
+
+   This used to be an orange-bordered warning box, which is the visual
+   grammar of "something is wrong here". Nothing is wrong: the form works,
+   and this is simply telling the visitor where their message goes. Neutral
+   surface, same borders as everything else on the page, icon instead of a
+   bolded "Note:". */
+.lfi-form__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 0 0 1.5rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--lfi-text-muted);
+  background: var(--lfi-surface-2);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius-sm);
+}
+
+.lfi-form__notice svg {
+  flex: none;
+  margin-top: 0.18em;
+  color: var(--lfi-yellow);
+}
+
+/* The honeypot.
+
+   Not `display: none` and not `hidden` - both are the first things a
+   form-filling bot skips. This is removed from the visual flow and from the
+   accessibility tree (aria-hidden on the wrapper, tabIndex -1 on the input)
+   while staying a real, fillable field in the DOM. */
+/* Gives the honeypot below something to be absolute against, so it cannot
+   escape the form and affect the page's scroll width. */
+.lfi-form {
+  position: relative;
+}
+
+.lfi-form__hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.lfi-form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--lfi-gap);
+}
+
+.lfi-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+  margin-bottom: var(--lfi-gap);
+  min-width: 0;
+}
+
+.lfi-form__group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--lfi-text);
+}
+
+.lfi-form__group label span[aria-hidden] {
+  color: var(--lfi-orange);
+}
+
+.lfi-form__opt {
+  font-weight: 500;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-form__group :is(input, select, textarea) {
+  width: 100%;
+  /* 16px minimum, or iOS zooms the viewport when the field is focused. */
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--lfi-text);
+  background: var(--lfi-bg);
+  border: 1px solid var(--lfi-border-strong);
+  border-radius: var(--lfi-radius-sm);
+  padding: 0.76rem 0.9rem;
+  min-height: 48px;
+  transition: border-color var(--lfi-dur) var(--lfi-ease),
+    background var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-form__group textarea {
+  resize: vertical;
+  min-height: 118px;
+  line-height: 1.55;
+}
+
+.lfi-form__group select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #a4aab4 50%),
+    linear-gradient(135deg, #a4aab4 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(50% + 2px),
+    calc(100% - 15px) calc(50% + 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.6rem;
+}
+
+.lfi-form__group :is(input, select, textarea):focus {
+  outline: none;
+  border-color: var(--lfi-yellow);
+  background: #0b0d11;
+}
+
+.lfi-form__group :is(input, textarea)[aria-invalid="true"] {
+  border-color: #ff6b5e;
+}
+
+/* Errors carry an icon glyph as well as colour, so the state is not signalled
+   by colour alone. */
+.lfi-form__err {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: #ff8d82;
+}
+
+.lfi-form__err::before {
+  content: "!";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: #08090c;
+  background: #ff8d82;
+  border-radius: 50%;
+  flex: none;
+}
+
+/* --- actions ----------------------------------------------------------------- */
+.lfi-form__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.lfi-form__req {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--lfi-text-subtle);
+}
+.lfi-form__req span {
+  color: var(--lfi-orange);
+}
+
+.lfi-form__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: lfi-spin 700ms linear infinite;
+  flex: none;
+}
+
+/* --- result ------------------------------------------------------------------- */
+.lfi-form__status:empty {
+  display: none;
+}
+
+.lfi-form__ok,
+.lfi-form__fail {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 1.2rem 0 0;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  border-radius: var(--lfi-radius-sm);
+  animation: lfi-rise 320ms var(--lfi-ease-out) both;
+}
+
+.lfi-form__ok {
+  color: #c9f5d8;
+  background: rgba(45, 192, 110, 0.1);
+  border: 1px solid rgba(45, 192, 110, 0.32);
+}
+.lfi-form__ok svg {
+  flex: none;
+  margin-top: 2px;
+  color: #6ee7a0;
+}
+
+.lfi-form__fail {
+  color: #ffc9c4;
+  background: rgba(255, 107, 94, 0.1);
+  border: 1px solid rgba(255, 107, 94, 0.34);
+}
+
+.lfi-form__status a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- responsive ---------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .lfi-contact__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Form interaction.
+   ========================================================================== */
+
+/* The field lifts off its background and grows a brand ring on focus. */
+.lfi-form__group :is(input, select, textarea) {
+  transition: border-color var(--lfi-dur) var(--lfi-ease),
+    background var(--lfi-dur) var(--lfi-ease),
+    box-shadow var(--lfi-dur) var(--lfi-ease),
+    transform var(--lfi-dur) var(--lfi-ease);
+}
+
+.lfi-form__group :is(input, select, textarea):focus {
+  box-shadow: 0 0 0 4px rgba(255, 214, 0, 0.14);
+}
+
+.lfi-form__group:focus-within label {
+  color: var(--lfi-yellow);
+}
+
+.lfi-form__group label {
+  transition: color var(--lfi-dur) var(--lfi-ease);
+  transform-origin: left center;
+}
+
+/* A newly shown error nudges once - enough to draw the eye, not enough to
+   feel like an alarm. */
+.lfi-form__err {
+  animation: lfi-shake 420ms var(--lfi-ease) both;
+}
+
+/* The invalid field keeps a soft red ring so the state is not colour alone
+   on a thin border. */
+.lfi-form__group :is(input, textarea)[aria-invalid="true"] {
+  box-shadow: 0 0 0 3px rgba(255, 107, 94, 0.14);
+}
+
+/* Fields enter with the panel, one after another. */
+.lfi-js .lfi-contact__formwrap[data-reveal="in"] .lfi-form__group {
+  animation: lfi-rise 620ms var(--lfi-ease-out) both;
+  animation-delay: calc(var(--lfi-f, 0) * 70ms + 160ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-form__err,
+  .lfi-js .lfi-contact__formwrap[data-reveal="in"] .lfi-form__group {
+    animation: none !important;
+  }
+}
+
+/* --- "what happens next" ---------------------------------------------------
+   The company's published description of what follows an enquiry. A numbered
+   list, set quietly under the contact details - it is reassurance, not a
+   second call to action competing with the form.
+   -------------------------------------------------------------------------- */
+.lfi-contact__next {
+  margin-top: clamp(1.8rem, 3vw, 2.4rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-contact__next-label {
+  margin: 0 0 1rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-contact__next ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: next;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.lfi-contact__next li {
+  counter-increment: next;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-contact__next li::before {
+  content: counter(next, decimal-leading-zero);
+  font-family: var(--lfi-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--lfi-yellow);
+  /* Aligns the number with the first line of text beside it rather than with
+     the top of the box. */
+  padding-top: 0.2em;
+}

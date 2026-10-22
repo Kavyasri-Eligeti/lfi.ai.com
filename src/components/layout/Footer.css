@@ -1,0 +1,199 @@
+.lfi-footer {
+  position: relative;
+  /* Transparent rather than an opaque near-black, so the page's lighting
+     (styles/atmosphere.css) carries down through the footer instead of
+     stopping at a hard edge above it. The base colour behind it is the same
+     `--lfi-bg` this used to paint. */
+  background: transparent;
+  border-top: 1px solid var(--lfi-border);
+  padding-top: clamp(3rem, 6vw, 4.5rem);
+  padding-bottom: 2rem;
+}
+
+/* The brand bar: the three logo blocks read as one rule across the top. */
+.lfi-footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--lfi-yellow) 0%,
+    var(--lfi-orange) 44%,
+    var(--lfi-blue) 100%
+  );
+  opacity: 0.45;
+}
+
+.lfi-footer__top {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 2.05fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* --- brand ------------------------------------------------------------------ */
+.lfi-footer__brand p {
+  margin: 1.2rem 0 0;
+  max-width: 38ch;
+  font-size: 0.9rem;
+  line-height: 1.62;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-footer__social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  margin-top: 1rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--lfi-text);
+}
+
+.lfi-footer__social svg {
+  color: var(--lfi-text-subtle);
+}
+
+@media (hover: hover) {
+  .lfi-footer__social:hover {
+    color: var(--lfi-yellow);
+  }
+  .lfi-footer__social:hover svg {
+    color: var(--lfi-yellow);
+  }
+}
+
+/* --- link columns ------------------------------------------------------------ */
+.lfi-footer__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.lfi-footer__col h2 {
+  margin: 0 0 1rem;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.66rem;
+  /* 400 only: the mono face is loaded at a single weight, so asking for 500
+     would otherwise pull a second 14 KB font file for four short labels. */
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-footer__col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.lfi-footer__col a {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.2rem 0;
+  font-size: 0.875rem;
+  color: var(--lfi-text-muted);
+  transition: color var(--lfi-dur) var(--lfi-ease);
+}
+
+@media (hover: hover) {
+  .lfi-footer__col a:hover {
+    color: #fff;
+  }
+}
+
+/* --- contact strip ------------------------------------------------------------ */
+.lfi-footer__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  margin-top: clamp(2.4rem, 5vw, 3.4rem);
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-footer__contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  font-size: 0.875rem;
+  color: var(--lfi-text-muted);
+}
+
+.lfi-footer__contact svg {
+  color: var(--lfi-text-subtle);
+  flex: none;
+}
+
+@media (hover: hover) {
+  .lfi-footer__contact a:hover {
+    color: var(--lfi-yellow);
+  }
+  .lfi-footer__contact a:hover svg {
+    color: var(--lfi-yellow);
+  }
+}
+
+/* --- bottom ------------------------------------------------------------------- */
+.lfi-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem 1.6rem;
+  margin-top: 1.6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--lfi-border);
+}
+
+.lfi-footer__bottom p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--lfi-text-subtle);
+}
+
+.lfi-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+}
+
+.lfi-footer__legal a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  font-size: 0.8rem;
+  color: var(--lfi-text-subtle);
+}
+
+@media (hover: hover) {
+  .lfi-footer__legal a:hover {
+    color: var(--lfi-text);
+  }
+}
+
+@media (max-width: 880px) {
+  .lfi-footer__top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Footer columns rise in as the page end comes into view. */
+.lfi-js .lfi-footer[data-reveal="in"] .lfi-footer__col,
+.lfi-js .lfi-footer[data-reveal="in"] .lfi-footer__brand {
+  animation: lfi-rise 700ms var(--lfi-ease-out) both;
+  animation-delay: calc(var(--lfi-c, 0) * 90ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-js .lfi-footer[data-reveal="in"] .lfi-footer__col,
+  .lfi-js .lfi-footer[data-reveal="in"] .lfi-footer__brand {
+    animation: none !important;
+  }
+}

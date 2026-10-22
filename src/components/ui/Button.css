@@ -1,0 +1,201 @@
+.lfi-btn {
+  --lfi-btn-bg: transparent;
+  --lfi-btn-fg: var(--lfi-text);
+  --lfi-btn-bd: var(--lfi-border-strong);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  /* 48px tall at the default size: comfortably past the 44px touch target. */
+  min-height: 48px;
+  padding: 0.78rem 1.35rem;
+  border: 1px solid var(--lfi-btn-bd);
+  border-radius: 999px;
+  background: var(--lfi-btn-bg);
+  color: var(--lfi-btn-fg);
+  font-family: inherit;
+  font-size: 0.945rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--lfi-dur) var(--lfi-ease),
+    border-color var(--lfi-dur) var(--lfi-ease),
+    color var(--lfi-dur) var(--lfi-ease),
+    transform var(--lfi-dur-fast) var(--lfi-ease);
+}
+
+.lfi-btn__arrow {
+  flex: none;
+  transition: transform var(--lfi-dur) var(--lfi-ease);
+}
+
+@media (hover: hover) {
+  .lfi-btn:hover .lfi-btn__arrow {
+    transform: translateX(3px);
+  }
+}
+
+.lfi-btn:active {
+  transform: translateY(1px);
+}
+
+.lfi-btn[disabled],
+.lfi-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- primary: the brand yellow, the one loud control on a screen --------- */
+.lfi-btn--primary {
+  --lfi-btn-bg: var(--lfi-yellow);
+  --lfi-btn-fg: #000;
+  --lfi-btn-bd: var(--lfi-yellow);
+}
+@media (hover: hover) {
+  .lfi-btn--primary:hover {
+    --lfi-btn-bg: var(--lfi-yellow-soft);
+    --lfi-btn-bd: var(--lfi-yellow-soft);
+  }
+}
+
+/* --- secondary: outlined, for the paired action ------------------------- */
+.lfi-btn--secondary {
+  --lfi-btn-bg: rgba(230, 236, 237, 0.04);
+}
+@media (hover: hover) {
+  .lfi-btn--secondary:hover {
+    --lfi-btn-bg: rgba(230, 236, 237, 0.09);
+    --lfi-btn-bd: rgba(230, 236, 237, 0.34);
+  }
+}
+
+/* --- ghost: inline text action ------------------------------------------ */
+.lfi-btn--ghost {
+  --lfi-btn-bd: transparent;
+  /* Inline in appearance, but still a 32px-tall hit area so it clears the
+     24px minimum target size on touch. */
+  min-height: 32px;
+  padding: 0.45rem 0;
+  font-weight: 700;
+  color: var(--lfi-yellow);
+}
+.lfi-btn--ghost .lfi-btn__label {
+  position: relative;
+}
+.lfi-btn--ghost .lfi-btn__label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--lfi-dur) var(--lfi-ease);
+}
+@media (hover: hover) {
+  .lfi-btn--ghost:hover .lfi-btn__label::after {
+    transform: scaleX(1);
+  }
+}
+
+/* --- sizes ---------------------------------------------------------------- */
+.lfi-btn--lg {
+  min-height: 54px;
+  padding: 0.95rem 1.7rem;
+  font-size: 1rem;
+}
+.lfi-btn--sm {
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* On the narrowest phones let a pair of CTAs stack to full width rather than
+   squeeze onto one line and clip. */
+@media (max-width: 420px) {
+  .lfi-btn--lg,
+  .lfi-btn--primary,
+  .lfi-btn--secondary {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Pointer feedback.
+
+   A light sweep crosses the button on hover and the whole control presses in
+   on click. Both are transform/opacity only, and both are suppressed under
+   reduced motion.
+   ========================================================================== */
+
+.lfi-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.lfi-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 620ms var(--lfi-ease-sweep);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .lfi-btn:hover::before {
+    transform: translateX(120%);
+  }
+  /* The outlined variants brighten rather than flash. */
+  .lfi-btn--secondary:hover,
+  .lfi-btn--ghost:hover {
+    --lfi-btn-fg: #fff;
+  }
+  .lfi-btn--ghost:hover {
+    --lfi-btn-fg: var(--lfi-yellow-soft);
+  }
+  .lfi-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.lfi-btn:active {
+  transform: translateY(0) scale(0.975);
+  transition-duration: 90ms;
+}
+
+/* Ghost buttons are inline text - they should not lift off the line. */
+@media (hover: hover) {
+  .lfi-btn--ghost:hover {
+    transform: none;
+  }
+}
+.lfi-btn--ghost::before {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfi-btn,
+  .lfi-btn:hover,
+  .lfi-btn:active {
+    transform: none !important;
+  }
+  .lfi-btn::before {
+    display: none;
+  }
+}
