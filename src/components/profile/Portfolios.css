@@ -1,0 +1,1071 @@
+/* ==========================================================================
+   Portfolio carousel - one screen, five slides.
+   ========================================================================== */
+
+/* The active portfolio's colour, registered so it can be TRANSITIONED: the
+   glow, progress bar, dots and arrows fade from one portfolio's colour to the
+   next instead of snapping. */
+@property --pf-tone-c {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ff8a1f;
+}
+
+.pf-car {
+  --pf-tone-c: var(--pf-active);
+  --pf-ease: cubic-bezier(0.77, 0, 0.18, 1);
+  position: relative;
+  isolation: isolate;
+  /* Exactly the space under the navbar, from its MEASURED height. */
+  height: calc(100vh - var(--lfi-nav-h, 77px));
+  height: calc(100svh - var(--lfi-nav-h, 77px));
+  min-height: 440px;
+  padding-block: clamp(12px, 2.4vh, 28px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: --pf-tone-c 0.8s ease;
+}
+.pf-car::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+      ellipse 50% 60% at 85% 10%,
+      color-mix(in srgb, var(--pf-tone-c) 16%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 40% 50% at 5% 95%,
+      color-mix(in srgb, var(--pf-tone-c) 9%, transparent),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+.pf-car__inner {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.8vh, 22px);
+}
+
+/* --- heading + controls ---------------------------------------------------- */
+.pf-car__top {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+.pf-car__top .lfi-section-head__text {
+  flex: 1 1 auto;
+}
+.pf-car .lfi-eyebrow {
+  margin-bottom: clamp(0.3rem, 1vh, 0.7rem);
+}
+.pf-car .lfi-heading {
+  max-width: none;
+  font-size: clamp(1.45rem, 1.5vw + 1.6vh, 2.7rem);
+}
+
+.pf-car__controls {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.pf-car__arrow {
+  display: grid;
+  place-items: center;
+  width: clamp(38px, 5vh, 46px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--pf-tone-c) 55%, transparent);
+  background: color-mix(in srgb, var(--pf-tone-c) 8%, transparent);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--lfi-dur-fast) var(--lfi-ease),
+    color var(--lfi-dur-fast) var(--lfi-ease), transform var(--lfi-dur-fast) var(--lfi-ease);
+}
+.pf-car__arrow:hover {
+  background: var(--pf-tone-c);
+  color: var(--pf-ink);
+}
+.pf-car__arrow:active {
+  transform: scale(0.94);
+}
+.pf-car__dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pf-car__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lfi-border-strong);
+  cursor: pointer;
+  transition: width 0.5s var(--pf-ease), background 0.5s var(--lfi-ease);
+}
+.pf-car__dot[aria-current="true"] {
+  width: 28px;
+  background: var(--pf-tone-c);
+}
+.pf-car__counter {
+  margin: 0;
+  min-width: 4.4em;
+  text-align: center;
+  font-family: var(--lfi-font-mono);
+  font-size: 0.78rem;
+  color: var(--lfi-text-subtle);
+}
+.pf-car__counter strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* --- navigation cards ------------------------------------------------------ */
+.pf-car__nav {
+  flex: none;
+}
+.pf-car__tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.4rem, 0.8vw, 0.75rem);
+}
+.pf-pf__tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: clamp(0.55rem, 1.3vh, 0.95rem) clamp(0.7rem, 1vw, 1.1rem);
+  border-radius: 14px;
+  border: 1.5px solid color-mix(in srgb, var(--tone) 70%, transparent);
+  background: color-mix(in srgb, var(--tone) 7%, var(--lfi-surface));
+  color: var(--lfi-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.5s var(--lfi-ease), color 0.5s var(--lfi-ease),
+    transform var(--lfi-dur) var(--lfi-ease-entrance), box-shadow 0.5s var(--lfi-ease);
+}
+.pf-pf__tab:hover {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--tone) 16%, var(--lfi-surface));
+}
+.pf-pf__tab[aria-selected="true"] {
+  background: var(--tone);
+  color: var(--pf-ink);
+  box-shadow: 0 18px 40px -24px var(--tone);
+}
+.pf-pf__tab-num {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--tone);
+  transition: color 0.5s var(--lfi-ease);
+}
+.pf-pf__tab[aria-selected="true"] .pf-pf__tab-num {
+  color: var(--pf-ink);
+}
+.pf-pf__tab-name {
+  font-size: clamp(0.84rem, 0.55vw + 0.6vh, 1.06rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+.pf-pf__tab-motto {
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.78;
+}
+
+.pf-car__progress {
+  height: 2px;
+  margin-top: clamp(8px, 1.4vh, 14px);
+  background: var(--lfi-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.pf-car__progress span {
+  display: block;
+  height: 100%;
+  background: var(--pf-tone-c);
+  transition: width 0.8s var(--pf-ease);
+}
+
+/* --- slides ---------------------------------------------------------------- */
+.pf-car__viewport {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.pf-car__track {
+  display: flex;
+  height: 100%;
+  transform: translate3d(calc(var(--i) * -100%), 0, 0);
+  transition: transform 0.85s var(--pf-ease);
+  will-change: transform;
+}
+.pf-car__slide {
+  flex: 0 0 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr);
+  gap: clamp(0.9rem, 2vw, 2rem);
+  transform-origin: center;
+  transition: opacity 0.7s var(--lfi-ease), transform 0.85s var(--pf-ease),
+    filter 0.7s var(--lfi-ease);
+}
+/* Neighbours recede as they slide out: a deck, not a strip. */
+.pf-car__slide:not(.is-active) {
+  opacity: 0.2;
+  transform: scale(0.93);
+  filter: saturate(0.6);
+}
+
+/* The incoming slide's content arrives in sequence, behind the track move.
+   `is-entering` exists only for the length of the entrance (see the
+   component), so re-measuring the layout can never replay it. */
+.pf-car__slide.is-entering .pf-car__lead > *,
+.pf-car__slide.is-entering .pf-car__group {
+  animation: pf-car-in 0.75s var(--lfi-ease-out) both;
+}
+.pf-car__slide.is-entering .pf-car__lead > :nth-child(1) { animation-delay: 0.22s; }
+.pf-car__slide.is-entering .pf-car__lead > :nth-child(2) { animation-delay: 0.28s; }
+.pf-car__slide.is-entering .pf-car__lead > :nth-child(3) { animation-delay: 0.34s; }
+.pf-car__slide.is-entering .pf-car__lead > :nth-child(4) { animation-delay: 0.4s; }
+.pf-car__slide.is-entering .pf-car__lead > :nth-child(5) { animation-delay: 0.46s; }
+.pf-car__slide.is-entering .pf-car__group--deliver { animation-delay: 0.32s; }
+.pf-car__slide.is-entering .pf-car__group--more { animation-delay: 0.42s; }
+@keyframes pf-car-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+}
+/* Artwork on the slides you cannot see does not need to run. */
+.pf-car__slide:not(.is-active) .pf-vis * {
+  animation-play-state: paused !important;
+}
+
+/* --- the coloured card ----------------------------------------------------- */
+.pf-car__lead {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(1rem, 2.6vh, 2.2rem) clamp(1rem, 1.8vw, 2rem);
+  border-radius: var(--lfi-radius-lg);
+  background: var(--tone);
+  color: var(--pf-ink);
+}
+.pf-car__lead > * {
+  flex: none;
+}
+.pf-pf__count {
+  margin: 0;
+  font-family: var(--lfi-font-mono);
+  font-weight: 600;
+  font-size: clamp(0.78rem, 1.4vh, 0.95rem);
+  letter-spacing: 0.18em;
+}
+.pf-car .pf-pf__name {
+  margin: clamp(0.4rem, 1.2vh, 0.9rem) 0 0;
+  color: var(--pf-ink);
+  font-size: clamp(1.45rem, 1.1vw + 1.9vh, 2.75rem);
+  line-height: 1.05;
+}
+.pf-pf__motto {
+  margin: clamp(0.6rem, 1.8vh, 1.4rem) 0 0;
+  font-size: clamp(0.72rem, 1.3vh, 0.86rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.pf-pf__summary {
+  margin: clamp(0.4rem, 1.2vh, 1rem) 0 clamp(0.8rem, 2vh, 1.6rem);
+  font-size: clamp(0.92rem, 0.4vw + 1.2vh, 1.2rem);
+  line-height: 1.45;
+}
+
+/* --- the detail -------------------------------------------------------------- */
+.pf-car__detail {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 2vh, 1.6rem);
+  min-height: 0;
+  overflow: hidden;
+  /* On tall screens the detail is shorter than the coloured card beside it;
+     centred, the spare height is shared above and below instead of pooling
+     as one empty block at the bottom. `safe` matters: when the content is
+     taller than the column it falls back to top alignment, so it still
+     overflows downwards where the fit pass can measure it (a plain `center`
+     would push half the overflow above the top, out of scrollHeight). */
+  justify-content: safe center;
+}
+.pf-car__detail > * {
+  flex: none;
+}
+.pf-car__group--more {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 2vh, 1.6rem);
+}
+
+/* Scoped: the global heading rule (.lfi-site h4, 0-1-1) would otherwise
+   outrank a single class and paint these white. */
+.pf-car .pf-pf__label {
+  margin: 0 0 clamp(0.45rem, 1.1vh, 0.85rem);
+  font-family: var(--lfi-font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tone);
+}
+
+.pf-pf__deliver {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.45rem, 1vh, 0.8rem);
+}
+.pf-pf__deliver li {
+  display: flex;
+  gap: 0.7rem;
+  padding: clamp(0.55rem, 1.4vh, 1rem) clamp(0.7rem, 1vw, 1.1rem);
+  background: var(--lfi-surface);
+  border: 1px solid var(--lfi-border);
+  border-radius: 14px;
+  transition: border-color var(--lfi-dur-fast) var(--lfi-ease), background var(--lfi-dur-fast);
+}
+.pf-pf__deliver li:hover {
+  border-color: color-mix(in srgb, var(--tone) 55%, transparent);
+  background: var(--lfi-surface-2);
+}
+.pf-pf__dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: var(--tone);
+  box-shadow: 0 0 12px -1px var(--tone);
+}
+.pf-car .pf-pf__deliver h5 {
+  margin: 0;
+  font-size: clamp(0.86rem, 0.3vw + 1vh, 1rem);
+  color: #fff;
+  line-height: 1.25;
+}
+.pf-pf__deliver p {
+  margin: 0.2rem 0 0;
+  font-size: clamp(0.76rem, 0.2vw + 0.9vh, 0.86rem);
+  color: var(--lfi-text-muted);
+  line-height: 1.4;
+}
+
+.pf-pf__iprow.has-platforms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+.pf-pf__ip {
+  display: grid;
+  gap: clamp(0.45rem, 1vh, 0.8rem);
+}
+.pf-pf__ip--2,
+.pf-pf__ip--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.pf-pf__ip--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.pf-pf__ip--1 .pf-pf__ipcard {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.7fr) 1fr;
+  align-items: center;
+  gap: 1.4rem;
+}
+.pf-pf__iprow.has-platforms .pf-pf__ip--1 .pf-pf__ipcard {
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+}
+.pf-pf__ipcard {
+  padding: clamp(0.7rem, 1.6vh, 1.2rem) clamp(0.8rem, 1vw, 1.2rem);
+  border-radius: 14px;
+  background: #fff;
+  color: #1a1f2e;
+}
+/* A fixed height, not auto/max-height: an image with both dimensions auto is
+   0px tall until it loads, which shifted the layout mid-scroll. */
+.pf-pf__ipcard img {
+  display: block;
+  height: clamp(30px, 4.6vh, 44px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+.pf-pf__ip--1 .pf-pf__ipcard img {
+  height: clamp(40px, 6vh, 60px);
+}
+.pf-pf__ipcard p {
+  margin: 0.55rem 0 0;
+  font-size: clamp(0.78rem, 0.2vw + 0.95vh, 0.9rem);
+  line-height: 1.45;
+}
+.pf-pf__ip--1 .pf-pf__ipcard p {
+  margin: 0;
+  font-size: clamp(0.84rem, 0.2vw + 1.05vh, 0.98rem);
+}
+.pf-pf__ipcard.is-dark {
+  background: var(--lfi-surface);
+  border: 1px solid var(--lfi-border);
+  color: var(--lfi-text-muted);
+}
+.pf-car .pf-pf__ipcard.is-dark h5 {
+  margin: 0;
+  font-size: 1.08rem;
+  color: var(--tone);
+  line-height: clamp(30px, 4.6vh, 44px);
+}
+
+.pf-pf__platforms {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.pf-pf__platforms .pf-logo-tile {
+  aspect-ratio: 538 / 272;
+}
+
+.pf-pf__models {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(0.4rem, 0.9vh, 0.6rem);
+}
+.pf-pf__models li {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 0.9fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(0.55rem, 1.3vh, 0.9rem) 1.1rem;
+  border-radius: 12px;
+  border: 2px solid var(--tone);
+  background: color-mix(in srgb, var(--tone) calc(18% + var(--k) * 30%), var(--lfi-surface));
+}
+.pf-pf__models li:last-child,
+.pf-pf__models li:last-child .pf-pf__model-num {
+  color: var(--pf-ink);
+}
+.pf-pf__model-num {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--tone);
+}
+.pf-pf__models strong {
+  font-size: clamp(0.9rem, 0.3vw + 1vh, 1.05rem);
+}
+.pf-pf__models span:last-child {
+  font-size: clamp(0.82rem, 0.2vw + 1vh, 0.95rem);
+  opacity: 0.88;
+}
+
+.pf-pf__chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.2rem;
+}
+.pf-car .pf-pf__chips-row .pf-pf__label {
+  margin: 0;
+}
+.pf-pf__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.pf-pf__chips li {
+  padding: clamp(0.38rem, 0.9vh, 0.55rem) clamp(0.85rem, 1vw, 1.2rem);
+  border-radius: 999px;
+  border: 2px solid var(--tone);
+  background: color-mix(in srgb, var(--tone) 14%, transparent);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 0.2vw + 1vh, 0.92rem);
+  color: #fff;
+}
+
+/* --- split switch (density 2+) --------------------------------------------- */
+.pf-car__switch {
+  display: none;
+  gap: 0.3rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--lfi-border);
+  background: var(--lfi-surface);
+  align-self: flex-start;
+}
+.pf-car__switch button {
+  white-space: nowrap;
+  padding: 0.45rem 0.95rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lfi-text-muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--lfi-dur-fast) var(--lfi-ease), color var(--lfi-dur-fast);
+}
+.pf-car__switch button[aria-pressed="true"] {
+  background: var(--tone);
+  color: var(--pf-ink);
+}
+
+/* ==========================================================================
+   Density levels, chosen by the fit pass in Portfolios.js.
+   ========================================================================== */
+
+/* 1 - tight: tighter rhythm. The artwork stays (it fills the coloured card's
+   spare height) but must keep a readable minimum; if that does not fit, the
+   fit pass sees the card overflow and steps on. It is dropped at compact. */
+.pf-car:not([data-density="0"]) .pf-vis {
+  min-height: 72px;
+}
+.pf-car[data-compact="true"] .pf-vis {
+  display: none;
+}
+.pf-car:not([data-density="0"]) .pf-pf__tab-motto {
+  display: none;
+}
+.pf-car:not([data-density="0"]) .pf-car__inner,
+.pf-car:not([data-density="0"]) .pf-car__detail,
+.pf-car:not([data-density="0"]) .pf-car__group--more {
+  gap: clamp(0.5rem, 1.4vh, 1rem);
+}
+.pf-car:not([data-density="0"]) .pf-pf__summary {
+  margin-bottom: 0;
+}
+
+/* 2 - split: one group at a time, behind the switch. */
+.pf-car[data-split="true"] .pf-car__switch {
+  display: inline-flex;
+}
+.pf-car__switch-accel {
+  display: none;
+}
+.pf-car[data-split="true"][data-group="deliver"] .pf-car__group--more,
+.pf-car[data-split="true"]:not([data-group="deliver"]) .pf-car__group--deliver {
+  display: none;
+}
+.pf-car__group-ip {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+}
+
+/* 3 - compact: three-way switch, accelerators on a page of their own. */
+.pf-car[data-compact="true"] .pf-car__switch-accel {
+  display: inline-block;
+}
+.pf-car[data-compact="true"] .pf-car__switch-ip[aria-pressed="true"] {
+  background: transparent;
+  color: var(--lfi-text-muted);
+}
+.pf-car[data-compact="true"][data-group="ip"] .pf-car__switch-ip {
+  background: var(--tone);
+  color: var(--pf-ink);
+}
+.pf-car[data-compact="true"][data-group="ip"] .pf-car__group-accel,
+.pf-car[data-compact="true"][data-group="accel"] .pf-car__group-ip {
+  display: none;
+}
+.pf-car[data-compact="true"] .pf-car__switch {
+  align-self: stretch;
+  justify-content: space-between;
+}
+.pf-car[data-compact="true"] .pf-car__switch button {
+  flex: 1 1 auto;
+  padding: 0.38rem 0.6rem;
+  font-size: 0.76rem;
+}
+.pf-car[data-compact="true"] {
+  padding-block: 10px;
+}
+.pf-car[data-compact="true"] .lfi-eyebrow {
+  margin-bottom: 0.25rem;
+}
+.pf-car[data-compact="true"] .pf-pf__tab {
+  padding: 0.45rem 0.75rem;
+}
+.pf-car[data-compact="true"] .pf-car__arrow {
+  width: 36px;
+}
+.pf-car[data-compact="true"] .pf-car__slide {
+  gap: 0.55rem;
+}
+
+/* compact, continued: drop what is shown twice, tighten type and spacing. */
+.pf-car[data-compact="true"] .pf-pf__count,
+.pf-car[data-compact="true"] .pf-car__progress,
+.pf-car[data-compact="true"] .pf-car__group--deliver > .pf-pf__label {
+  display: none;
+}
+.pf-car[data-compact="true"] .pf-car__inner {
+  gap: clamp(0.45rem, 1.2vh, 0.8rem);
+}
+.pf-car[data-compact="true"] .pf-car__lead {
+  padding: clamp(0.75rem, 1.8vh, 1.1rem) clamp(0.85rem, 3vw, 1.2rem);
+}
+.pf-car[data-compact="true"] .pf-pf__name {
+  margin-top: 0;
+}
+.pf-car[data-compact="true"] .pf-pf__motto {
+  margin-top: 0.4rem;
+}
+.pf-car[data-compact="true"] .pf-pf__summary {
+  margin-top: 0.35rem;
+  font-size: clamp(0.84rem, 0.3vw + 1vh, 0.95rem);
+  line-height: 1.4;
+}
+.pf-car[data-compact="true"] .pf-car__detail,
+.pf-car[data-compact="true"] .pf-car__group--more {
+  gap: 0.6rem;
+}
+.pf-car[data-compact="true"] .pf-pf__deliver li {
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+}
+.pf-car[data-compact="true"] .pf-pf__dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 0.3rem;
+}
+.pf-car[data-compact="true"] .pf-pf__deliver h5 {
+  font-size: 0.84rem;
+}
+.pf-car[data-compact="true"] .pf-pf__deliver p {
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+.pf-car[data-compact="true"] .pf-pf__ipcard {
+  padding: 0.6rem 0.7rem;
+}
+.pf-car[data-compact="true"] .pf-pf__ipcard p {
+  margin-top: 0.4rem;
+  font-size: 0.76rem;
+  line-height: 1.38;
+}
+.pf-car[data-compact="true"] .pf-pf__models li {
+  padding: 0.5rem 0.8rem;
+}
+.pf-car[data-compact="true"] .pf-pf__chips li {
+  padding: 0.32rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+/* 4 - fallback: unusually short screens may scroll inside the slide. */
+.pf-car[data-density="4"] .pf-car__slide.is-active,
+.pf-car[data-density="4"] .pf-car__slide.is-active .pf-car__detail {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* ==========================================================================
+   Panel visuals
+   ========================================================================== */
+.pf-vis {
+  /* Takes whatever height the card has left (the SVG letterboxes inside),
+     so the artwork shrinks before anything else on the card does. */
+  margin-top: auto;
+  flex: 1 1 0 !important;
+  min-height: 0;
+  max-height: 240px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0d1326;
+}
+.pf-vis svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pf-vis--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pf-vis__label {
+  font-family: var(--lfi-font-mono);
+  font-size: 8px;
+  fill: var(--tone);
+}
+.pf-vis__label--ink {
+  fill: var(--pf-ink);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* pipeline */
+.pf-vis__rail {
+  stroke: rgba(150, 170, 230, 0.35);
+  stroke-width: 1.5;
+}
+.pf-vis__legacy {
+  fill: none;
+  stroke: rgba(170, 185, 230, 0.6);
+  stroke-width: 1.2;
+}
+.pf-vis__gate {
+  fill: none;
+  stroke: var(--tone);
+  stroke-width: 2;
+}
+.pf-vis__block {
+  fill: var(--tone);
+}
+.pf-vis__mover {
+  animation: pf-vis-move 4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.pf-vis__mover--2 {
+  animation-delay: -2s;
+}
+.pf-vis__mover .pf-vis__block {
+  animation: pf-vis-morph 4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation-delay: inherit;
+}
+@keyframes pf-vis-move {
+  0% {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(370px);
+    opacity: 0;
+  }
+}
+@keyframes pf-vis-morph {
+  0%,
+  44% {
+    rx: 2px;
+  }
+  52%,
+  100% {
+    rx: 11px;
+  }
+}
+.pf-vis__new {
+  fill: var(--tone);
+  animation: pf-vis-glow 2s ease-in-out infinite;
+}
+.pf-vis__new--2 {
+  animation-delay: -1s;
+}
+@keyframes pf-vis-glow {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* hub */
+.pf-vis__orbit,
+.pf-vis__spoke {
+  fill: none;
+  stroke: rgba(150, 170, 230, 0.3);
+  stroke-width: 1;
+}
+.pf-vis__packet {
+  stroke: var(--tone);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.06 0.94;
+  animation: pf-vis-packet 2.2s linear infinite;
+  animation-delay: calc(var(--i) * -0.37s);
+}
+@keyframes pf-vis-packet {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.pf-vis__node {
+  fill: #0d1326;
+  stroke: var(--tone);
+  stroke-width: 1.2;
+}
+.pf-vis__core {
+  fill: var(--tone);
+}
+.pf-vis__core-ring {
+  fill: none;
+  stroke: var(--tone);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pf-vis-ring 2.4s ease-out infinite;
+}
+@keyframes pf-vis-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* neural */
+.pf-vis__datum {
+  fill: rgba(200, 210, 255, 0.75);
+  animation: pf-vis-twinkle 3s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.23s);
+}
+@keyframes pf-vis-twinkle {
+  50% {
+    opacity: 0.2;
+  }
+}
+.pf-vis__edge {
+  stroke: var(--tone);
+  stroke-width: 0.6;
+  opacity: 0.28;
+  animation: pf-vis-edge 2.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.4s);
+}
+.pf-vis__edge--in {
+  stroke-dasharray: 2 3;
+  opacity: 0.4;
+}
+@keyframes pf-vis-edge {
+  50% {
+    opacity: 0.7;
+  }
+}
+.pf-vis__neuron {
+  fill: var(--tone);
+  filter: drop-shadow(0 0 4px var(--tone));
+  animation: pf-vis-fire 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--l) * 0.35s + var(--i) * 0.08s);
+}
+@keyframes pf-vis-fire {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+.pf-vis__out {
+  stroke: rgba(200, 210, 255, 0.4);
+  stroke-width: 1;
+}
+
+/* radar */
+.pf-vis--radar {
+  background: radial-gradient(circle at 50% 50%, #3a2408, #170f06 70%);
+}
+.pf-vis__ring {
+  fill: none;
+  stroke: rgba(255, 150, 60, 0.32);
+  stroke-width: 0.8;
+}
+.pf-vis__sweep {
+  animation: pf-vis-sweep 4s linear infinite;
+  transform-origin: 0 0;
+}
+@keyframes pf-vis-sweep {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.pf-vis__wedge {
+  fill: rgba(255, 140, 40, 0.22);
+}
+.pf-vis__beam {
+  stroke: #ffb35c;
+  stroke-width: 1.4;
+}
+.pf-vis__blip {
+  fill: #ff8a1f;
+  animation: pf-vis-blip 4s ease-out infinite;
+  animation-delay: calc(var(--i) * -0.8s);
+}
+.pf-vis__target {
+  fill: none;
+  stroke: #ff8a1f;
+  stroke-width: 1;
+  opacity: 0;
+  animation: pf-vis-blip 4s ease-out infinite;
+  animation-delay: calc(var(--i) * -0.8s);
+}
+@keyframes pf-vis-blip {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  8% {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 1180px) {
+  .pf-car__slide {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.45fr);
+  }
+  .pf-pf__ip--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pf-pf__tab-motto {
+    display: none;
+  }
+}
+
+/* Tablet: one column - the coloured card becomes a header band over the
+   detail, and the cards row scrolls sideways instead of squeezing. */
+@media (max-width: 900px) {
+  .pf-car__tabs {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(var(--lfi-gutter) * -1);
+    padding-inline: var(--lfi-gutter);
+  }
+  .pf-car__tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .pf-pf__tab {
+    flex: 0 0 auto;
+    max-width: 230px;
+    scroll-snap-align: start;
+  }
+  .pf-pf__tab:hover {
+    transform: none;
+  }
+  .pf-car__slide {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: clamp(0.6rem, 1.6vh, 1rem);
+  }
+  .pf-car .pf-vis {
+    display: none;
+  }
+  .pf-pf__summary {
+    margin-bottom: 0;
+  }
+  .pf-pf__iprow.has-platforms {
+    grid-template-columns: 1fr;
+  }
+  /* One row of six logos rather than a tall two-row grid. */
+  .pf-pf__platforms {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Phone: controls under the heading, two-column service grid. */
+@media (max-width: 600px) {
+  /* The arrows and counter ride on the eyebrow's line instead of taking a
+     row of their own; the dots step aside - the counter and the card strip
+     already say where you are. */
+  .pf-car__top {
+    position: relative;
+    display: block;
+  }
+  .pf-car .lfi-eyebrow {
+    max-width: calc(100% - 140px);
+  }
+  .pf-car__controls {
+    position: absolute;
+    top: -6px;
+    right: 0;
+    gap: 0.35rem;
+  }
+  .pf-car__dots {
+    display: none;
+  }
+  .pf-car__counter {
+    min-width: 3.6em;
+  }
+  .pf-car__arrow {
+    width: 34px;
+  }
+  .pf-car .lfi-heading {
+    font-size: clamp(1.3rem, 5.4vw, 1.7rem);
+  }
+  .pf-pf__tab-num {
+    display: none;
+  }
+  .pf-car__lead {
+    border-radius: var(--lfi-radius);
+  }
+  .pf-car .pf-pf__name {
+    font-size: clamp(1.25rem, 5.6vw, 1.6rem);
+  }
+  .pf-pf__deliver,
+  .pf-pf__ip--2,
+  .pf-pf__ip--3,
+  .pf-pf__ip--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pf-pf__ip--1 .pf-pf__ipcard {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  .pf-pf__platforms {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .pf-pf__models li {
+    grid-template-columns: 1.8rem 1fr;
+    gap: 0.2rem 0.6rem;
+  }
+  .pf-pf__models span:last-child {
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-car,
+  .pf-car__track,
+  .pf-car__slide,
+  .pf-car__progress span,
+  .pf-car__dot {
+    transition: none !important;
+  }
+  .pf-car__slide.is-entering .pf-car__lead > *,
+  .pf-car__slide.is-entering .pf-car__group,
+  .pf-vis *,
+  .pf-vis__mover {
+    animation: none !important;
+  }
+  .pf-vis__mover {
+    transform: translateX(150px);
+  }
+}

@@ -148,7 +148,7 @@ async function main() {
     await page.waitForTimeout(2400);
 
     const hero = await page.evaluate(() => {
-      const h1 = document.querySelector(".lfi-hero__title");
+      const h1 = document.querySelector(".pf-hero__title");
       if (!h1) return null;
       const accent = h1.querySelector(".lfi-accent");
       const lh = parseFloat(getComputedStyle(h1).lineHeight);
@@ -172,28 +172,29 @@ async function main() {
     await ctx.close();
   }
 
-  /* --- 2b. the product catalogue is COMPLETE -----------------------------
-     The check that would have caught the portfolio being short two products.
-     It reads the names straight out of the data module and asserts that each
-     one reaches the DOM - at desktop AND at mobile, because a product lost to
-     a responsive rule is still a lost product.
+  /* --- 2b. the profile is COMPLETE ---------------------------------------
+     Reads the portfolio names straight out of src/data/profile.js and
+     asserts each reaches the portfolio tablist, then checks that no image on
+     the homepage is broken - logos, photos and the recognition art are all
+     cut from the corporate deck, so a bad path is the likeliest regression.
+     Desktop AND mobile, because content lost to a responsive rule is still
+     lost.
      ----------------------------------------------------------------------- */
   {
     const src = fs.readFileSync(
-      path.join(__dirname, "..", "src", "data", "demos.js"),
+      path.join(__dirname, "..", "src", "data", "profile.js"),
       "utf8"
     );
-    // The `products` array only, up to its closing bracket.
     const block = src.slice(
-      src.indexOf("export const products = ["),
-      src.indexOf("/** The full catalogue")
+      src.indexOf("export const portfolios = ["),
+      src.indexOf("export const about")
     );
     const expected = [...block.matchAll(/^\s{4}name:\s*"([^"]+)"/gm)].map(
       (m) => m[1]
     );
 
-    if (expected.length < 2) {
-      fail("could not read the product list out of src/data/demos.js");
+    if (expected.length !== 5) {
+      fail(`expected 5 portfolios in src/data/profile.js, read ${expected.length}`);
     } else {
       for (const vp of [
         { name: "desktop-1440", width: 1440, height: 900 },
@@ -208,42 +209,31 @@ async function main() {
         await settle(page);
 
         const seen = await page.evaluate(() =>
-          [...document.querySelectorAll("#products h3")].map((h) =>
-            h.textContent.trim()
+          [...document.querySelectorAll("#portfolios [role='tab']")].map((t) =>
+            t.textContent.trim()
           )
         );
-
         const missing = expected.filter((n) => !seen.some((s) => s.includes(n)));
         if (missing.length)
-          fail(
-            `[${vp.name}] products missing from the page: ${missing.join(", ")}`
-          );
-        else
-          note(
-            `[${vp.name}] all ${expected.length} products rendered: ${seen.join(
-              ", "
-            )}`
-          );
+          fail(`[${vp.name}] portfolios missing from the tablist: ${missing.join(", ")}`);
+        else note(`[${vp.name}] all ${expected.length} portfolios rendered`);
 
-        // Every product card must lead somewhere real.
-        const deadLinks = await page.evaluate(() =>
-          [...document.querySelectorAll("#products a[href]")]
-            .map((a) => a.getAttribute("href"))
-            .filter((h) => !h || h === "#" || h === "")
-        );
-        if (deadLinks.length)
-          fail(`[${vp.name}] ${deadLinks.length} product link(s) go nowhere`);
-
-        // No broken artwork anywhere in the section.
+        // Lazy images only load near the viewport, so walk the page first.
+        await page.evaluate(async () => {
+          for (let y = 0; y < document.body.scrollHeight; y += 600) {
+            window.scrollTo(0, y);
+            await new Promise((r) => setTimeout(r, 60));
+          }
+        });
+        await page.waitForLoadState("networkidle");
         const brokenImgs = await page.evaluate(() =>
-          [...document.querySelectorAll("#products img")]
-            .filter((i) => !i.getAttribute("src") || i.naturalWidth === 0)
+          [...document.querySelectorAll("main img")]
+            .filter((i) => i.complete && (!i.getAttribute("src") || i.naturalWidth === 0))
             .map((i) => i.getAttribute("src") || "(no src)")
         );
         if (brokenImgs.length)
-          fail(
-            `[${vp.name}] broken product image(s): ${brokenImgs.join(", ")}`
-          );
+          fail(`[${vp.name}] broken image(s): ${brokenImgs.join(", ")}`);
+        else note(`[${vp.name}] every homepage image loaded`);
 
         await ctx.close();
       }
@@ -335,8 +325,7 @@ async function main() {
     await page.waitForTimeout(2200);
 
     for (const [label, sel] of [
-      ["industries", ".lfi-industries__tab"],
-      ["solutions", ".lfi-caps__tab"],
+      ["portfolios", ".pf-pf__tab"],
     ]) {
       const count = await page.locator(sel).count();
       if (!count) {
@@ -344,10 +333,10 @@ async function main() {
         continue;
       }
       await page.locator(sel).first().focus();
-      const before = await page.locator(`${sel}.is-active`).first().textContent();
+      const before = await page.locator(`${sel}[aria-selected="true"]`).first().textContent();
       await page.keyboard.press("ArrowRight");
       await page.waitForTimeout(250);
-      const after = await page.locator(`${sel}.is-active`).first().textContent();
+      const after = await page.locator(`${sel}[aria-selected="true"]`).first().textContent();
       if (before === after)
         fail(`${label} tablist does not respond to ArrowRight`);
       else note(`${label} tablist: ${before.trim()} -> ${after.trim()}`);

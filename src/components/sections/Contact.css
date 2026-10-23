@@ -475,3 +475,207 @@
      the top of the box. */
   padding-top: 0.2em;
 }
+
+/* --- corporate profile additions ------------------------------------------ */
+.lfi-contact__presence {
+  margin: 1.4rem 0 0;
+  color: var(--lfi-text);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.lfi-contact__presence span {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--lfi-font-mono);
+  font-size: var(--lfi-label);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--lfi-orange-soft);
+}
+
+/* The closing slide's photograph - Table Mountain from across the bay - as
+   the room's back wall, fading out well before the form. */
+.lfi-contact {
+  isolation: isolate;
+}
+.lfi-contact::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(58%, 820px);
+  z-index: -1;
+  background: var(--lfi-contact-photo, none) center / cover no-repeat;
+  opacity: 0.32;
+  -webkit-mask-image: linear-gradient(90deg, #000 20%, transparent 100%),
+    linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, #000 20%, transparent 100%),
+    linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+@media (max-width: 760px) {
+  .lfi-contact::before {
+    width: 100%;
+    opacity: 0.18;
+  }
+}
+
+/* ==========================================================================
+   One screen (two-column widths).
+
+   `data-fit` is chosen by the fit pass in Contact.js: "0" comfortable, "1"
+   tight, "natural" when neither fits (the section then grows to its content
+   rather than clipping anything). Everything is scaled by viewport height so
+   the same rules serve a 1080px monitor and a 665px laptop viewport.
+   ========================================================================== */
+.lfi-section.lfi-contact:is([data-fit="0"], [data-fit="1"]) {
+  /* A CAP, not a fixed height: never taller than the space under the
+     navbar, but no taller than its content either. A fixed height centred
+     the content on tall screens and left ~140px of blank above the heading;
+     capped, the footer simply follows. The fit pass still works unchanged -
+     a column that would exceed the cap overflows it and the next level is
+     tried. */
+  max-height: calc(100vh - var(--lfi-nav-h, 77px));
+  max-height: calc(100svh - var(--lfi-nav-h, 77px));
+  padding-block: clamp(14px, 2.8vh, 34px);
+  display: flex;
+  flex-direction: column;
+}
+.lfi-contact:is([data-fit="0"], [data-fit="1"]) .lfi-contact__inner {
+  width: 100%;
+  /* Top-aligned: centring the shorter column against the form pushed the
+     heading down, away from the navbar a nav click lands it under. */
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+/* Both columns are on screen at once; nothing to pin. */
+.lfi-contact:is([data-fit="0"], [data-fit="1"]) .lfi-contact__aside {
+  position: static;
+}
+
+/* --- level 0: comfortable ------------------------------------------------ */
+.lfi-contact[data-fit] .lfi-eyebrow {
+  margin-bottom: clamp(0.4rem, 1.2vh, 1rem);
+}
+.lfi-contact[data-fit] .lfi-heading {
+  font-size: clamp(1.7rem, 1.3vw + 2.3vh, 3.1rem);
+  max-width: 16ch;
+}
+.lfi-contact[data-fit] .lfi-lede {
+  margin-top: clamp(0.5rem, 1.4vh, 1.1rem);
+  font-size: clamp(0.92rem, 0.25vw + 1.25vh, 1.12rem);
+  line-height: 1.5;
+}
+.lfi-contact[data-fit] .lfi-contact__presence {
+  margin-top: clamp(0.6rem, 1.8vh, 1.4rem);
+  font-size: clamp(0.88rem, 0.2vw + 1.1vh, 1rem);
+}
+.lfi-contact[data-fit] .lfi-contact__direct {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: clamp(0.15rem, 0.6vh, 0.5rem) 1.6rem;
+  margin-top: clamp(0.5rem, 1.6vh, 1.3rem);
+}
+.lfi-contact[data-fit] .lfi-contact__direct li a {
+  min-height: 30px;
+}
+.lfi-contact[data-fit] .lfi-contact__offices {
+  margin-top: clamp(0.5rem, 1.6vh, 1.3rem);
+  padding-top: clamp(0.3rem, 1vh, 0.9rem);
+}
+.lfi-contact[data-fit] .lfi-contact__offices summary {
+  min-height: 34px;
+}
+.lfi-contact[data-fit] .lfi-contact__next {
+  margin-top: clamp(0.5rem, 1.4vh, 1.2rem);
+  padding-top: clamp(0.5rem, 1.4vh, 1.1rem);
+}
+.lfi-contact[data-fit] .lfi-contact__next-label {
+  margin-bottom: clamp(0.4rem, 1.1vh, 0.85rem);
+}
+.lfi-contact[data-fit] .lfi-contact__next ol {
+  gap: clamp(0.3rem, 0.9vh, 0.7rem);
+}
+.lfi-contact[data-fit] .lfi-contact__next li {
+  font-size: clamp(0.8rem, 0.15vw + 1vh, 0.88rem);
+  line-height: 1.5;
+}
+
+/* The form: smaller panel padding, fields sized to the screen. */
+.lfi-contact[data-fit] .lfi-contact__formwrap {
+  padding: clamp(0.9rem, 2.6vh, 2rem) clamp(1rem, 2vw, 2rem);
+}
+.lfi-contact[data-fit] .lfi-form__notice {
+  margin-bottom: clamp(0.6rem, 1.6vh, 1.2rem);
+  padding: clamp(0.45rem, 1vh, 0.75rem) 0.85rem;
+  font-size: clamp(0.76rem, 0.1vw + 1vh, 0.84rem);
+  line-height: 1.45;
+}
+.lfi-contact[data-fit] .lfi-form__row {
+  gap: 0 clamp(0.75rem, 1.4vw, 1.1rem);
+}
+.lfi-contact[data-fit] .lfi-form__group {
+  gap: 0.3rem;
+  margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+}
+.lfi-contact[data-fit] .lfi-form__group label {
+  font-size: clamp(0.76rem, 0.1vw + 1vh, 0.82rem);
+}
+.lfi-contact[data-fit] .lfi-form__group :is(input, select, textarea) {
+  min-height: clamp(38px, 5.4vh, 46px);
+  padding: clamp(0.4rem, 1vh, 0.7rem) 0.85rem;
+  font-size: 0.94rem;
+}
+.lfi-contact[data-fit] .lfi-form__group select {
+  padding-right: 2.6rem;
+}
+.lfi-contact[data-fit] .lfi-form__group textarea {
+  height: clamp(66px, 12vh, 120px);
+  min-height: 0;
+}
+.lfi-contact[data-fit] .lfi-form__actions {
+  margin-top: 0.2rem;
+}
+
+/* --- level 1: tight (also the base for "natural" on wide screens) ---------- */
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-heading {
+  font-size: clamp(1.5rem, 1.1vw + 1.9vh, 2.5rem);
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-lede {
+  font-size: clamp(0.86rem, 0.2vw + 1.1vh, 1rem);
+  line-height: 1.45;
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-contact__direct li a {
+  min-height: 26px;
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-contact__next li {
+  font-size: 0.79rem;
+  line-height: 1.42;
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-form__group {
+  margin-bottom: clamp(0.4rem, 1.1vh, 0.75rem);
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-form__group :is(input, select, textarea) {
+  min-height: 36px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-form__group select {
+  padding-right: 2.6rem;
+}
+.lfi-contact:is([data-fit="1"], [data-fit="natural"]) .lfi-form__group textarea {
+  height: clamp(56px, 9vh, 96px);
+}
+
+/* Phones and narrow tablets: one column at natural height, as before - two
+   columns cannot hold all of this on a phone screen without hiding some of
+   it. Inputs keep 16px text there so iOS does not zoom on focus. */
+@media (max-width: 899px) {
+  .lfi-contact[data-fit] .lfi-form__group :is(input, select, textarea) {
+    font-size: 16px;
+  }
+  .lfi-contact[data-fit] .lfi-contact__direct {
+    grid-template-columns: 1fr;
+  }
+}

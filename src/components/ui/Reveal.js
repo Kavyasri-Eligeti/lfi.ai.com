@@ -13,10 +13,13 @@ export default function Reveal({
   from,
   delay = 0,
   className,
+  style,
   children,
   ...rest
 }) {
   const ref = useReveal();
+  // Merged rather than spread over: a caller's `style` must not drop the delay.
+  const merged = delay ? { ...style, "--lfi-reveal-delay": `${delay}ms` } : style;
 
   return (
     <Tag
@@ -24,7 +27,7 @@ export default function Reveal({
       data-reveal=""
       data-reveal-from={from}
       className={className}
-      style={delay ? { "--lfi-reveal-delay": `${delay}ms` } : undefined}
+      style={merged}
       {...rest}
     >
       {children}

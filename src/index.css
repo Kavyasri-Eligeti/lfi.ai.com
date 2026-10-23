@@ -30,7 +30,9 @@ html {
      header's height - and nothing may add the offset a second time. (It did
      once: an explicit `anchors: { offset }` on top of this landed every
      anchor 88px too low.) */
-  scroll-padding-top: calc(var(--lfi-header-h, 76px) + 12px);
+  /* Exactly the header: its height plus its 1px bottom border, so a section
+     lands flush beneath the bar rather than 12px below it. */
+  scroll-padding-top: calc(var(--lfi-header-h, 76px) + 1px);
   -webkit-text-size-adjust: 100%;
 }
 

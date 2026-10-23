@@ -1,0 +1,112 @@
+.pf-culture__grid {
+  display: grid;
+  grid-template-columns: 1.28fr 1fr 1fr;
+  grid-template-rows: repeat(2, minmax(220px, 1fr));
+  gap: 1rem;
+  min-height: clamp(460px, 52vw, 680px);
+}
+
+.pf-culture__tile {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--lfi-radius);
+  background: var(--lfi-surface);
+}
+.pf-culture__tile--hero {
+  grid-row: span 2;
+}
+.pf-culture__tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.4s var(--lfi-ease);
+}
+.pf-culture__tile:hover img {
+  transform: scale(1.06);
+}
+.pf-culture__tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(7, 10, 21, 0.55));
+  pointer-events: none;
+}
+.pf-culture__tile figcaption {
+  position: absolute;
+  z-index: 1;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  padding: 0.5rem 1.3rem;
+  border-radius: 999px;
+  border: 2px solid var(--tone);
+  background: rgba(11, 15, 29, 0.84);
+  backdrop-filter: blur(6px);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.pf-culture__hq {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--lfi-radius);
+  display: grid;
+  padding: clamp(1.4rem, 2.6vw, 2.2rem);
+}
+.pf-culture__pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pf-culture__hq-card {
+  position: relative;
+  align-self: center;
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+  border-radius: 14px;
+  background: rgba(11, 15, 29, 0.9);
+  backdrop-filter: blur(4px);
+}
+.pf-culture__hq-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  color: var(--lfi-yellow);
+}
+.pf-culture__hq-card p {
+  margin: 0;
+  color: var(--lfi-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .pf-culture__grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: 210px;
+    min-height: 0;
+  }
+  .pf-culture__tile--hero {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .pf-culture__hq {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 520px) {
+  .pf-culture__grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 220px;
+  }
+  .pf-culture__tile--hero,
+  .pf-culture__hq {
+    grid-column: auto;
+  }
+  .pf-culture__tile--hero {
+    grid-row: span 2;
+  }
+}

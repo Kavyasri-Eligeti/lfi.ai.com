@@ -24,8 +24,38 @@ export default function Header() {
   const panelRef = useRef(null);
   const toggleRef = useRef(null);
   const navRef = useRef(null);
+  const headerRef = useRef(null);
 
   const onHome = location.pathname === "/";
+
+  /* --- publish the bar's real height ----------------------------------
+     Measured, not assumed: the rendered height (border included) goes on
+     <html> as --lfi-nav-h, and anything that must fit the space below the
+     bar - the full-screen portfolio carousel - sizes itself from that. A
+     ResizeObserver keeps it right through breakpoint changes. */
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return undefined;
+    const root = document.documentElement;
+    const publish = () =>
+      root.style.setProperty("--lfi-nav-h", `${el.offsetHeight}px`);
+    publish();
+    if (typeof ResizeObserver === "undefined") return undefined;
+    // Written on the next frame, not inside the observer callback: the new
+    // value resizes the portfolio carousel, which has an observer of its own,
+    // and resizing an observed element from within an RO callback is the
+    // browser's "ResizeObserver loop completed with undelivered notifications".
+    let raf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(publish);
+    });
+    ro.observe(el);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, []);
 
   /* --- shrink / solidify on scroll ------------------------------------- */
   useEffect(() => {
@@ -273,7 +303,7 @@ export default function Header() {
                   variant="primary"
                   onClick={closeDrawer}
                 >
-                  Let&rsquo;s Talk AI
+                  Let&rsquo;s talk
                 </Button>
               </div>
             </div>
@@ -283,6 +313,7 @@ export default function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={`lfi-header ${scrolled ? "is-scrolled" : ""} ${
         open ? "is-open" : ""
       }`}
@@ -303,7 +334,7 @@ export default function Header() {
             size="sm"
             className="lfi-header__cta"
           >
-            Let&rsquo;s Talk AI
+            Let&rsquo;s talk
           </Button>
 
           <button

@@ -1,0 +1,87 @@
+.pf-partners__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+}
+.pf-partners__tile {
+  aspect-ratio: 538 / 272;
+  transition: transform var(--lfi-dur) var(--lfi-ease-entrance),
+    box-shadow var(--lfi-dur) var(--lfi-ease);
+}
+.pf-partners__tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 40px -22px rgba(255, 120, 0, 0.55);
+}
+
+.pf-partners__eyebrow {
+  margin-top: clamp(2.2rem, 4vw, 3.4rem);
+  color: var(--lfi-orange-soft);
+}
+
+.pf-partners__recognition {
+  display: grid;
+  /* The badge and awards strip are sized to their artwork, not stretched
+     across the row; the partner stat takes whatever is left. */
+  grid-template-columns: 112px minmax(0, 400px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+.pf-partners__bbbee {
+  padding: 0.4rem;
+  aspect-ratio: 1;
+}
+.pf-partners__awards {
+  padding: 0.6rem 0.9rem;
+}
+.pf-partners__stat {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2.2rem);
+  padding: clamp(1.3rem, 2.6vw, 2.2rem);
+  background: var(--lfi-surface);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius);
+}
+.pf-partners__stat p {
+  margin: 0;
+  color: var(--lfi-text-muted);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+.pf-partners__stat .pf-partners__num {
+  flex: none;
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--lfi-yellow);
+}
+
+@media (max-width: 1000px) {
+  .pf-partners__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .pf-partners__recognition {
+    grid-template-columns: 112px minmax(0, 400px);
+  }
+  .pf-partners__stat {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 560px) {
+  .pf-partners__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pf-partners__recognition {
+    grid-template-columns: 1fr;
+  }
+  .pf-partners__bbbee {
+    max-width: 112px;
+  }
+  .pf-partners__awards {
+    max-width: 400px;
+  }
+  .pf-partners__stat {
+    grid-column: auto;
+  }
+}

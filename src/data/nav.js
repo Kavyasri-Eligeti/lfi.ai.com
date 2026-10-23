@@ -11,10 +11,10 @@
  * contents, and at 1024px a seventh item is what makes the bar wrap.
  */
 export const NAV_LINKS = [
-  { label: "Company", hash: "#introduction" },
-  { label: "Solutions", hash: "#solutions" },
-  { label: "Products", hash: "#products" },
+  { label: "Who we are", hash: "#who-we-are" },
+  { label: "Portfolios", hash: "#portfolios" },
   { label: "Industries", hash: "#industries" },
+  { label: "Products", hash: "#products" },
   { label: "Demos", to: "/demos" },
   { label: "Contact", hash: "#contact" },
 ];

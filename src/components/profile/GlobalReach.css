@@ -1,0 +1,192 @@
+.pf-reach__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+.pf-reach__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.pf-reach__dots {
+  fill: none;
+  stroke: rgba(150, 170, 220, 0.42);
+  stroke-width: 1.05;
+  stroke-linecap: round;
+}
+
+/* --- arcs: dashed, drawn in from the hub, then marching ------------------- */
+.pf-reach__arc {
+  fill: none;
+  stroke: var(--tone);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+  stroke-dasharray: 0.012 0.014;
+  opacity: 0;
+  transition: opacity 0.4s var(--lfi-ease);
+}
+.pf-reach__svg[data-inview="true"] .pf-reach__arc {
+  opacity: 0.9;
+  animation: pf-arc-in 1.2s var(--lfi-ease-out) both, pf-arc-march 2.4s linear infinite;
+  animation-delay: calc(0.2s + var(--i) * 0.14s), calc(1.4s + var(--i) * 0.14s);
+}
+.pf-reach__svg[data-inview="true"] .pf-reach__arc.is-west {
+  animation-name: pf-arc-in-west, pf-arc-march;
+}
+.pf-reach__arc.is-dim {
+  opacity: 0.18 !important;
+}
+@keyframes pf-arc-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes pf-arc-in-west {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes pf-arc-march {
+  to {
+    stroke-dashoffset: -0.052;
+  }
+}
+
+/* --- markers ----------------------------------------------------------- */
+.pf-reach__marker circle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pf-reach__pulse {
+  fill: var(--tone);
+  opacity: 0.25;
+  animation: pf-marker-pulse 2.6s var(--lfi-ease) infinite;
+}
+.pf-reach__ring {
+  fill: color-mix(in srgb, var(--tone) 30%, transparent);
+  stroke: var(--tone);
+  stroke-width: 0.6;
+  transition: transform var(--lfi-dur) var(--lfi-ease-entrance);
+}
+.pf-reach__core {
+  fill: var(--tone);
+}
+.pf-reach__marker.is-active .pf-reach__ring {
+  transform: scale(1.6);
+}
+@keyframes pf-marker-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* --- list ---------------------------------------------------------------- */
+.pf-reach__list {
+  display: grid;
+  gap: 0.35rem;
+}
+.pf-reach__item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: default;
+  transition: background var(--lfi-dur-fast) var(--lfi-ease),
+    border-color var(--lfi-dur-fast) var(--lfi-ease);
+}
+.pf-reach__item.is-active {
+  background: var(--lfi-surface);
+  border-color: var(--lfi-border);
+}
+.pf-reach__dot {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: var(--tone);
+  box-shadow: 0 0 14px -2px var(--tone);
+}
+.pf-reach__item h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.pf-reach__item p {
+  margin: 0.15rem 0 0;
+  color: var(--lfi-text-muted);
+  font-size: 0.95rem;
+}
+.pf-reach__item p.is-hub {
+  color: var(--lfi-orange-soft);
+}
+.pf-reach__item .pf-reach__city {
+  font-family: var(--lfi-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lfi-text-subtle);
+}
+
+/* --- summary bar --------------------------------------------------------- */
+.pf-reach__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.8rem;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem) !important;
+  padding: 1.4rem clamp(1.2rem, 2.6vw, 2rem);
+  background: var(--lfi-surface);
+  border: 1px solid var(--lfi-border);
+  border-radius: var(--lfi-radius);
+  font-weight: 800;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+}
+.pf-reach__summary li + li::before {
+  content: "·";
+  margin-right: 1.8rem;
+  color: var(--lfi-text-subtle);
+}
+
+@media (max-width: 960px) {
+  .pf-reach__grid {
+    grid-template-columns: 1fr;
+  }
+  .pf-reach__list {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-reach__svg[data-inview="true"] .pf-reach__arc {
+    animation: none;
+  }
+  .pf-reach__pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Stacked on phones; a separator that wraps to the start of a line reads as a stray bullet. */
+@media (max-width: 640px) {
+  .pf-reach__summary {
+    flex-direction: column;
+  }
+  .pf-reach__summary li + li::before {
+    display: none;
+  }
+}

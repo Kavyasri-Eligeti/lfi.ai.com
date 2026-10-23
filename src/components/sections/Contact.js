@@ -1,9 +1,11 @@
 import React, { useMemo, useRef, useState } from "react";
+import useFitScreen from "../ui/useFitScreen";
 import Reveal from "../ui/Reveal";
 import Scrub from "../ui/Scrub";
 import LineReveal from "../../motion/LineReveal";
 import Icon from "../ui/Icon";
 import { contact, offices, official } from "../../data/company";
+import { portfolios, contactBlock } from "../../data/profile";
 import useGsap from "../../motion/useGsap";
 import { gsap, EASE, prefersReducedMotion } from "../../motion";
 import "./Contact.css";
@@ -54,14 +56,10 @@ const ENDPOINT = process.env.REACT_APP_CONTACT_ENDPOINT || "";
    ========================================================================== */
 const MIN_FILL_MS = 3000;
 
+// The five portfolios, in the profile's order, then the software on its own.
 const INTERESTS = [
-  "AI & ML idea to product",
-  "AI & ML platform services",
-  "Explainable AI",
-  "Intelligent document analytics",
-  "Intelligent enterprise search",
-  "Conversational platforms",
-  "Intelligent automation",
+  ...portfolios.map((p) => p.name),
+  "Linkfields software (licence / SaaS)",
   "Something else",
 ];
 
@@ -92,6 +90,12 @@ const EMPTY = {
 
 export default function Contact() {
   const formRef2 = useRef(null);
+  const sectionRef = useRef(null);
+
+  /* One screen: on two-column widths the section is capped at the space
+     under the navbar and the roomiest density that fits is chosen (see
+     ui/useFitScreen and the data-fit rules in Contact.css). */
+  useFitScreen(sectionRef, { columns: ".lfi-contact__aside, .lfi-contact__formwrap" });
 
   useGsap(
     (root) => {
@@ -230,20 +234,33 @@ export default function Contact() {
     ) : null;
 
   return (
-    <section className="lfi-section lfi-contact" id="contact" data-light="ember">
+    <section
+      className="lfi-section lfi-contact"
+      id="contact"
+      ref={sectionRef}
+      data-fit="0"
+      data-scroll-align="edge"
+      data-light="ember"
+      // Passed in rather than written in the stylesheet: CRA tries to bundle
+      // root-relative url()s in CSS, and this image lives in /public.
+      style={{ "--lfi-contact-photo": `url(${contactBlock.photo.src})` }}
+    >
       <Scrub className="lfi-scrub lfi-glow lfi-parallax-slow" aria-hidden="true" />
       <div className="lfi-container lfi-contact__inner">
         {/* --- left: the pitch and the real contact details --------------- */}
         <Reveal className="lfi-contact__aside" from="left">
           <p className="lfi-eyebrow">Contact</p>
           <LineReveal as="h2" className="lfi-heading">
-            Bring us the problem, not the specification.
+            {contactBlock.title}
           </LineReveal>
           <p className="lfi-lede">
-            The most useful first conversation is about what is going wrong in
-            the business &mdash; the backlog, the churn, the documents nobody
-            can search. We will tell you honestly whether AI is the right
-            answer.
+            Bring us the problem, not the specification. Every engagement
+            starts from a business outcome, and we will tell you honestly
+            which of our portfolios, people and software fit it.
+          </p>
+          <p className="lfi-contact__presence">
+            <span>Global presence</span>
+            {contactBlock.presence}
           </p>
 
           <ul className="lfi-contact__direct">

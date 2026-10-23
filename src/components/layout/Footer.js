@@ -5,7 +5,7 @@ import useReveal from "../ui/useReveal";
 import Icon from "../ui/Icon";
 import { company, contact, parentLinks, PARENT_SITE } from "../../data/company";
 import { products } from "../../data/demos";
-import { solutions } from "../../data/solutions";
+import { portfolios } from "../../data/profile";
 import "./Footer.css";
 
 /**
@@ -28,9 +28,9 @@ export default function Footer() {
           <div className="lfi-footer__brand" style={{ "--lfi-c": 0 }}>
             <Logo height={40} />
             <p>
-              The AI and analytics practice of {company.name}. We build
-              intelligent systems for enterprises &mdash; and publish working
-              demonstrations of every capability we describe.
+              A technology partner across five portfolios, combining
+              specialist services with our own software and reusable delivery
+              IP. Headquartered in South Africa, delivering globally.
             </p>
             <a
               className="lfi-footer__social"
@@ -51,16 +51,19 @@ export default function Footer() {
                   <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <a href="/#solutions">AI solutions</a>
+                  <a href="/#who-we-are">Who we are</a>
                 </li>
                 <li>
-                  <a href="/#products">Products</a>
-                </li>
-                <li>
-                  <a href="/#services">Services</a>
+                  <a href="/#global">Global reach</a>
                 </li>
                 <li>
                   <a href="/#industries">Industries</a>
+                </li>
+                <li>
+                  <a href="/#clients">Clients &amp; partners</a>
+                </li>
+                <li>
+                  <a href="/#engage">How we engage</a>
                 </li>
                 <li>
                   <Link to="/demos">Demo catalogue</Link>
@@ -72,11 +75,11 @@ export default function Footer() {
             </div>
 
             <div className="lfi-footer__col" style={{ "--lfi-c": 2 }}>
-              <h2>Capabilities</h2>
+              <h2>Portfolios</h2>
               <ul>
-                {solutions.map((s) => (
-                  <li key={s.id}>
-                    <a href="/#solutions">{s.title}</a>
+                {portfolios.map((p) => (
+                  <li key={p.id}>
+                    <a href="/#portfolios">{p.name}</a>
                   </li>
                 ))}
               </ul>
